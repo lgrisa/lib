@@ -1,0 +1,12 @@
+package wechat
+
+import "crypto/rsa"
+
+func (c *ClientV3) SetPlatformPubKey(wxSerialNo string, snCertMap map[string]*rsa.PublicKey) {
+	c.rwMu.Lock()
+	defer c.rwMu.Unlock()
+
+	c.SnCertMap = snCertMap
+	c.WxSerialNo = wxSerialNo
+	c.wxPublicKey = c.SnCertMap[wxSerialNo]
+}
