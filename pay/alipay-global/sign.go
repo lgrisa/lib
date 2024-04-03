@@ -6,7 +6,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/packer/utils"
 	"github.com/pkg/errors"
-	"github.com/sirupsen/logrus"
 	"io"
 	"net/url"
 	"strings"
@@ -80,8 +79,6 @@ func (a *GlobalAliPayClient) VerifySign(ctx *gin.Context) error {
 	}
 
 	checkSign := fmt.Sprintf("%s %s\n%s.%s.%s", ctx.Request.Method, ctx.Request.URL.Path, clientId, reqTime, string(data))
-
-	logrus.Debugf("AliPay VerifySign checkSign:%s", checkSign)
 
 	if err = utils.VerifySign(checkSign, urlDecode, utils.RSA2, a.aliPublicKey); err != nil {
 		return errors.Errorf("AliPay VerifySign verifySign(%s,%s,%s)：%v", checkSign, urlDecode, utils.RSA2, err)
