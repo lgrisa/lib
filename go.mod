@@ -10,6 +10,7 @@ require (
 	github.com/disgoorg/log v1.2.1
 	github.com/disgoorg/snowflake/v2 v2.0.1
 	github.com/gin-gonic/gin v1.9.1
+	github.com/go-pay/gopay v1.5.100
 	github.com/guregu/dynamo v1.22.0
 	github.com/lestrrat-go/file-rotatelogs v2.4.0+incompatible
 	github.com/oschwald/geoip2-golang v1.9.0
@@ -29,6 +30,11 @@ require (
 	github.com/fsnotify/fsnotify v1.7.0 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.2 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
+	github.com/go-pay/bm v0.0.1 // indirect
+	github.com/go-pay/crypto v0.0.1 // indirect
+	github.com/go-pay/xhttp v0.0.2 // indirect
+	github.com/go-pay/xlog v0.0.2 // indirect
+	github.com/go-pay/xtime v0.0.2 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/go-playground/validator/v10 v10.14.0 // indirect
@@ -57,8 +63,7 @@ require (
 	github.com/subosito/gotenv v1.6.0 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/ugorji/go/codec v1.2.11 // indirect
-	go.uber.org/atomic v1.9.0 // indirect
-	go.uber.org/multierr v1.9.0 // indirect
+	go.uber.org/multierr v1.11.0 // indirect
 	golang.org/x/arch v0.3.0 // indirect
 	golang.org/x/crypto v0.21.0 // indirect
 	golang.org/x/exp v0.0.0-20240112132812-db7319d0e0e3 // indirect
