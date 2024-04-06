@@ -1,9 +1,9 @@
 package message
 
 import (
-	"github.com/packer/utils/call"
+	"github.com/disgoorg/log"
+	"github.com/lgrisa/library/utils/call"
 	"github.com/pkg/errors"
-	"github.com/sirupsen/logrus"
 )
 
 type SendMessageClient struct {
@@ -30,7 +30,7 @@ func NewSendMessageClient(messagePrefix, dingDingAccessToken, dingDingSecret, di
 }
 
 func (m *SendMessageClient) SendTextMessage(msg string) {
-	logrus.Errorf("SendMessage: %v", msg)
+	log.Errorf("SendMessage: %v", msg)
 
 	go call.CatchLoopPanic("SendMessage", func() {
 		message := m.messagePrefix + msg
@@ -38,7 +38,7 @@ func (m *SendMessageClient) SendTextMessage(msg string) {
 		if m.DingRobot != nil {
 			err := m.DingRobot.SendTextMessage(message)
 			if err != nil {
-				logrus.Errorf("SendTextMessage DingDing error: %v", err)
+				log.Errorf("SendTextMessage DingDing error: %v", err)
 			}
 		}
 

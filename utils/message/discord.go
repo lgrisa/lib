@@ -4,8 +4,8 @@ import (
 	"context"
 	"github.com/disgoorg/disgo/discord"
 	"github.com/disgoorg/disgo/webhook"
+	"github.com/disgoorg/log"
 	"github.com/disgoorg/snowflake/v2"
-	"github.com/sirupsen/logrus"
 	"math/rand"
 	"time"
 )
@@ -17,7 +17,7 @@ func sendDiscord(discordWebhookUrl, discordRobotThread, title, message string) {
 
 	client, err := webhook.NewWithURL(discordWebhookUrl)
 	if err != nil {
-		logrus.Errorf("init webhook fail failed,url:%v err: %v", discordWebhookUrl, err)
+		log.Errorf("init webhook fail failed,url:%v err: %v", discordWebhookUrl, err)
 		return
 	}
 	defer client.Close(context.Background())
@@ -39,13 +39,13 @@ func sendDiscord(discordWebhookUrl, discordRobotThread, title, message string) {
 	}
 
 	if err != nil {
-		logrus.Errorf("webhook.CreateMessage failed, err: %v", err)
+		log.Errorf("webhook.CreateMessage failed, err: %v", err)
 	}
 }
 
 func SendDiscordNoGoroutines(discordWebhookUrl, discordRobotThread, title, message string) {
 
-	logrus.Errorf("SendDiscord message:%v", message)
+	log.Errorf("SendDiscord message:%v", message)
 
 	if discordWebhookUrl == "" {
 		return
@@ -53,7 +53,7 @@ func SendDiscordNoGoroutines(discordWebhookUrl, discordRobotThread, title, messa
 
 	client, err := webhook.NewWithURL(discordWebhookUrl)
 	if err != nil {
-		logrus.Errorf("init webhook fail failed,url:%v err: %v", discordWebhookUrl, err)
+		log.Errorf("init webhook fail failed,url:%v err: %v", discordWebhookUrl, err)
 		return
 	}
 	defer client.Close(context.Background())
@@ -76,6 +76,6 @@ func SendDiscordNoGoroutines(discordWebhookUrl, discordRobotThread, title, messa
 	}
 
 	if err != nil {
-		logrus.Errorf("webhook.CreateMessage failed, err: %v", err)
+		log.Errorf("webhook.CreateMessage failed, err: %v", err)
 	}
 }

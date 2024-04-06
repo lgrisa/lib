@@ -1,7 +1,7 @@
 package dbv
 
 import (
-	"github.com/packer/db/dbdef"
+	"github.com/lgrisa/library/db/dbdef"
 )
 
 var AccountTableDefinition = &dbdef.TableDefinition{

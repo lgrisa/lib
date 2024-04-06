@@ -2,7 +2,7 @@ package config
 
 import (
 	"encoding/json"
-	"github.com/packer/utils/holiday"
+	"github.com/lgrisa/library/utils/holiday"
 	"strings"
 	"time"
 )

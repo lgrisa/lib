@@ -2,9 +2,8 @@ package call
 
 import (
 	"fmt"
+	"github.com/disgoorg/log"
 	"runtime/debug"
-
-	"github.com/sirupsen/logrus"
 )
 
 var server string
@@ -20,7 +19,7 @@ func GetServer() string {
 func TryRecover(handlerName string) bool {
 	if r := recover(); r != nil {
 		stack := string(debug.Stack())
-		logrus.WithField("err", r).Error(handlerName + " recovered from panic!!! SERIOUS PROBLEM " + stack)
+		log.Errorf(handlerName+" recovered from panic!!! SERIOUS PROBLEM, err: %v, stack: %v", r, stack)
 		fmt.Println(r, stack)
 		return true
 	}
@@ -30,7 +29,7 @@ func TryRecover(handlerName string) bool {
 func RecoverFunc(handlerName string, f func()) bool {
 	if r := recover(); r != nil {
 		stack := string(debug.Stack())
-		logrus.WithField("err", r).WithField("stack", stack).Error(handlerName + " recovered from panic!!! SERIOUS PROBLEM")
+		log.Errorf(handlerName+" recovered from panic!!! SERIOUS PROBLEM, err: %v, stack: %v", r, stack)
 		fmt.Println(r, stack)
 		f()
 		return true
@@ -41,7 +40,7 @@ func RecoverFunc(handlerName string, f func()) bool {
 func RecoverError(handlerName string, f func(err interface{})) bool {
 	if r := recover(); r != nil {
 		stack := string(debug.Stack())
-		logrus.WithField("err", r).WithField("stack", stack).Error(handlerName + " recovered from panic!!! SERIOUS PROBLEM")
+		log.Errorf(handlerName+" recovered from panic!!! SERIOUS PROBLEM, err: %v, stack: %v", r, stack)
 		fmt.Println(r, stack)
 		f(r)
 		return true

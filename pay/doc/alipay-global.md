@@ -38,7 +38,10 @@ status := notifyReq.Result.ResultStatus //支付状态
 
 if if status == "" || transactionId == "" || orderId == "" {
 	log.Printf("status or transactionId or orderId is empty")
-	client.WritePayNotifyResp(context,"fail")
+	err = client.WritePayNotifyResp(context,"fail")
+	if err != nil {
+		log.Printf("write pay notify resp failed, err:%v", err)
+	}
     return
 }
 
@@ -49,7 +52,10 @@ if status == "S" {
 	return
 }
 
-client.WritePayNotifyResp(context,"")
+err = client.WritePayNotifyResp(context,"")
+if err != nil {
+    log.Printf("write pay notify resp failed, err:%v", err)
+}
 ```
 
 退款通知解析示例：
@@ -76,5 +82,8 @@ if notify.Result.ResultStatus != "S" {
     return
 }
 
-Client.writeAliRefundResp(ctx, "success", "")
+err = client.writeAliRefundResp(ctx, "success", "")
+if err != nil {
+    log.Printf("write refund resp failed, err:%v", err)
+}
 ```

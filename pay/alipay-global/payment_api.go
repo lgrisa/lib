@@ -3,8 +3,8 @@ package alipayGlobal
 import (
 	"encoding/json"
 	"github.com/gin-gonic/gin"
-	"github.com/packer/utils"
-	consts "github.com/packer/utils/const"
+	"github.com/lgrisa/library/utils"
+	consts "github.com/lgrisa/library/utils/const"
 	"github.com/pkg/errors"
 	"net/http"
 )

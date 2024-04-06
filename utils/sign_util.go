@@ -10,8 +10,6 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"github.com/go-pay/crypto/xpem"
-	"github.com/go-pay/gopay"
 	"hash"
 )
 
@@ -43,7 +41,7 @@ func GetRsaSign(body, signType string, privateKey *rsa.PrivateKey) (sign string,
 		return
 	}
 	if encryptedBytes, err = rsa.SignPKCS1v15(rand.Reader, privateKey, hashes, h.Sum(nil)); err != nil {
-		return gopay.NULL, fmt.Errorf("[%w]: %+v", gopay.SignatureErr, err)
+		return NULL, fmt.Errorf("[%v]: %+v", "rsa.SignPKCS1v15", err)
 	}
 
 	sign = base64.StdEncoding.EncodeToString(encryptedBytes)
@@ -56,7 +54,7 @@ func VerifySign(signData, sign, signType, alipayPublicKey string) (err error) {
 		h     hash.Hash
 		hashs crypto.Hash
 	)
-	publicKey, err := xpem.DecodePublicKey([]byte(alipayPublicKey))
+	publicKey, err := DecodePublicKey([]byte(alipayPublicKey))
 	if err != nil {
 		return err
 	}
@@ -73,7 +71,7 @@ func VerifySign(signData, sign, signType, alipayPublicKey string) (err error) {
 	h = hashs.New()
 	h.Write([]byte(signData))
 	if err = rsa.VerifyPKCS1v15(publicKey, hashs, h.Sum(nil), signBytes); err != nil {
-		return fmt.Errorf("[%v]: %v", gopay.VerifySignatureErr, err)
+		return fmt.Errorf("[%v]: %v", "VerifySign", err)
 	}
 	return nil
 }

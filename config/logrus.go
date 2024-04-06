@@ -2,7 +2,7 @@ package config
 
 import (
 	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
-	"github.com/packer/utils/lfshook"
+	"github.com/lgrisa/library/utils/lfshook"
 	"github.com/sirupsen/logrus"
 	"strings"
 	"time"

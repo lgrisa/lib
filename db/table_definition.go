@@ -1,6 +1,6 @@
 package db
 
-import "github.com/packer/db/dbdef"
+import "github.com/lgrisa/library/db/dbdef"
 
 var CounterTableDefinition = &dbdef.TableDefinition{
 	TableName: "Counter",

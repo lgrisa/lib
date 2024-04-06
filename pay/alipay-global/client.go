@@ -2,10 +2,9 @@ package alipayGlobal
 
 import (
 	"crypto/rsa"
-	"github.com/go-pay/crypto/xpem"
-	"github.com/go-pay/crypto/xrsa"
-	"github.com/packer/pay"
-	"github.com/packer/utils"
+	"github.com/lgrisa/library/pay"
+	"github.com/lgrisa/library/utils"
+	"github.com/lgrisa/library/utils/xrsa"
 	"github.com/pkg/errors"
 )
 
@@ -31,7 +30,7 @@ func NewClient(clientId, privateKey, aliPublicKey string, webNotifyUrl, webRefun
 		return nil, MissAlipayInitParamErr
 	}
 	key := xrsa.FormatAlipayPrivateKey(privateKey)
-	priKey, err := xpem.DecodePrivateKey([]byte(key))
+	priKey, err := utils.DecodePrivateKey([]byte(key))
 	if err != nil {
 		return nil, errors.Errorf("InitAliPay xpem.DecodePrivateKey(%s)：%v", key, err)
 	}

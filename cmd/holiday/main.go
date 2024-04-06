@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/packer/config"
+	"github.com/lgrisa/library/config"
 	"time"
 )
 

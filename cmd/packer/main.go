@@ -7,7 +7,7 @@ import (
 	"github.com/disgoorg/disgo/webhook"
 	"github.com/disgoorg/log"
 	"github.com/disgoorg/snowflake/v2"
-	"github.com/packer/utils"
+	"github.com/lgrisa/library/utils"
 	"github.com/pkg/errors"
 	"github.com/skip2/go-qrcode"
 	"math/rand"

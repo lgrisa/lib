@@ -4,10 +4,10 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
+	"github.com/disgoorg/log"
 	"github.com/guregu/dynamo"
-	"github.com/packer/db/dbdef"
+	"github.com/lgrisa/library/db/dbdef"
 	"github.com/pkg/errors"
-	"github.com/sirupsen/logrus"
 	"strings"
 )
 
@@ -76,14 +76,14 @@ func (t *DynamoTable) CreateTableWithDefinition(ddb *dynamo.DB, from interface{}
 	if err != nil {
 		if aerr, ok := err.(awserr.Error); ok {
 			if aerr.Code() == dynamodb.ErrCodeResourceInUseException {
-				logrus.Infof("创建表: %v, 表已经存在，跳过", tableName)
+				log.Infof("创建表: %v, 表已经存在，跳过", tableName)
 				tableExist = true
 				goto ttl
 			}
 		}
 		return errors.Wrapf(err, tableName)
 	}
-	logrus.Infof("创建表: %v 成功", tableName)
+	log.Infof("创建表: %v 成功", tableName)
 
 ttl:
 
@@ -98,17 +98,17 @@ ttl:
 
 			switch ttl.Status {
 			case dynamo.TTLEnabled:
-				logrus.Infof("创建表: %v, ttl已经启用，跳过", tableName)
+				log.Infof("创建表: %v, ttl已经启用，跳过", tableName)
 			case dynamo.TTLDisabled:
 				if err := t.UpdateTTL(t.TtlKey.KeyName, true).Run(); err != nil {
 					return errors.Wrapf(err, "创建表: %v, 启用ttl出错", tableName)
 				} else {
-					logrus.Infof("创建表: %v, 启用ttl成功", tableName)
+					log.Infof("创建表: %v, 启用ttl成功", tableName)
 				}
 			case dynamo.TTLEnabling:
-				logrus.Infof("创建表: %v, ttl正在启用，跳过", tableName)
+				log.Infof("创建表: %v, ttl正在启用，跳过", tableName)
 			case dynamo.TTLDisabling:
-				logrus.Infof("创建表: %v, ttl正在禁用，跳过", tableName)
+				log.Infof("创建表: %v, ttl正在禁用，跳过", tableName)
 			default:
 				return errors.Errorf("创建表: %v, ttl状态未知: %v", tableName, ttl.Status)
 			}
@@ -132,7 +132,7 @@ ttl:
 			for _, gsi := range createTableInput.GlobalSecondaryIndexes {
 
 				if _, ok := existIndexMap[*gsi.IndexName]; ok {
-					logrus.Infof("创建表[%v]的索引[%v]，索引已经存在，跳过", tableName, *gsi.IndexName)
+					log.Infof("创建表[%v]的索引[%v]，索引已经存在，跳过", tableName, *gsi.IndexName)
 					continue
 				}
 
@@ -153,13 +153,13 @@ ttl:
 				}); err != nil {
 					if aerr, ok := err.(awserr.Error); ok {
 						if strings.Contains(strings.ToLower(aerr.Message()), "exists") {
-							logrus.Infof("创建表[%v]的索引[%v]，索引已经存在，跳过, err: %v", tableName, *gsi.IndexName, err)
+							log.Infof("创建表[%v]的索引[%v]，索引已经存在，跳过, err: %v", tableName, *gsi.IndexName, err)
 							continue
 						}
 					}
 					return errors.Wrapf(err, "创建索引[%v].[%v]失败", tableName, *gsi.IndexName)
 				} else {
-					logrus.Infof("创建表[%v]的索引[%v]成功, resp: %+v", tableName, *gsi.IndexName, resp)
+					log.Infof("创建表[%v]的索引[%v]成功, resp: %+v", tableName, *gsi.IndexName, resp)
 				}
 			}
 		}
@@ -210,53 +210,4 @@ func (t *DynamoTable) BatchWrite() *dynamo.BatchWrite {
 
 type DynamoKey struct {
 	KeyName string
-	//KeyType string
 }
-
-//func createTableIfNotExist(db *dynamo.DynamoDB, table *DynamoTable) error {
-//
-//	tableName := table.Name()
-//
-//	input := &dynamo.CreateTableInput{
-//		AttributeDefinitions: []*dynamo.AttributeDefinition{
-//			{
-//				AttributeName: aws.String(table.HashKey.KeyName),
-//				AttributeType: aws.String(table.HashKey.KeyType),
-//			},
-//		},
-//		KeySchema: []*dynamo.KeySchemaElement{
-//			{
-//				AttributeName: aws.String(table.HashKey.KeyName),
-//				KeyType:       aws.String("HASH"),
-//			},
-//		},
-//		BillingMode: aws.String("PAY_PER_REQUEST"),
-//		TableName:   aws.String(tableName),
-//	}
-//
-//	if table.RangeKey != nil {
-//		input.AttributeDefinitions = append(input.AttributeDefinitions, &dynamo.AttributeDefinition{
-//			AttributeName: aws.String(table.RangeKey.KeyName),
-//			AttributeType: aws.String(table.RangeKey.KeyType),
-//		})
-//
-//		input.KeySchema = append(input.KeySchema, &dynamo.KeySchemaElement{
-//			AttributeName: aws.String(table.RangeKey.KeyName),
-//			KeyType:       aws.String("RANGE"),
-//		})
-//	}
-//
-//	result, err := db.CreateTable(input)
-//	if err != nil {
-//		if aerr, ok := err.(awserr.Error); ok {
-//			if aerr.Code() == dynamo.ErrCodeResourceInUseException {
-//				logrus.Debugf("创建表: %v, 表已经存在，跳过", tableName)
-//				return nil
-//			}
-//		}
-//		return errors.Wrapf(err, tableName)
-//	}
-//	logrus.Debugf("创建表: %v 成功, result: %v", tableName, result)
-//
-//	return nil
-//}

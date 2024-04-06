@@ -1,6 +1,8 @@
 package call
 
-import "github.com/sirupsen/logrus"
+import (
+	"github.com/disgoorg/log"
+)
 
 func CatchPanic(name string, f func()) {
 	defer TryRecover(name)
@@ -10,7 +12,7 @@ func CatchPanic(name string, f func()) {
 
 func CatchLoopPanic(name string, f func()) {
 	if name != "" {
-		defer logrus.Infof("%s exit", name)
+		defer log.Infof("%s exit", name)
 	}
 	defer TryRecover(name)
 

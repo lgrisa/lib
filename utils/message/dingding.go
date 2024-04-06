@@ -7,7 +7,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"github.com/packer/utils"
+	"github.com/lgrisa/library/utils"
 	"io"
 	"net/http"
 	"regexp"

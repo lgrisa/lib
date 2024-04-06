@@ -2,10 +2,10 @@ package utils
 
 import (
 	"github.com/awslabs/aws-lambda-go-api-proxy/core"
+	"github.com/disgoorg/log"
 	"github.com/gin-gonic/gin"
+	"github.com/lgrisa/library/utils/const"
 	"github.com/oschwald/geoip2-golang"
-	"github.com/packer/utils/const"
-	"github.com/sirupsen/logrus"
 	"net"
 	"strings"
 )
@@ -54,7 +54,7 @@ func GetIpRegion(context *gin.Context, IpDbPath string) (isoCode string) {
 	clientIp := GetClientIp(context)
 	db, err := geoip2.Open(IpDbPath)
 	if err != nil {
-		logrus.Errorf("open ip db error: %v", err)
+		log.Errorf("open ip db error: %v", err)
 		return
 	}
 	defer db.Close()
@@ -62,7 +62,7 @@ func GetIpRegion(context *gin.Context, IpDbPath string) (isoCode string) {
 	netIP := net.ParseIP(clientIp)
 	record, err := db.City(netIP)
 	if err != nil {
-		logrus.Errorf("get ip region error: %v", err)
+		log.Errorf("get ip region error: %v", err)
 		return
 	}
 
