@@ -120,27 +120,13 @@ github.com/gin-gonic/gin/binding
 github.com/gin-gonic/gin/internal/bytesconv
 github.com/gin-gonic/gin/internal/json
 github.com/gin-gonic/gin/render
-# github.com/go-pay/bm v0.0.1
-## explicit; go 1.20
-github.com/go-pay/bm
 # github.com/go-pay/crypto v0.0.1
 ## explicit; go 1.20
-github.com/go-pay/crypto/aes
 github.com/go-pay/crypto/xpem
 github.com/go-pay/crypto/xrsa
 # github.com/go-pay/gopay v1.5.100
 ## explicit; go 1.20
 github.com/go-pay/gopay
-github.com/go-pay/gopay/alipay
-# github.com/go-pay/xhttp v0.0.2
-## explicit; go 1.20
-github.com/go-pay/xhttp
-# github.com/go-pay/xlog v0.0.2
-## explicit; go 1.20
-github.com/go-pay/xlog
-# github.com/go-pay/xtime v0.0.2
-## explicit; go 1.20
-github.com/go-pay/xtime
 # github.com/go-playground/locales v0.14.1
 ## explicit; go 1.17
 github.com/go-playground/locales
