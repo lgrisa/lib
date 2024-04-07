@@ -23,7 +23,6 @@ func responseHandle(resp *http.Response, err error) (string, error) {
 		return "", err
 	}
 	respBody := string(b)
-	//log.Printf("api %s 响应结果: %s", resp.Request.URL, respBody)
 	return respBody, nil
 }
 

@@ -4,10 +4,10 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/disgoorg/log"
 	"github.com/guregu/dynamo"
 	"github.com/lgrisa/library/config"
 	"github.com/lgrisa/library/dbv"
+	"github.com/lgrisa/library/utils"
 	"github.com/pkg/errors"
 )
 
@@ -55,7 +55,7 @@ func NewDynamoClient() (*DynamoDB, error) {
 	userIdCounter := newCounterTable(db, c.DynamoTablePrefix)
 
 	if c.CreateTableAnyway {
-		log.Infof("尝试创建db表")
+		utils.LogInfof("尝试创建db表")
 
 		for _, t := range tableArray {
 			if err := t.CreateTable(db); err != nil {

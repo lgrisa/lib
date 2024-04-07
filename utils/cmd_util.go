@@ -3,7 +3,6 @@ package utils
 import (
 	"bytes"
 	"fmt"
-	"github.com/disgoorg/log"
 	"github.com/pkg/errors"
 	"io"
 	"os/exec"
@@ -76,7 +75,7 @@ func RunSyncCommand(shellCmd string) error {
 	stderr, _ := cmd.StderrPipe()
 
 	if err := cmd.Start(); err != nil {
-		log.Errorf("Error starting command: %s......", err.Error())
+		LogErrorf("Error starting command: %s......", err.Error())
 		return err
 	}
 
@@ -121,7 +120,7 @@ func RunSyncCommand(shellCmd string) error {
 	}
 
 	if err := cmd.Wait(); err != nil {
-		log.Errorf("Error waiting for command execution: %s......", err.Error())
+		LogErrorf("Error waiting for command execution: %s......", err.Error())
 		return err
 	}
 
@@ -129,7 +128,7 @@ func RunSyncCommand(shellCmd string) error {
 }
 
 func RunCommandGetOutPut(cmd string) ([]byte, error) {
-	log.Tracef("RunCommandGetOutPut: %s", cmd)
+	LogTracef("RunCommandGetOutPut: %s", cmd)
 
 	pwdCmd := exec.Command("sh", "-c", cmd)
 	return pwdCmd.CombinedOutput()

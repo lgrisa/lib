@@ -1,7 +1,7 @@
 package call
 
 import (
-	"github.com/disgoorg/log"
+	"github.com/lgrisa/library/utils"
 )
 
 func CatchPanic(name string, f func()) {
@@ -12,7 +12,7 @@ func CatchPanic(name string, f func()) {
 
 func CatchLoopPanic(name string, f func()) {
 	if name != "" {
-		defer log.Infof("%s exit", name)
+		defer utils.LogInfof("%s exit", name)
 	}
 	defer TryRecover(name)
 

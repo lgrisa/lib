@@ -1,8 +1,7 @@
 package call
 
 import (
-	"fmt"
-	"github.com/disgoorg/log"
+	"github.com/lgrisa/library/utils"
 	"runtime/debug"
 )
 
@@ -19,8 +18,7 @@ func GetServer() string {
 func TryRecover(handlerName string) bool {
 	if r := recover(); r != nil {
 		stack := string(debug.Stack())
-		log.Errorf(handlerName+" recovered from panic!!! SERIOUS PROBLEM, err: %v, stack: %v", r, stack)
-		fmt.Println(r, stack)
+		utils.LogErrorf(handlerName+" recovered from panic!!! SERIOUS PROBLEM, err: %v, stack: %v", r, stack)
 		return true
 	}
 	return false
@@ -29,8 +27,7 @@ func TryRecover(handlerName string) bool {
 func RecoverFunc(handlerName string, f func()) bool {
 	if r := recover(); r != nil {
 		stack := string(debug.Stack())
-		log.Errorf(handlerName+" recovered from panic!!! SERIOUS PROBLEM, err: %v, stack: %v", r, stack)
-		fmt.Println(r, stack)
+		utils.LogErrorf(handlerName+" recovered from panic!!! SERIOUS PROBLEM, err: %v, stack: %v", r, stack)
 		f()
 		return true
 	}
@@ -40,8 +37,7 @@ func RecoverFunc(handlerName string, f func()) bool {
 func RecoverError(handlerName string, f func(err interface{})) bool {
 	if r := recover(); r != nil {
 		stack := string(debug.Stack())
-		log.Errorf(handlerName+" recovered from panic!!! SERIOUS PROBLEM, err: %v, stack: %v", r, stack)
-		fmt.Println(r, stack)
+		utils.LogErrorf(handlerName+" recovered from panic!!! SERIOUS PROBLEM, err: %v, stack: %v", r, stack)
 		f(r)
 		return true
 	}

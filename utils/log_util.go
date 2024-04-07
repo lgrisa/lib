@@ -1,6 +1,9 @@
 package utils
 
-import "github.com/disgoorg/log"
+import (
+	"fmt"
+	"github.com/disgoorg/log"
+)
 
 func LogTracef(format string, args ...interface{}) {
 	log.Tracef(format, args...)
@@ -20,4 +23,8 @@ func LogWarnf(format string, args ...interface{}) {
 
 func LogErrorf(format string, args ...interface{}) {
 	log.Errorf(format, args...)
+}
+
+func LogPrintf(format string, args ...interface{}) {
+	fmt.Println(fmt.Sprintf(format, args...))
 }

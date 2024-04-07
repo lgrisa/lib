@@ -1,7 +1,7 @@
 package message
 
 import (
-	"github.com/disgoorg/log"
+	"github.com/lgrisa/library/utils"
 	"github.com/lgrisa/library/utils/call"
 	"github.com/pkg/errors"
 )
@@ -30,7 +30,7 @@ func NewSendMessageClient(messagePrefix, dingDingAccessToken, dingDingSecret, di
 }
 
 func (m *SendMessageClient) SendTextMessage(msg string) {
-	log.Errorf("SendMessage: %v", msg)
+	utils.LogErrorf("SendMessage: %v", msg)
 
 	go call.CatchLoopPanic("SendMessage", func() {
 		message := m.messagePrefix + msg
@@ -38,7 +38,7 @@ func (m *SendMessageClient) SendTextMessage(msg string) {
 		if m.DingRobot != nil {
 			err := m.DingRobot.SendTextMessage(message)
 			if err != nil {
-				log.Errorf("SendTextMessage DingDing error: %v", err)
+				utils.LogErrorf("SendTextMessage DingDing error: %v", err)
 			}
 		}
 

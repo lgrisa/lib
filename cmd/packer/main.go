@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"github.com/disgoorg/disgo/discord"
 	"github.com/disgoorg/disgo/webhook"
-	"github.com/disgoorg/log"
 	"github.com/disgoorg/snowflake/v2"
 	"github.com/lgrisa/library/utils"
 	"github.com/pkg/errors"
@@ -49,11 +48,11 @@ type initCiStruct struct {
 func main() {
 
 	for i, v := range os.Args {
-		log.Tracef("args[%d]: %s\n", i, v)
+		utils.LogTracef("args[%d]: %s\n", i, v)
 	}
 
 	output, _ := utils.RunCommandGetOutPut("pwd")
-	log.Tracef("cur dir: %s", string(output))
+	utils.LogTracef("cur dir: %s", string(output))
 
 	initCi, err := initStruct()
 
@@ -70,7 +69,7 @@ func main() {
 
 func initStruct() (*initCiStruct, error) {
 	for i, v := range os.Args {
-		log.Tracef("args[%d]: %s\n", i, v)
+		utils.LogTracef("args[%d]: %s\n", i, v)
 	}
 
 	execTag := os.Args[1]
@@ -83,7 +82,7 @@ func initStruct() (*initCiStruct, error) {
 			return nil, errors.Wrapf(err, "run shell failed")
 		}
 	} else {
-		log.Tracef("Not shell script %s", execShell)
+		utils.LogTracef("Not shell script %s", execShell)
 	}
 
 	err := os.MkdirAll(BuildDir, os.ModePerm)
@@ -105,7 +104,7 @@ func initStruct() (*initCiStruct, error) {
 
 	platform := getPlatformByExecTag(execTag)
 
-	log.Tracef("platform: %s", platform)
+	utils.LogTracef("platform: %s", platform)
 
 	if platform == "" {
 		execExit(fmt.Sprintf("unkonw platform: %s", execTag))
@@ -113,7 +112,7 @@ func initStruct() (*initCiStruct, error) {
 
 	activeDirPath = fmt.Sprintf("%s/%s", activeDirPath, platform)
 
-	log.Tracef("activeDirPath: %s", activeDirPath)
+	utils.LogTracef("activeDirPath: %s", activeDirPath)
 
 	activeDir, err := os.ReadDir(activeDirPath)
 	if err != nil {
@@ -161,7 +160,7 @@ func (i *initCiStruct) packAndSendFile() error {
 				execExit(fmt.Sprintf("zip err: %s, err: %s", file.Name(), err))
 			}
 
-			log.Tracef("zip file: %s", fileName)
+			utils.LogTracef("zip file: %s", fileName)
 		}
 
 		//反复打包不能覆盖，对于打包出来的文件夹名称进行修饰
@@ -186,7 +185,7 @@ func (i *initCiStruct) packAndSendFile() error {
 			execExit(fmt.Sprintf("生成二维码失败: %s, err: %s", file.Name(), err))
 		}
 
-		log.Tracef("create png: %s", pngPath)
+		utils.LogTracef("create png: %s", pngPath)
 
 		output, err = utils.RunCommandGetOutPut(fmt.Sprintf("ncftpput -u %s -p %s %s /%s/%s/%s %s",
 			uploadName, uploadPasswd, uploadHost, uploadTargetRootPath, uploadTargetMidPath, QRCodePath, pngPath))
@@ -266,7 +265,7 @@ type sendDisCordStruct struct {
 
 func execExit(errMsg string) {
 	if errMsg != "" {
-		log.Error(errMsg)
+		utils.LogErrorf(errMsg)
 		senDiscordErrMsg(errMsg)
 	}
 
