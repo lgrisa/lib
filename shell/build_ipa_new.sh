@@ -373,19 +373,25 @@ copy_assets()
 {
 	target_path=$2
 	target_res_folder=$target_path"/${platform}"
-	if [[ -d ${target_res_folder} ]]; then
+	if [ -d "${target_res_folder}" ]; then
 		echo "${target_res_folder} exist---delete"
-		rm -rf ${target_res_folder}
+		rm -rf "${target_res_folder}"
 	fi
+	# shellcheck disable=SC2039
 	echo -e "\n---------------copy_assets to $target_path---------------\n"
 	#资源目录
 	project_res_path=${client_chubao%/*}
 	echo "project_res_path => "$project_res_path
 	assets_path=$1    #"${project_res_path}/Bundle/copy/${res_folder}"
 	echo "assets_path => "$assets_path
+
+	if [ ! -d "${assets_path}" ]; then
+    mkdir -p "${assets_path}"
+  fi
+
 	{
 		echo "cp -r ${assets_path} ${target_path}"
-		cp -r ${assets_path} ${target_path}
+		cp -r "${assets_path}" "${target_path}"
 	}||{ 
 		echo "copy_assets failed"
 	}
@@ -423,7 +429,7 @@ build_xcode()
 
 	echo "xcode_proj_path => $xcode_proj_path"
 
-  cp /Users/packer/Documents/pbj "$xcode_proj_path"
+  cp /Users/Shared/Documents/pbj "$xcode_proj_path"
 
   cd "$xcode_proj_path" || exit
 
@@ -479,14 +485,6 @@ build_ipa()
 	# 指定输出ipa名称
 	ipa_name="$zoo"
 
-	echo "${project_name}.xcworkspace"
-	if [ -e "${project_name}.xcworkspace" ] ; then
-		echo "exist:${project_name}.xcworkspace"
-	else
-		echo "not exist:${project_name}.xcworkspace"
-		errorlogExit "not exist:${project_name}.xcworkspace"
-	fi
-
 	# AdHoc,AppStore,Enterprise三种打包方式的区别: http://blog.csdn.net/lwjok2007/article/details/46379945
 	echo "------------------------------------------------------"
 	echo "\033[32m开始构建项目  \033[0m"
@@ -499,28 +497,18 @@ build_ipa()
 		mkdir -pv "$export_path"
 	fi
 
-	# 判断编译的项目类型是workspace还是project
-	if $is_workspace ; then
-		# 编译前清理工程
-		xcodebuild clean -workspace ${project_name}.xcworkspace -scheme ${scheme_name} -configuration ${build_configuration}
+	# 编译前清理工程
+	xcodebuild clean -project ${project_name}.xcodeproj \
+	                 -scheme ${scheme_name} \
+	                 -configuration ${build_configuration}
 
-		xcodebuild archive -workspace ${project_name}.xcworkspace \
-		                   -scheme ${scheme_name} \
-		                   -configuration ${build_configuration} \
-		                   -archivePath ${export_archive_path} \
-		                > "$log_file" 2>&1
-	else
-		# 编译前清理工程
-		xcodebuild clean -project ${project_name}.xcodeproj \
-		                 -scheme ${scheme_name} \
-		                 -configuration ${build_configuration}
+	echo ""
 
-		xcodebuild archive -project ${project_name}.xcodeproj \
-		                   -scheme ${scheme_name} \
-		                   -configuration ${build_configuration} \
-		                   -archivePath ${export_archive_path} \
-	                > "$log_file" 2>&1
-	fi
+	xcodebuild archive -project ${project_name}.xcodeproj \
+	                   -scheme ${scheme_name} \
+	                   -configuration ${build_configuration} \
+	                   -archivePath "${export_archive_path}" \
+	              > "$log_file" 2>&1
 
 	#  检查是否构建成功
 	#  xcarchive 实际是一个文件夹不是一个文件所以使用 -d 判断
