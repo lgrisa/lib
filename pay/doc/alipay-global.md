@@ -87,3 +87,12 @@ if err != nil {
     log.Printf("write refund resp failed, err:%v", err)
 }
 ```
+* <font color='#003087' size='4'>API</font>
+    * 初始化：`NewClient()`
+    * 退款：`client.FundTransRefund()`
+    * 创建订单：`client.TradePagePay()`
+    * 查询订单：`client.TradeInquiryPayment()`
+    * 验签：`client.VerifySign()`
+* <font color='#003087' size='4'>RESP</font>
+    * 常用通知回复：`client.WritePayNotifyResp()`
+    * 退款通知回复：`client.WriteAliRefundResp()`

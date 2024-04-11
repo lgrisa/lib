@@ -83,7 +83,7 @@ func (a *GlobalAliPayClient) WritePayNotifyResp(context *gin.Context, result str
 
 //https://global.alipay.com/docs/ac/ams/notify_refund
 
-func (a *GlobalAliPayClient) WriteAliRefundResp(context *gin.Context, result string) {
+func (a *GlobalAliPayClient) WriteRefundResp(context *gin.Context, result string) {
 	resp := refundNotifyResp{
 		Result: struct {
 			ResultCode    string `json:"resultCode"`

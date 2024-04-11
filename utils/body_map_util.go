@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"fmt"
+	"github.com/pkg/errors"
 	"io"
 	"net/url"
 	"sort"
@@ -26,6 +27,8 @@ type File struct {
 	Name    string `json:"name"`
 	Content []byte `json:"content"`
 }
+
+var MissParamErr = errors.New("missing required parameter")
 
 // 设置参数
 func (bm BodyMap) Set(key string, value any) BodyMap {
