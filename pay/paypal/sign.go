@@ -9,30 +9,10 @@ import (
 	"net/http"
 )
 
-type Client struct {
-	sandboxWebhookId string
-	webhookId        string
-	accessToken      string
-	IsProd           bool
-}
-
-func NewClient(sandboxWebhookId, webhookId, accessToken string, isProd bool) *Client {
-	return &Client{
-		sandboxWebhookId: sandboxWebhookId,
-		webhookId:        webhookId,
-		accessToken:      accessToken,
-		IsProd:           isProd,
-	}
-}
-
 // VerifySign https://developer.paypal.com/docs/api/webhooks/v1/#verify-webhook-signature_post
 func (c *Client) verifySign(context *gin.Context, webHookBody *[]byte) error {
 
 	webHookeId := c.webhookId
-
-	if !c.IsProd {
-		webHookeId = c.sandboxWebhookId
-	}
 
 	if webHookeId == "" {
 		return errors.Errorf("VerifyPaypalSign MainConf.PayPalWebhookID == ''")
@@ -53,10 +33,10 @@ func (c *Client) verifySign(context *gin.Context, webHookBody *[]byte) error {
 		return errors.Errorf("VerifyPaypalSign json.Marshal(%v) error: %v", myVerifyReq, err)
 	}
 
-	payPalVerifyApiUrl := verifyUrl
+	urlProfile := httpProfile
 
 	if !c.IsProd {
-		payPalVerifyApiUrl = verifySandboxUrl
+		urlProfile = httpSandboxProfile
 	}
 
 	headers := map[string]string{
@@ -64,14 +44,14 @@ func (c *Client) verifySign(context *gin.Context, webHookBody *[]byte) error {
 		"Authorization": "Bearer " + c.accessToken,
 	}
 
-	_, respBody, err, httpCode := utils.HttpRequest(context, "POST", payPalVerifyApiUrl, headers, bytes.NewBuffer(verifyReqJson))
+	_, respBody, err, httpCode := utils.HttpRequest(context, "POST", urlProfile+verifyMethod, headers, bytes.NewBuffer(verifyReqJson))
 
 	if err != nil {
-		return errors.Errorf("VerifyPaypalSign HttpRequest(%s,%s,%s) error: %v", "POST", payPalVerifyApiUrl, verifyReqJson, err)
+		return errors.Errorf("VerifyPaypalSign HttpRequest(%s,%s,%s) error: %v", "POST", urlProfile+verifyMethod, verifyReqJson, err)
 	}
 
 	if httpCode != 200 {
-		return errors.Errorf("VerifyPaypalSign HttpRequest(%s,%s,%s) httpCode: %d", "POST", payPalVerifyApiUrl, verifyReqJson, httpCode)
+		return errors.Errorf("VerifyPaypalSign HttpRequest(%s,%s,%s) httpCode: %d", "POST", urlProfile+verifyMethod, verifyReqJson, httpCode)
 	}
 
 	myVerifyResp := &verifyResp{}
@@ -87,29 +67,24 @@ func (c *Client) verifySign(context *gin.Context, webHookBody *[]byte) error {
 	return nil
 }
 
-func (c *Client) WebHookVerify(context *gin.Context) (*WebhookNotifyResponse,error) {
+func (c *Client) WebHookVerifySign(context *gin.Context) (*WebhookNotifyResponse, error) {
 	rawData, err := context.GetRawData()
 	if err != nil {
-		return nil,err
+		return nil, err
 	}
 
 	if err = c.verifySign(context, &rawData); err != nil {
-		return nil,err
+		return nil, err
 	}
 
-	resp:=&WebhookNotifyResponse{}
+	resp := &WebhookNotifyResponse{}
 
 	err = json.Unmarshal(rawData, resp)
 	if err != nil {
-		return nil,errors.Errorf("json.Unmarshal Err:%v", err)
+		return nil, errors.Errorf("json.Unmarshal Err:%v", err)
 	}
 
-	return resp,nil
-}
-
-func (c *Client) NotifyVerify(context *gin.Context) error {
-
-	return nil
+	return resp, nil
 }
 
 func (c *Client) WriteNotifyResp(context *gin.Context, code int) {

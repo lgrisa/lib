@@ -3,11 +3,14 @@ package utils
 import (
 	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
 	"golang.org/x/net/context/ctxhttp"
 	"io"
 	"io/ioutil"
 	"net/http"
+	"net/url"
+	"strings"
 	"time"
 )
 
@@ -91,4 +94,34 @@ func HttpRequest(ctx context.Context, method string, url string, headers map[str
 	}
 
 	return resp.Header, body, nil, resp.StatusCode
+}
+
+const (
+	ContentTypeXWwwFormUrlencodedText = "application/x-www-form-urlencoded"
+	ContentTypeJsonText               = "application/json;charset=UTF-8"
+)
+
+func BuildHttpBody(contentType string, dataMap map[string]interface{}) (io.Reader, error) {
+	var requestBody io.Reader
+
+	if contentType == ContentTypeXWwwFormUrlencodedText {
+		slice1 := []string{}
+		for k, v := range dataMap {
+			value, ok := v.(string)
+			if ok {
+				slice1 = append(slice1, k+"="+url.QueryEscape(value))
+			}
+		}
+
+		requestBody = strings.NewReader(strings.Join(slice1, "&"))
+	} else if contentType == ContentTypeJsonText {
+		b, err := json.Marshal(dataMap)
+		if err != nil {
+			return nil, err
+		}
+
+		requestBody = bytes.NewBuffer(b)
+	}
+
+	return requestBody, nil
 }

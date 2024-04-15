@@ -1,10 +1,15 @@
 package paypal
 
 const (
-	verifyUrl        = "https://api-m.paypal.com/v1/notifications/verify-webhook-signature"
-	verifySandboxUrl = "https://api-m.sandbox.paypal.com/v1/notifications/verify-webhook-signature"
+	httpProfile        = "https://api-m.paypal.com"
+	httpSandboxProfile = "https://api-m.sandbox.paypal.com"
+
+	verifyMethod = "/v1/notifications/verify-webhook-signature"
+	orderCapture = "/v2/checkout/orders/%s/capture"
 )
 
-const(
-	WEBHOOK_EVENT_CHECKOUT_ORDER_APPROVED = "CHECKOUT.ORDER.APPROVED"
+const (
+	WebhookEventCheckoutOrderApproved = "CHECKOUT.ORDER.APPROVED"
+	WebhookEventCheckoutOrderComplete = "PAYMENT.CAPTURE.COMPLETED"
+	WebhookEventCheckoutOrderRefunded = "PAYMENT.CAPTURE.REFUNDED"
 )

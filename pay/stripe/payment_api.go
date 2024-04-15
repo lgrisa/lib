@@ -3,9 +3,9 @@ package stripe
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/lgrisa/library/pay"
 	"github.com/stripe/stripe-go/v76"
 	"github.com/stripe/stripe-go/v76/checkout/session"
-	"github.com/lgrisa/library/pay"
 )
 
 // CreateOrder creates a new order https://docs.stripe.com/api/checkout/sessions/create
@@ -53,7 +53,7 @@ func (c *Client) CheckoutSessionCompleted(rawData []byte) (*pay.CheckoutOrderApp
 
 	if checkoutSession.PaymentStatus == stripe.CheckoutSessionPaymentStatusPaid {
 		return &pay.CheckoutOrderApprovedResult{
-			OutTradeNo:      checkoutSession.ClientReferenceID,
+			TransactionId:   checkoutSession.ClientReferenceID,
 			PlatformOrderId: checkoutSession.ID,
 			RefundStr:       checkoutSession.PaymentIntent.ID,
 		}, nil
