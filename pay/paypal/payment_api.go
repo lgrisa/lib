@@ -5,13 +5,12 @@ import (
 	"fmt"
 	"github.com/go-pay/gopay/paypal"
 	"github.com/lgrisa/library/pay"
-	"github.com/pkg/errors"
 	"strings"
 )
 
 func (c *Client) EventCheckoutOrderApproved(ctx context.Context, notify *WebhookNotifyResponse) (*pay.CheckoutOrderApprovedResult, error) {
 	if notify == nil {
-		return nil, errors.Errorf("notify is nil")
+		return nil, fmt.Errorf("notify is nil")
 	}
 
 	iapTransactionId := notify.Resource.Id
@@ -21,7 +20,7 @@ func (c *Client) EventCheckoutOrderApproved(ctx context.Context, notify *Webhook
 		ppRsp, err := c.GoPayClient.OrderCapture(ctx, iapTransactionId, nil)
 
 		if err != nil {
-			return nil, errors.Errorf("PaymentAuthorizeCapture error: %v", err)
+			return nil, fmt.Errorf("PaymentAuthorizeCapture error: %v", err)
 		}
 
 		if ppRsp.Code != paypal.Success {
@@ -29,13 +28,13 @@ func (c *Client) EventCheckoutOrderApproved(ctx context.Context, notify *Webhook
 				if ppRsp.ErrorResponse.Details[0].Issue == "ORDER_ALREADY_CAPTURED" {
 					return nil, pay.OrderAlreadyCapturedError
 				} else {
-					return nil, errors.Errorf("PaymentAuthorizeCapture error: %v", ppRsp.ErrorResponse)
+					return nil, fmt.Errorf("PaymentAuthorizeCapture error: %v", ppRsp.ErrorResponse)
 				}
 			}
 		}
 
 		if ppRsp.Response.Status != "COMPLETED" {
-			return nil, errors.Errorf("PaymentAuthorizeCapture status: %v", ppRsp.Response.Status)
+			return nil, fmt.Errorf("PaymentAuthorizeCapture status: %v", ppRsp.Response.Status)
 		}
 
 		orderInfo := ppRsp.Response.PurchaseUnits[0]
@@ -47,13 +46,13 @@ func (c *Client) EventCheckoutOrderApproved(ctx context.Context, notify *Webhook
 		}, nil
 
 	} else {
-		return nil, errors.Errorf("event type is not CHECKOUT.ORDER.APPROVED")
+		return nil, fmt.Errorf("event type is not CHECKOUT.ORDER.APPROVED")
 	}
 }
 
 func (c *Client) EventCheckoutOrderComplete(ctx context.Context, notify *WebhookNotifyResponse) (*pay.CheckoutOrderApprovedResult, error) {
 	if notify == nil {
-		return nil, errors.Errorf("notify is nil")
+		return nil, fmt.Errorf("notify is nil")
 	}
 
 	id := notify.Resource.SupplementaryData.RelatedIds["order_id"]
@@ -63,15 +62,15 @@ func (c *Client) EventCheckoutOrderComplete(ctx context.Context, notify *Webhook
 		ppRsp, err := c.GoPayClient.OrderDetail(ctx, id, nil)
 
 		if err != nil {
-			return nil, errors.Errorf("OrderDetail error: %v", err)
+			return nil, fmt.Errorf("OrderDetail error: %v", err)
 		}
 
 		if ppRsp.Code != paypal.Success {
-			return nil, errors.Errorf("OrderDetail ppRsp HttpStatusCode: %v,ErorrResponse: %v", ppRsp.Code, ppRsp.ErrorResponse)
+			return nil, fmt.Errorf("OrderDetail ppRsp HttpStatusCode: %v,ErorrResponse: %v", ppRsp.Code, ppRsp.ErrorResponse)
 		}
 
 		if ppRsp.Response.Status != "COMPLETED" {
-			return nil, errors.Errorf("OrderDetail status: %v", ppRsp.Response.Status)
+			return nil, fmt.Errorf("OrderDetail status: %v", ppRsp.Response.Status)
 		}
 
 		if len(ppRsp.Response.PurchaseUnits) > 1 {
@@ -85,13 +84,13 @@ func (c *Client) EventCheckoutOrderComplete(ctx context.Context, notify *Webhook
 		}, nil
 
 	} else {
-		return nil, errors.Errorf("event type is not CHECKOUT.ORDER.COMPLETE")
+		return nil, fmt.Errorf("event type is not CHECKOUT.ORDER.COMPLETE")
 	}
 }
 
 func (c *Client) EventCheckoutOrderRefund(ctx context.Context, notify *WebhookNotifyResponse) (string, error) {
 	if notify == nil {
-		return "", errors.Errorf("notify is nil")
+		return "", fmt.Errorf("notify is nil")
 	}
 
 	id := notify.Resource.Id
@@ -101,15 +100,15 @@ func (c *Client) EventCheckoutOrderRefund(ctx context.Context, notify *WebhookNo
 		ppRsp, err := c.GoPayClient.PaymentRefundDetail(ctx, id)
 
 		if err != nil {
-			return "", errors.Errorf("PaymentRefundDetail error: %v", err)
+			return "", fmt.Errorf("PaymentRefundDetail error: %v", err)
 		}
 
 		if ppRsp.Code != paypal.Success {
-			return "", errors.Errorf("PaymentRefundDetail ppRsp HttpStatusCode: %v,ErorrResponse: %v", ppRsp.Code, ppRsp.ErrorResponse)
+			return "", fmt.Errorf("PaymentRefundDetail ppRsp HttpStatusCode: %v,ErorrResponse: %v", ppRsp.Code, ppRsp.ErrorResponse)
 		}
 
 		if ppRsp.Response.Status != "COMPLETED" {
-			return "", errors.Errorf("PaymentRefundDetail status: %v", ppRsp.Response.Status)
+			return "", fmt.Errorf("PaymentRefundDetail status: %v", ppRsp.Response.Status)
 		}
 
 		var refundStr string
@@ -123,12 +122,12 @@ func (c *Client) EventCheckoutOrderRefund(ctx context.Context, notify *WebhookNo
 		}
 
 		if refundStr == "" {
-			return "", errors.Errorf("PaymentRefundDetail refundStr is empty")
+			return "", fmt.Errorf("PaymentRefundDetail refundStr is empty")
 		}
 
 		return refundStr, nil
 
 	} else {
-		return "", errors.Errorf("event type is not CHECKOUT.ORDER.REFUND")
+		return "", fmt.Errorf("event type is not CHECKOUT.ORDER.REFUND")
 	}
 }

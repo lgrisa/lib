@@ -1,8 +1,8 @@
 package paypal
 
 import (
+	"fmt"
 	"github.com/go-pay/gopay/paypal"
-	"github.com/pkg/errors"
 )
 
 type Client struct {
@@ -20,7 +20,7 @@ func NewClient(webhookId, clientId, Secret string, isProd bool) (*Client, error)
 	goPayClient, err := paypal.NewClient(clientId, Secret, isProd)
 
 	if err != nil {
-		return nil, errors.Errorf("NewClient paypal.NewClient error: %v", err)
+		return nil, fmt.Errorf("NewClient paypal.NewClient error: %v", err)
 	}
 
 	return &Client{

@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/lgrisa/library/pay"
-	"github.com/stripe/stripe-go/v76"
-	"github.com/stripe/stripe-go/v76/checkout/session"
+	"github.com/stripe/stripe-go/v78"
+	"github.com/stripe/stripe-go/v78/checkout/session"
 )
 
 // CreateOrder creates a new order https://docs.stripe.com/api/checkout/sessions/create
@@ -14,7 +14,7 @@ import (
 // successUrl The URL to redirect to after the transaction is successful
 // transactionUrl The URL to redirect to after the transaction is successful
 // platFromOrderId The order number of the recharge
-func (c *Client) CreateOrder(priceId string, outTradeNo string, successUrl string) (transactionUrl string, platFromOrderId string) {
+func (c *Client) CreateOrder(priceId string, outTradeNo string, successUrl string) (string, string, error) {
 
 	params := &stripe.CheckoutSessionParams{
 		LineItems: []*stripe.CheckoutSessionLineItemParams{
@@ -34,19 +34,21 @@ func (c *Client) CreateOrder(priceId string, outTradeNo string, successUrl strin
 
 	curSession, err := session.New(params)
 	if err != nil {
-		return
+		return "", "", err
 	}
 
-	transactionUrl = curSession.URL
-
-	platFromOrderId = curSession.ID
-
-	return
+	return curSession.URL, curSession.ID, nil
 }
 
-func (c *Client) CheckoutSessionCompleted(rawData []byte) (*pay.CheckoutOrderApprovedResult, error) {
+func (c *Client) CheckoutSessionCompleted(event *stripe.Event) (*pay.CheckoutOrderApprovedResult, error) {
+
+	if event.Type != PayCompleted && event.Type != PayAsyncSucceeded {
+		return nil, fmt.Errorf("event.Type != checkout.session.completed")
+	}
+
 	checkoutSession := &stripe.CheckoutSession{}
-	err := json.Unmarshal(rawData, checkoutSession)
+	err := json.Unmarshal(event.Data.Raw, checkoutSession)
+
 	if err != nil {
 		return nil, err
 	}
@@ -59,5 +61,23 @@ func (c *Client) CheckoutSessionCompleted(rawData []byte) (*pay.CheckoutOrderApp
 		}, nil
 	} else {
 		return nil, fmt.Errorf("checkoutSession.PaymentStatus == %v", checkoutSession.PaymentStatus)
+	}
+}
+
+// CheckoutSessionRefunded https://docs.stripe.com/api/refunds/create
+func (c *Client) CheckoutSessionRefunded(event *stripe.Event) (string, error) {
+	if event.Type != REFUNDED {
+		return "", fmt.Errorf("event.Type != charge.refunded")
+	}
+
+	refund := &stripe.Refund{}
+	if err := json.Unmarshal(event.Data.Raw, refund); err != nil {
+		return "", err
+	}
+
+	if refund.Status == stripe.RefundStatusSucceeded {
+		return refund.PaymentIntent.ID, nil
+	} else {
+		return "", fmt.Errorf("refund.Status == %v", refund.Status)
 	}
 }

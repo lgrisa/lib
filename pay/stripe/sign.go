@@ -4,17 +4,11 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/lgrisa/library/utils"
-	"github.com/stripe/stripe-go/v76"
-	"github.com/stripe/stripe-go/v76/webhook"
+	"github.com/stripe/stripe-go/v78"
+	"github.com/stripe/stripe-go/v78/webhook"
 )
 
-const (
-	PAY_COMPLETED       = "checkout.session.completed"
-	PAY_ASYNC_SUCCEEDED = "checkout.session.async_payment_succeeded"
-	REFUNDED            = "charge.refunded"
-)
-
-func (c *Client) WebHookVerify(context *gin.Context) (*stripe.Event, error) {
+func (c *Client) WebHookVerifySign(context *gin.Context) (*stripe.Event, error) {
 	body, err := context.GetRawData()
 	stripeSignature := context.GetHeader("Stripe-Signature")
 
