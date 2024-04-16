@@ -16,7 +16,8 @@
 #-u, --update 仅仅进行更新,也就是跳过所有已经存在于DST,并且文件时间晚于要备份的文件(不覆盖更新的文件)
 #--inplace update destination files in-place (SEE MAN PAGE)
 #--append 将数据附加到较短的文件 --append-verify 类似--append,但是对旧数据会计算校验和
-#-d, --dirs 不使用递归传输目录 -l, --links 不处理符号链接(保留符号链接)
+#-d, --dirs 不使用递归传输目录
+# -l, --links 不处理符号链接(保留符号链接)
 #-L, --copy-links 将符号链接处理为具体的文件或者文件夹
 #    --copy-unsafe-links 只处理不安全的符号链接
 #    --safe-links 忽略不在SRC源目录的符号链接
