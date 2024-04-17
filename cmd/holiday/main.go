@@ -7,7 +7,8 @@ import (
 )
 
 func main() {
-	//utils.Export(map[int]string{2024: "https://www.gov.cn/yaowen/liebiao/202310/content_6911540.htm"}, config.StartConfig.ConfigPath.HolidayPath)
+	//holidayPath := "holiday" //导出节假日数据路径
+	//holiday.Export(map[int]string{2024: "https://www.gov.cn/yaowen/liebiao/202310/content_6911540.htm"}, holidayPath)
 
 	if err := config.ReadStartUpConfig(); err != nil {
 		utils.LogPrintf("读取配置失败: %v", err)
