@@ -15,3 +15,5 @@ const (
 )
 
 //沙盒测试地址：https://global.alipay.com/docs/ac/ref/testwallet
+
+//支持货币类型：https://global.alipay.com/docs/ac/ref/cc#ONkIe

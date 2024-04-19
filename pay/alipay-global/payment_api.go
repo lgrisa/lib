@@ -154,7 +154,7 @@ func (a *GlobalAliPayClient) payParamHandle(bm utils.BodyMap, RedirectUrl string
 	return string(marshal), nil
 }
 
-// TradePagePay https://global.alipay.com/docs/ac/ams/api_fund#WWH90
+// TradePagePay https://global.alipay.com/docs/ac/ams/payment_cashier
 func (a *GlobalAliPayClient) TradePagePay(ctx *gin.Context, bm utils.BodyMap, returnUrl string, isMobile, isAndroid bool) (*PayResp, error) {
 	sendParam, err := a.payParamHandle(bm, returnUrl, isMobile, isAndroid)
 	if err != nil {
