@@ -27,6 +27,10 @@ func main() {
 		utils.LogPrintf("Today %v is holiday:%v ", ctime.String(), holidayData.IsHoliday(ctime))
 	}
 
+	if holidayData == nil {
+		return
+	}
+
 	for i, v := range *holidayData {
 		utils.LogPrintf("%v:%v\n", i, v)
 	}

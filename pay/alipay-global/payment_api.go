@@ -127,7 +127,14 @@ func (a *GlobalAliPayClient) payParamHandle(bm utils.BodyMap, RedirectUrl string
 	payJson.Order.ReferenceOrderId = bm.Get("out_trade_no")
 	payJson.Order.OrderDescription = bm.Get("subject")
 
-	payJson.PaymentAmount.Currency = bm.GetString("currency")
+	//不支持的货币类型，默认为USD
+	currency := bm.GetString("currency")
+
+	if _, ok := CurrencyType[currency]; !ok {
+		currency = "USD"
+	}
+
+	payJson.PaymentAmount.Currency = currency
 	payJson.PaymentAmount.Value = amountInt
 	payJson.PaymentMethod.PaymentMethodType = "ALIPAY_CN"
 	payJson.PaymentRedirectUrl = RedirectUrl
@@ -156,6 +163,7 @@ func (a *GlobalAliPayClient) payParamHandle(bm utils.BodyMap, RedirectUrl string
 
 // TradePagePay https://global.alipay.com/docs/ac/ams/payment_cashier
 func (a *GlobalAliPayClient) TradePagePay(ctx *gin.Context, bm utils.BodyMap, returnUrl string, isMobile, isAndroid bool) (*PayResp, error) {
+
 	sendParam, err := a.payParamHandle(bm, returnUrl, isMobile, isAndroid)
 	if err != nil {
 		return nil, errors.Errorf("payParamHandle(%v)：%v", bm, err)
