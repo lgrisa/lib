@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	jsoniter "github.com/json-iterator/go"
-	"github.com/lgrisa/library/utils"
+	"github.com/lgrisa/lib/utils"
 	"github.com/pkg/errors"
 	"os"
 	"sort"

@@ -6,7 +6,8 @@ import (
 	"github.com/disgoorg/disgo/discord"
 	"github.com/disgoorg/disgo/webhook"
 	"github.com/disgoorg/snowflake/v2"
-	"github.com/lgrisa/library/utils"
+	"github.com/lgrisa/lib/utils"
+	"github.com/lgrisa/lib/utils/log"
 	"github.com/pkg/errors"
 	"github.com/skip2/go-qrcode"
 	"math/rand"
@@ -48,11 +49,11 @@ type initCiStruct struct {
 func main() {
 
 	for i, v := range os.Args {
-		utils.LogTracef("args[%d]: %s\n", i, v)
+		log.LogTracef("args[%d]: %s\n", i, v)
 	}
 
 	output, _ := utils.RunCommandGetOutPut("pwd")
-	utils.LogTracef("cur dir: %s", string(output))
+	log.LogTracef("cur dir: %s", string(output))
 
 	initCi, err := initStruct()
 
@@ -69,7 +70,7 @@ func main() {
 
 func initStruct() (*initCiStruct, error) {
 	for i, v := range os.Args {
-		utils.LogTracef("args[%d]: %s\n", i, v)
+		log.LogTracef("args[%d]: %s\n", i, v)
 	}
 
 	execTag := os.Args[1]
@@ -82,7 +83,7 @@ func initStruct() (*initCiStruct, error) {
 			return nil, errors.Wrapf(err, "run shell failed")
 		}
 	} else {
-		utils.LogTracef("Not shell script %s", execShell)
+		log.LogTracef("Not shell script %s", execShell)
 	}
 
 	err := os.MkdirAll(BuildDir, os.ModePerm)
@@ -104,7 +105,7 @@ func initStruct() (*initCiStruct, error) {
 
 	platform := getPlatformByExecTag(execTag)
 
-	utils.LogTracef("platform: %s", platform)
+	log.LogTracef("platform: %s", platform)
 
 	if platform == "" {
 		execExit(fmt.Sprintf("unkonw platform: %s", execTag))
@@ -112,7 +113,7 @@ func initStruct() (*initCiStruct, error) {
 
 	activeDirPath = fmt.Sprintf("%s/%s", activeDirPath, platform)
 
-	utils.LogTracef("activeDirPath: %s", activeDirPath)
+	log.LogTracef("activeDirPath: %s", activeDirPath)
 
 	activeDir, err := os.ReadDir(activeDirPath)
 	if err != nil {
@@ -160,7 +161,7 @@ func (i *initCiStruct) packAndSendFile() error {
 				execExit(fmt.Sprintf("zip err: %s, err: %s", file.Name(), err))
 			}
 
-			utils.LogTracef("zip file: %s", fileName)
+			log.LogTracef("zip file: %s", fileName)
 		}
 
 		//反复打包不能覆盖，对于打包出来的文件夹名称进行修饰
@@ -185,7 +186,7 @@ func (i *initCiStruct) packAndSendFile() error {
 			execExit(fmt.Sprintf("生成二维码失败: %s, err: %s", file.Name(), err))
 		}
 
-		utils.LogTracef("create png: %s", pngPath)
+		log.LogTracef("create png: %s", pngPath)
 
 		output, err = utils.RunCommandGetOutPut(fmt.Sprintf("ncftpput -u %s -p %s %s /%s/%s/%s %s",
 			uploadName, uploadPasswd, uploadHost, uploadTargetRootPath, uploadTargetMidPath, QRCodePath, pngPath))
@@ -265,7 +266,7 @@ type sendDisCordStruct struct {
 
 func execExit(errMsg string) {
 	if errMsg != "" {
-		utils.LogErrorf(errMsg)
+		log.LogErrorf(errMsg)
 		senDiscordErrMsg(errMsg)
 	}
 

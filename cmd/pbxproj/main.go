@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/lgrisa/library/pbxproj"
-	"github.com/lgrisa/library/utils"
+	"github.com/lgrisa/lib/pbxproj"
+	"github.com/lgrisa/lib/utils"
 	"os"
 	"strings"
 )

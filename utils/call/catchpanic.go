@@ -1,7 +1,7 @@
 package call
 
 import (
-	"github.com/lgrisa/library/utils"
+	"github.com/lgrisa/lib/utils/log"
 )
 
 func CatchPanic(name string, f func()) {
@@ -12,7 +12,7 @@ func CatchPanic(name string, f func()) {
 
 func CatchLoopPanic(name string, f func()) {
 	if name != "" {
-		defer utils.LogInfof("%s exit", name)
+		defer log.LogInfof("%s exit", name)
 	}
 	defer TryRecover(name)
 

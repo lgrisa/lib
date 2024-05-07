@@ -2,6 +2,7 @@ package utils
 
 import (
 	"fmt"
+	"github.com/lgrisa/lib/utils/log"
 	"strconv"
 	"strings"
 )
@@ -9,7 +10,7 @@ import (
 func GetPreviousBetweenCommit(tag string) string {
 	tagList := strings.Split(tag, ".")
 	if len(tagList) < 2 {
-		LogTracef("tag format err: %s not get commit\n", tag)
+		log.LogTracef("tag format err: %s not get commit\n", tag)
 		return ""
 	}
 
@@ -17,12 +18,12 @@ func GetPreviousBetweenCommit(tag string) string {
 
 	lastTagNumInt, err := strconv.Atoi(lastTagNum)
 	if err != nil {
-		LogTracef("tag转换数字失败: %s, err: %s\n", lastTagNum, err)
+		log.LogTracef("tag转换数字失败: %s, err: %s\n", lastTagNum, err)
 		return ""
 	}
 
 	if lastTagNumInt < 1 {
-		LogTracef("tag num < 1: %s\n", lastTagNum)
+		log.LogTracef("tag num < 1: %s\n", lastTagNum)
 		return ""
 	}
 
@@ -32,12 +33,12 @@ func GetPreviousBetweenCommit(tag string) string {
 	output, err := RunCommandGetOutPut(fmt.Sprintf("git tag -l %s", lastTagName))
 
 	if err != nil {
-		LogTracef("获取tag失败: %s, err: %s\n", lastTagName, err)
+		log.LogTracef("获取tag失败: %s, err: %s\n", lastTagName, err)
 		return ""
 	}
 
 	if string(output) == "" {
-		LogTracef("tag不存在: %s\n", lastTagName)
+		log.LogTracef("tag不存在: %s\n", lastTagName)
 		return ""
 	}
 
@@ -61,7 +62,7 @@ func GetPreviousBetweenCommit(tag string) string {
 	output, err = RunCommandGetOutPut(fmt.Sprintf("git log %s...%s --pretty=format:\"%%s\"", lastTagName, tag))
 
 	if err != nil {
-		LogErrorf("获取tag之间的commit失败: %s, err: %s\n", lastTagName, err)
+		log.LogErrorf("获取tag之间的commit失败: %s, err: %s\n", lastTagName, err)
 		return ""
 	}
 

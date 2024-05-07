@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"github.com/gin-gonic/gin"
-	"github.com/lgrisa/library/utils"
+	"github.com/lgrisa/lib/utils"
 	"github.com/pkg/errors"
 	"net/http"
 )

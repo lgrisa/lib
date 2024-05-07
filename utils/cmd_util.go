@@ -3,6 +3,7 @@ package utils
 import (
 	"bytes"
 	"fmt"
+	"github.com/lgrisa/lib/utils/log"
 	"github.com/pkg/errors"
 	"io"
 	"os/exec"
@@ -75,7 +76,7 @@ func RunSyncCommand(shellCmd string) error {
 	stderr, _ := cmd.StderrPipe()
 
 	if err := cmd.Start(); err != nil {
-		LogErrorf("Error starting command: %s......", err.Error())
+		log.LogErrorf("Error starting command: %s......", err.Error())
 		return err
 	}
 
@@ -120,7 +121,7 @@ func RunSyncCommand(shellCmd string) error {
 	}
 
 	if err := cmd.Wait(); err != nil {
-		LogErrorf("Error waiting for command execution: %s......", err.Error())
+		log.LogErrorf("Error waiting for command execution: %s......", err.Error())
 		return err
 	}
 
@@ -128,7 +129,7 @@ func RunSyncCommand(shellCmd string) error {
 }
 
 func RunCommandGetOutPut(cmd string) ([]byte, error) {
-	LogTracef("RunCommandGetOutPut: %s", cmd)
+	log.LogTracef("RunCommandGetOutPut: %s", cmd)
 
 	pwdCmd := exec.Command("sh", "-c", cmd)
 	return pwdCmd.CombinedOutput()

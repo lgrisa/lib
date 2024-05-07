@@ -1,8 +1,8 @@
 package message
 
 import (
-	"github.com/lgrisa/library/utils"
-	"github.com/lgrisa/library/utils/call"
+	"github.com/lgrisa/lib/shared/utils/call"
+	"github.com/lgrisa/lib/shared/utils/log"
 	"github.com/pkg/errors"
 )
 
@@ -30,7 +30,7 @@ func NewSendMessageClient(messagePrefix, dingDingAccessToken, dingDingSecret, di
 }
 
 func (m *SendMessageClient) SendTextMessage(msg string) {
-	utils.LogErrorf("SendMessage: %v", msg)
+	log.LogPrintf("SendMessage: %v", msg)
 
 	go call.CatchLoopPanic("SendMessage", func() {
 		message := m.messagePrefix + msg
@@ -38,7 +38,7 @@ func (m *SendMessageClient) SendTextMessage(msg string) {
 		if m.DingRobot != nil {
 			err := m.DingRobot.SendTextMessage(message)
 			if err != nil {
-				utils.LogErrorf("SendTextMessage DingDing error: %v", err)
+				log.LogErrorf("SendTextMessage DingDing error: %v", err)
 			}
 		}
 

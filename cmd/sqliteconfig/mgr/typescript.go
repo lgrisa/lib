@@ -3,7 +3,8 @@ package mgr
 import (
 	"bytes"
 	"fmt"
-	"github.com/lgrisa/library/utils"
+	"github.com/lgrisa/lib/utils"
+	"github.com/lgrisa/lib/utils/compress"
 	"github.com/pkg/errors"
 	"io"
 	"net/http"
@@ -97,7 +98,7 @@ func (m *Manager) handleGenTypeScript(w http.ResponseWriter, r *http.Request) {
 		fileBytes["Protobuf/confpb.d.ts"] = pbts
 		fileBytes["Logic/Config/ConfigsGen.ts"] = configBytes
 
-		body, err := utils.PackZipData(fileBytes)
+		body, err := compress.PackZipData(fileBytes)
 		if err != nil {
 			errMsg := fmt.Sprintf("PackData fail, %v", err)
 			fmt.Println(errMsg)

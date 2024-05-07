@@ -5,7 +5,8 @@ import (
 	"flag"
 	"fmt"
 	jsoniter "github.com/json-iterator/go"
-	"github.com/lgrisa/library/utils"
+	"github.com/lgrisa/lib/utils"
+	"github.com/lgrisa/lib/utils/compress"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 	"io"
@@ -39,7 +40,7 @@ func main() {
 	flag.Parse()
 
 	// 遍历conf文件夹
-	data, err := utils.ZipPackDir(*confPath)
+	data, err := compress.ZipPackDir(*confPath)
 	if err != nil {
 		fmt.Println("遍历文件夹压缩生成Data失败：", err)
 		return
@@ -61,7 +62,7 @@ func main() {
 
 	fmt.Printf("FileMd5: %s, FileSize: %d\n", resp.Data.FileMd5, resp.Data.FileSize)
 
-	fileMap, err := utils.UnpackZipData(resp.Data.Body)
+	fileMap, err := compress.UnpackZipData(resp.Data.Body)
 	if err != nil {
 		fmt.Println("解压zip失败：", err)
 		return

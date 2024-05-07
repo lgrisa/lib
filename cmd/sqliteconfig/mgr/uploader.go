@@ -8,7 +8,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/aws/aws-sdk-go-v2/service/s3/types"
 	smithyhttp "github.com/aws/smithy-go/transport/http"
-	"github.com/lgrisa/library/cmd/sqliteconfig/mgr/pool"
+	"github.com/lgrisa/lib/cmd/sqliteconfig/mgr/pool"
 	"github.com/pkg/errors"
 	"github.com/rs/zerolog/log"
 	"io"

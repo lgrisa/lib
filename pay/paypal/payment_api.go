@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/go-pay/gopay/paypal"
-	"github.com/lgrisa/library/pay"
+	"github.com/lgrisa/lib/pay"
 	"strings"
 )
 

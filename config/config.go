@@ -5,6 +5,7 @@ import (
 	"github.com/spf13/viper"
 	"os"
 	"sync"
+	"time"
 )
 
 type StartConfigStruct struct {
@@ -27,6 +28,11 @@ type StartConfigStruct struct {
 		// 尝试创建表
 		CreateTableAnyway bool `mapstructure:"create_table_anyway"`
 	} `mapstructure:"aws"`
+
+	SwitchController struct {
+		IsDebugMode   bool      `mapstructure:"is_debug_mode"`
+		SetServerTime time.Time `mapstructure:"server_time"`
+	} `mapstructure:"switch_controller"`
 }
 
 var (

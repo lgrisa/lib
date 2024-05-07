@@ -2,9 +2,9 @@ package alipayGlobal
 
 import (
 	"crypto/rsa"
-	"github.com/lgrisa/library/pay"
-	"github.com/lgrisa/library/utils"
-	"github.com/lgrisa/library/utils/xrsa"
+	"github.com/lgrisa/lib/pay"
+	"github.com/lgrisa/lib/utils"
+	"github.com/lgrisa/lib/utils/xrsa"
 	"github.com/pkg/errors"
 )
 

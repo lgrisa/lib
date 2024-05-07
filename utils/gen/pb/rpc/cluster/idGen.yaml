@@ -1,0 +1,39 @@
+msgidcounter: 2
+msgmap:
+  cluster_server_call:
+    msgid: 1
+    errorsidcounter: 0
+    fieldsidcounter:
+      AnyClusterServerCallProtoRequest: 6
+      LogicClusterServerCallProtoResponse: 1
+    fieldsidmap:
+      AnyClusterServerCallProtoRequest:
+        data: 4
+        module_id: 5
+        msg_id: 6
+        namespacce: 1
+        target_gs_id: 2
+        user_id: 3
+      LogicClusterServerCallProtoResponse:
+        data: 1
+    errorsidmap: {}
+  cluster_user_call:
+    msgid: 2
+    errorsidcounter: 0
+    fieldsidcounter:
+      AnyClusterUserCallProtoRequest: 7
+      LogicClusterUserCallProtoResponse: 3
+    fieldsidmap:
+      AnyClusterUserCallProtoRequest:
+        data: 6
+        module_id: 4
+        msg_id: 5
+        namespacce: 1
+        namespace: 7
+        target_gs_id: 2
+        user_id: 3
+      LogicClusterUserCallProtoResponse:
+        data: 1
+        fail_reason: 3
+        result: 2
+    errorsidmap: {}

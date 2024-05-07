@@ -3,7 +3,7 @@ package mgr
 import (
 	"fmt"
 	jsoniter "github.com/json-iterator/go"
-	"github.com/lgrisa/library/utils"
+	"github.com/lgrisa/lib/utils"
 	"github.com/pkg/errors"
 	"io"
 	"net/http"

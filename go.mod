@@ -1,8 +1,9 @@
-module github.com/lgrisa/library
+module github.com/lgrisa/lib
 
 go 1.20
 
 require (
+	github.com/alitto/pond v1.8.3
 	github.com/anaskhan96/soup v1.2.5
 	github.com/aws/aws-sdk-go v1.51.7
 	github.com/aws/aws-sdk-go-v2 v1.26.1
@@ -15,21 +16,28 @@ require (
 	github.com/disgoorg/disgo v0.16.11
 	github.com/disgoorg/log v1.2.1
 	github.com/disgoorg/snowflake/v2 v2.0.1
+	github.com/eapache/queue v1.1.0
+	github.com/funny/utest v0.0.0-20161029064919-43870a374500
 	github.com/gin-gonic/gin v1.9.1
 	github.com/go-pay/gopay v1.5.100
+	github.com/golang/snappy v0.0.4
 	github.com/guregu/dynamo v1.22.0
 	github.com/jhump/protoreflect v1.16.0
 	github.com/json-iterator/go v1.1.12
 	github.com/lestrrat-go/file-rotatelogs v2.4.0+incompatible
 	github.com/mattn/go-sqlite3 v1.14.22
+	github.com/onsi/gomega v1.27.7
 	github.com/oschwald/geoip2-golang v1.9.0
 	github.com/pkg/errors v0.9.1
 	github.com/rs/zerolog v1.32.0
+	github.com/shopspring/decimal v1.4.0
 	github.com/sirupsen/logrus v1.9.3
 	github.com/skip2/go-qrcode v0.0.0-20200617195104-da1b6568686e
 	github.com/spf13/viper v1.18.2
 	github.com/stripe/stripe-go/v78 v78.1.0
 	github.com/tealeg/xlsx v1.0.5
+	go.uber.org/atomic v1.9.0
+	golang.org/x/exp v0.0.0-20240112132812-db7319d0e0e3
 	golang.org/x/net v0.22.0
 	gopkg.in/yaml.v3 v3.0.1
 )
@@ -66,6 +74,7 @@ require (
 	github.com/go-playground/validator/v10 v10.14.0 // indirect
 	github.com/goccy/go-json v0.10.2 // indirect
 	github.com/golang/protobuf v1.5.4 // indirect
+	github.com/google/go-cmp v0.6.0 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/jonboulle/clockwork v0.4.0 // indirect
@@ -93,7 +102,6 @@ require (
 	go.uber.org/multierr v1.11.0 // indirect
 	golang.org/x/arch v0.3.0 // indirect
 	golang.org/x/crypto v0.21.0 // indirect
-	golang.org/x/exp v0.0.0-20240112132812-db7319d0e0e3 // indirect
 	golang.org/x/sync v0.6.0 // indirect
 	golang.org/x/sys v0.18.0 // indirect
 	golang.org/x/text v0.14.0 // indirect

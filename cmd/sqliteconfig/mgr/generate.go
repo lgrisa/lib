@@ -4,7 +4,8 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/lgrisa/library/utils"
+	"github.com/lgrisa/lib/utils"
+	"github.com/lgrisa/lib/utils/compress"
 	"github.com/pkg/errors"
 	"github.com/tealeg/xlsx"
 	"os"
@@ -24,7 +25,7 @@ func (d *excel_zip) GenerateCs() error {
 }
 
 func (d *excel_zip) doGenerate(shouldCache, createCS, createDB bool) error {
-	fileMap, err := utils.UnpackZipData(d.data)
+	fileMap, err := compress.UnpackZipData(d.data)
 	if err != nil {
 		return errors.Wrapf(err, "unpackData")
 	}
@@ -265,5 +266,5 @@ func (d *excel_zip) packCsBody() ([]byte, error) {
 
 	fileBytes["conf.proto"] = protoBufBytes.Bytes()
 
-	return utils.PackZipData(fileBytes)
+	return compress.PackZipData(fileBytes)
 }

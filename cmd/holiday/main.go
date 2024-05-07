@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/lgrisa/library/config"
-	"github.com/lgrisa/library/utils"
+	"github.com/lgrisa/lib/config"
+	"github.com/lgrisa/lib/utils/log"
 	"time"
 )
 
@@ -11,20 +11,20 @@ func main() {
 	//holiday.Export(map[int]string{2024: "https://www.gov.cn/yaowen/liebiao/202310/content_6911540.htm"}, holidayPath)
 
 	if err := config.ReadStartUpConfig(); err != nil {
-		utils.LogPrintf("读取配置失败: %v", err)
+		log.LogPrintf("读取配置失败: %v", err)
 		return
 	}
 
 	holidayData, err := config.LoadHolidaysJson()
 
 	if err != nil {
-		utils.LogPrintf("LoadHolidaysJson error: %s\n", err)
+		log.LogPrintf("LoadHolidaysJson error: %s\n", err)
 		return
 	}
 
 	if holidayData != nil {
 		ctime := time.Now()
-		utils.LogPrintf("Today %v is holiday:%v ", ctime.String(), holidayData.IsHoliday(ctime))
+		log.LogPrintf("Today %v is holiday:%v ", ctime.String(), holidayData.IsHoliday(ctime))
 	}
 
 	if holidayData == nil {
@@ -32,6 +32,6 @@ func main() {
 	}
 
 	for i, v := range *holidayData {
-		utils.LogPrintf("%v:%v\n", i, v)
+		log.LogPrintf("%v:%v\n", i, v)
 	}
 }

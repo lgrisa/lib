@@ -3,7 +3,7 @@ package stripe
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/lgrisa/library/pay"
+	"github.com/lgrisa/lib/pay"
 	"github.com/stripe/stripe-go/v78"
 	"github.com/stripe/stripe-go/v78/checkout/session"
 )

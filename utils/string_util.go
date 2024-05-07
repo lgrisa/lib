@@ -1,11 +1,16 @@
 package utils
 
 import (
+	"bytes"
 	"fmt"
+	"github.com/pkg/errors"
 	"log"
 	"regexp"
 	"strconv"
 	"strings"
+	"unicode"
+	"unicode/utf8"
+	"unsafe"
 )
 
 // Capitalize 首字母大写
@@ -118,4 +123,227 @@ func ParseSize(size string) (int64, string) {
 	}
 	sizeStr := strconv.FormatInt(num, 10) + unit
 	return byteNum, sizeStr
+}
+
+// Byte2String 快速把一个[]byte转换为string. 使string在背后直接使用这个[]byte作为它的数据而不再copy一份
+// 调用之后不能再修改原始的[]byte中的数据, 不然会导致string被修改
+func Byte2String(b []byte) string {
+	return *(*string)(unsafe.Pointer(&b))
+}
+
+// String2Byte 快速把一个string转换为[]byte. 直接使用string背后的[]byte
+// 调用之后不能修改[]byte中的数据, 不然会导致string被修改
+func String2Byte(b string) []byte {
+	return *(*[]byte)(unsafe.Pointer(&b))
+}
+
+func GetCharLen(s string) int {
+
+	charLen := 0
+	for _, r := range []rune(s) {
+		n := utf8.RuneLen(r)
+		switch n {
+		case -1:
+			// 当成最大的unicode字符处理
+			charLen += 4
+		case 1:
+			charLen += 1
+		default:
+			// 多字节字符，一个当成2个
+			charLen += 2
+		}
+	}
+
+	return charLen
+}
+
+func TruncateCharLen(s string, maxCharLen int) string {
+	runeArray := []rune(s)
+	b := &bytes.Buffer{}
+
+	charLen := 0
+	for _, r := range runeArray {
+		n := utf8.RuneLen(r)
+		switch n {
+		case -1:
+			// 跳过这种字符
+			continue
+		case 1:
+			charLen += 1
+		default:
+			// 多字节字符，一个当成2个
+			charLen += 2
+		}
+
+		if charLen > maxCharLen {
+			break
+		}
+		b.WriteRune(r)
+	}
+
+	return b.String()
+}
+
+// ReplaceInvalidChar 替换非法的字符
+func ReplaceInvalidChar(s string) string {
+	runeArray := []rune(s)
+	buffer := bytes.NewBuffer(make([]byte, 0, len(runeArray)))
+
+	for _, r := range runeArray {
+		if isValidRune(r, true) {
+			buffer.WriteRune(r)
+		}
+	}
+
+	return strings.TrimSpace(buffer.String())
+}
+
+func IsValidName(s string) bool {
+
+	// 名字，不能空格，符号开头
+	// 不能包含非法字符
+
+	runeArray := []rune(s)
+	lastIdx := len(runeArray) - 1
+	for i, r := range runeArray {
+		puntValid := !(i == 0 || i == lastIdx)
+
+		// 开头必须是字母，或者数字，不能是符号开头
+		if !isValidRune(r, puntValid) {
+			return false
+		}
+	}
+
+	return true
+}
+
+func HaveInvalidChar(s string) bool {
+	runeArray := []rune(s)
+
+	for _, r := range runeArray {
+		if !isValidRune(r, true) {
+			return true
+		}
+	}
+
+	return false
+}
+
+func isValidRune(r rune, punctValid bool) bool {
+	switch r {
+	case '_', ' ':
+		if !punctValid {
+			return false
+		}
+	case '0', '1', '2', '3', '4', '5', '6', '7', '8', '9':
+
+	default:
+		if !unicode.IsLetter(r) {
+			return false
+		}
+	}
+
+	return true
+}
+
+func Split(s, sep string) []string {
+	return strings.Split(s, sep)
+}
+
+func Split2(s, sep, sep2 string) [][]string {
+	array := strings.Split(s, sep)
+	rets := make([][]string, 0, len(array))
+	for _, v := range array {
+		rets = append(rets, Split(v, sep2))
+	}
+	return rets
+}
+
+func SplitToNumber(s, sep string) ([]int64, error) {
+	var ret []int64
+	for _, v := range strings.Split(s, sep) {
+		i, err := strconv.ParseInt(strings.TrimSpace(v), 10, 64)
+		if err == nil {
+			ret = append(ret, i)
+		} else {
+			return nil, errors.Wrapf(err, "解析数字失败，字符串：%s", v)
+		}
+	}
+	return ret, nil
+}
+func SplitToF64(s, sep string) ([]float64, error) {
+	var ret []float64
+	for _, v := range strings.Split(s, sep) {
+		f, err := strconv.ParseFloat(strings.TrimSpace(v), 64)
+		if err == nil {
+			ret = append(ret, f)
+		} else {
+			return nil, errors.Wrapf(err, "解析数字失败，字符串：%s", v)
+		}
+	}
+	return ret, nil
+}
+
+func SplitToNumber2(s, sep, sep2 string) ([][]int64, error) {
+	array := strings.Split(s, sep)
+
+	rets := make([][]int64, 0, len(array))
+	for _, v := range array {
+		ret, err := SplitToNumber(v, sep2)
+		if err != nil {
+			return nil, errors.Wrapf(err, s)
+		}
+		rets = append(rets, ret)
+	}
+	return rets, nil
+}
+
+func SplitToI64F64Map(s, sep, sep2 string) (map[int64]float64, error) {
+	array := strings.Split(s, sep)
+
+	rets := make(map[int64]float64, len(array))
+	for _, v := range array {
+		array := strings.Split(v, sep2)
+		if len(array) != 2 {
+			return nil, errors.New("解析失败, len(array) != 2")
+		}
+
+		i, err := strconv.ParseInt(strings.TrimSpace(array[0]), 10, 64)
+		if err != nil {
+			return nil, errors.Wrapf(err, "解析数字失败，字符串：%s", array[0])
+		}
+
+		f, err := strconv.ParseFloat(strings.TrimSpace(array[1]), 64)
+		if err != nil {
+			return nil, errors.Wrapf(err, "解析数字失败，字符串：%s", array[1])
+		}
+
+		if _, exist := rets[i]; exist {
+			return nil, errors.New("解析失败, 存在重复的key")
+		}
+
+		rets[i] = f
+	}
+	return rets, nil
+}
+
+func SplitToStrMap(s, sep, sep2 string) (map[string]string, error) {
+	array := strings.Split(s, sep)
+
+	rets := make(map[string]string, len(array))
+	for _, v := range array {
+		array := strings.Split(v, sep2)
+		if len(array) != 2 {
+			return nil, errors.Errorf("解析失败, len(array) != 2, %v", s)
+		}
+		key := strings.TrimSpace(array[0])
+		value := strings.TrimSpace(array[1])
+
+		if _, exist := rets[key]; exist {
+			return nil, errors.Errorf("解析失败, duplicate key, %v", s)
+		}
+
+		rets[key] = value
+	}
+	return rets, nil
 }

@@ -7,7 +7,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/credentials"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
-	"github.com/lgrisa/library/cmd/sqliteconfig/mgr"
+	"github.com/lgrisa/lib/cmd/sqliteconfig/mgr"
 	"github.com/pkg/errors"
 	"time"
 )

@@ -1,7 +1,7 @@
 package call
 
 import (
-	"github.com/lgrisa/library/utils"
+	"github.com/lgrisa/lib/utils/log"
 	"runtime/debug"
 )
 
@@ -18,7 +18,7 @@ func GetServer() string {
 func TryRecover(handlerName string) bool {
 	if r := recover(); r != nil {
 		stack := string(debug.Stack())
-		utils.LogErrorf(handlerName+" recovered from panic!!! SERIOUS PROBLEM, err: %v, stack: %v", r, stack)
+		log.LogErrorf(handlerName+" recovered from panic!!! SERIOUS PROBLEM, err: %v, stack: %v", r, stack)
 		return true
 	}
 	return false
@@ -27,7 +27,7 @@ func TryRecover(handlerName string) bool {
 func RecoverFunc(handlerName string, f func()) bool {
 	if r := recover(); r != nil {
 		stack := string(debug.Stack())
-		utils.LogErrorf(handlerName+" recovered from panic!!! SERIOUS PROBLEM, err: %v, stack: %v", r, stack)
+		log.LogErrorf(handlerName+" recovered from panic!!! SERIOUS PROBLEM, err: %v, stack: %v", r, stack)
 		f()
 		return true
 	}
@@ -37,7 +37,7 @@ func RecoverFunc(handlerName string, f func()) bool {
 func RecoverError(handlerName string, f func(err interface{})) bool {
 	if r := recover(); r != nil {
 		stack := string(debug.Stack())
-		utils.LogErrorf(handlerName+" recovered from panic!!! SERIOUS PROBLEM, err: %v, stack: %v", r, stack)
+		log.LogErrorf(handlerName+" recovered from panic!!! SERIOUS PROBLEM, err: %v, stack: %v", r, stack)
 		f(r)
 		return true
 	}
