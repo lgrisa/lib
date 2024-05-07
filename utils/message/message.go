@@ -1,8 +1,6 @@
 package message
 
 import (
-	"github.com/lgrisa/lib/shared/utils/call"
-	"github.com/lgrisa/lib/shared/utils/log"
 	"github.com/pkg/errors"
 )
 

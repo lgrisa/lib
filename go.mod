@@ -20,6 +20,7 @@ require (
 	github.com/funny/utest v0.0.0-20161029064919-43870a374500
 	github.com/gin-gonic/gin v1.9.1
 	github.com/go-pay/gopay v1.5.100
+	github.com/gogo/protobuf v1.3.2
 	github.com/golang/snappy v0.0.4
 	github.com/guregu/dynamo v1.22.0
 	github.com/jhump/protoreflect v1.16.0
@@ -36,9 +37,12 @@ require (
 	github.com/spf13/viper v1.18.2
 	github.com/stripe/stripe-go/v78 v78.1.0
 	github.com/tealeg/xlsx v1.0.5
+	github.com/tinylib/msgp v1.1.9
 	go.uber.org/atomic v1.9.0
 	golang.org/x/exp v0.0.0-20240112132812-db7319d0e0e3
 	golang.org/x/net v0.22.0
+	google.golang.org/grpc v1.61.0
+	google.golang.org/protobuf v1.33.1-0.20240408130810-98873a205002
 	gopkg.in/yaml.v3 v3.0.1
 )
 
@@ -89,6 +93,7 @@ require (
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/oschwald/maxminddb-golang v1.11.0 // indirect
 	github.com/pelletier/go-toml/v2 v2.1.0 // indirect
+	github.com/philhofer/fwd v1.1.2 // indirect
 	github.com/sagikazarmark/locafero v0.4.0 // indirect
 	github.com/sagikazarmark/slog-shim v0.1.0 // indirect
 	github.com/sasha-s/go-csync v0.0.0-20240107134140-fcbab37b09ad // indirect
@@ -105,6 +110,6 @@ require (
 	golang.org/x/sync v0.6.0 // indirect
 	golang.org/x/sys v0.18.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
-	google.golang.org/protobuf v1.33.1-0.20240408130810-98873a205002 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20231120223509-83a465c0220f // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 )
