@@ -155,7 +155,7 @@ func (i *initCiStruct) packAndSendFile() error {
 
 		//先压缩文件夹
 		if file.IsDir() {
-			fileName = fmt.Sprintf("%s.zip", utils.GetFilePrefix(file.Name()))
+			fileName = fmt.Sprintf("%s.zip", file.GetFilePrefix(file.Name()))
 
 			if _, err := utils.RunCommandGetOutPut(fmt.Sprintf("cd %s && zip -r %s %s && cd -", i.activeDirPath, fileName, file.Name())); err != nil {
 				execExit(fmt.Sprintf("zip err: %s, err: %s", file.Name(), err))
@@ -178,7 +178,7 @@ func (i *initCiStruct) packAndSendFile() error {
 			execExit(fmt.Sprintf("upload: %s, err: %s, output: %s", file.Name(), err, output))
 		}
 
-		pngPath := fmt.Sprintf("%s/%s", QRCodePath, fmt.Sprintf("%s.png", utils.GetFilePrefix(newAppName)))
+		pngPath := fmt.Sprintf("%s/%s", QRCodePath, fmt.Sprintf("%s.png", file.GetFilePrefix(newAppName)))
 
 		err = qrcode.WriteFile(pngPath, qrcode.Medium, 256, pngPath)
 

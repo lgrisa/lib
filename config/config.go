@@ -33,6 +33,11 @@ type StartConfigStruct struct {
 		LogrusLevel string `mapstructure:"logrus_level"`
 	} `mapstructure:"log"`
 
+	HttpConfig struct {
+		CertFile string `mapstructure:"cert_file"` // 证书文件 "conf/test46.sgameuser.com.pem"
+		KeyFile  string `mapstructure:"key_file"`  // 私钥文件 "conf/test46.sgameuser.com.key"
+	}
+
 	SwitchController struct {
 		IsDebugMode   bool      `mapstructure:"is_debug_mode"`
 		SetServerTime time.Time `mapstructure:"server_time"`

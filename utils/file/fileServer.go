@@ -1,13 +1,13 @@
-package main
+package file
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
+	"github.com/lgrisa/lib/config"
 	"github.com/lgrisa/lib/utils/log"
-	"github.com/sirupsen/logrus"
+	"github.com/pkg/errors"
 	"net/http"
 	"os"
 	"os/signal"
@@ -15,14 +15,8 @@ import (
 	"time"
 )
 
-const (
-	port       = 7903
-	StaticPath = "/file"
-)
-
-func main() {
-	log.InitLog()
-
+// NewSimpleFileServer 创建一个简单的文件服务器
+func NewSimpleFileServer(StaticPath string, port int) {
 	gin.SetMode(gin.ReleaseMode)
 
 	router := gin.Default()
@@ -94,24 +88,39 @@ func main() {
 
 	go func() {
 
-		logrus.Infof("https server start at :%v", port)
+		certFile := config.StartConfig.HttpConfig.CertFile
+		keyFile := config.StartConfig.HttpConfig.KeyFile
 
-		if err := srv.ListenAndServeTLS("conf/test46.sgameuser.com.pem", "conf/test46.sgameuser.com.key"); err != nil {
-			if !errors.Is(err, http.ErrServerClosed) {
-				logrus.WithError(err).WithField("port", port).Errorf("服务器监听失败")
+		if certFile != "" && keyFile != "" {
+			log.LogInfof("https server start at :%v", port)
+
+			if err := srv.ListenAndServeTLS("conf/test46.sgameuser.com.pem", "conf/test46.sgameuser.com.key"); err != nil {
+				if !errors.Is(err, http.ErrServerClosed) {
+					log.LogErrorf("https server start fail:%v", err)
+				}
 			}
-		}
 
-		logrus.Infof("httpServer closed")
+			log.LogInfof("https server closed")
+		} else {
+			log.LogInfof("http server start at :%v", port)
+
+			if err := srv.ListenAndServe(); err != nil {
+				if !errors.Is(err, http.ErrServerClosed) {
+					log.LogErrorf("http server start fail:%v", err)
+				}
+			}
+
+			log.LogInfof("httpServer closed")
+		}
 	}()
 	quit := make(chan os.Signal)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	<-quit
-	logrus.Infof("Shutdown Server ...")
+	log.LogInfof("Shutdown Server ...")
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	if err := srv.Shutdown(ctx); err != nil {
-		logrus.WithError(err).Errorf("Server Shutdown error")
+		log.LogErrorf("Server Shutdown:%v", err)
 	}
 }
