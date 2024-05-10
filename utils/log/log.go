@@ -3,6 +3,7 @@ package log
 import (
 	"fmt"
 	"github.com/disgoorg/log"
+	"github.com/lgrisa/lib/config"
 )
 
 func LogTracef(format string, args ...interface{}) {
@@ -27,4 +28,8 @@ func LogErrorf(format string, args ...interface{}) {
 
 func LogPrintf(format string, args ...interface{}) {
 	fmt.Println(fmt.Sprintf(format, args...))
+}
+
+func InitLog() {
+	initLogrus("", 0, config.StartConfig.Log.LogrusLevel)
 }

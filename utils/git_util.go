@@ -71,3 +71,18 @@ func GetPreviousBetweenCommit(tag string) string {
 
 	return strings.ReplaceAll(returnStr, "\n", "\n\n*")
 }
+
+func GetTagCommit(tag string) string {
+	//获取tag之间的commit
+	output, err := RunCommandGetOutPut(fmt.Sprintf("git log %s --pretty=format:\"%%s\"", tag))
+
+	if err != nil {
+		log.LogErrorf("获取tag的commit失败: %s, err: %s\n", tag, err)
+		return ""
+	}
+
+	//美化下返回值，每行中间加一行空白行
+	returnStr := "*" + string(output)
+
+	return strings.ReplaceAll(returnStr, "\n", "\n\n*")
+}

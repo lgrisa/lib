@@ -29,6 +29,10 @@ type StartConfigStruct struct {
 		CreateTableAnyway bool `mapstructure:"create_table_anyway"`
 	} `mapstructure:"aws"`
 
+	Log struct {
+		LogrusLevel string `mapstructure:"logrus_level"`
+	} `mapstructure:"log"`
+
 	SwitchController struct {
 		IsDebugMode   bool      `mapstructure:"is_debug_mode"`
 		SetServerTime time.Time `mapstructure:"server_time"`
@@ -45,6 +49,7 @@ var (
 )
 
 func init() {
+	StartConfig.Log.LogrusLevel = "trace"
 }
 
 func (d *StartConfigStruct) OnLoaded() error {
