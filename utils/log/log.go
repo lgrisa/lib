@@ -31,5 +31,5 @@ func LogPrintf(format string, args ...interface{}) {
 }
 
 func InitLog() {
-	initLogrus("", 0, config.StartConfig.Log.LogrusLevel)
+	InitLogrus("", 0, config.StartConfig.Log.LogrusLevel)
 }

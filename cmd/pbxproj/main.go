@@ -85,7 +85,7 @@ func rmBuglyFramework(filePath string, deleteTagStr string, lines []string, file
 
 		isContain := false
 		for _, filesId := range filesIds {
-			if strings.Contains(line, buglyStr) && strings.Contains(line, filesId) {
+			if strings.Contains(line, deleteTagStr) && strings.Contains(line, filesId) {
 				//找到了Bugly.framework
 				//删除这一行
 				isContain = true

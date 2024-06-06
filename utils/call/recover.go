@@ -5,16 +5,6 @@ import (
 	"runtime/debug"
 )
 
-var server string
-
-func SetServer(s string) {
-	server = s
-}
-
-func GetServer() string {
-	return server
-}
-
 func TryRecover(handlerName string) bool {
 	if r := recover(); r != nil {
 		stack := string(debug.Stack())

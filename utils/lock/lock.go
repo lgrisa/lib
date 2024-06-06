@@ -447,7 +447,7 @@ func dumpStacks(name string) {
 	buf = buf[:runtime.Stack(buf, true)]
 	ioutil.WriteFile(name+"_"+time.Now().Format(timeutil.SecondsLayout), buf, os.ModePerm)
 
-	reporter.FormatStack(string(buf), "服务器死锁检查"+call.GetServer())
+	reporter.FormatStack(string(buf), "服务器死锁检查")
 }
 
 type lockEntry[O LockObject] struct {

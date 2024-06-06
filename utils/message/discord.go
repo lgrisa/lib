@@ -5,77 +5,99 @@ import (
 	"github.com/disgoorg/disgo/discord"
 	"github.com/disgoorg/disgo/webhook"
 	"github.com/disgoorg/snowflake/v2"
-	"github.com/lgrisa/lib/utils/log"
+	"github.com/pkg/errors"
 	"math/rand"
+	"os"
 	"time"
 )
 
-//StartConfig.Notify.DiscordWebhookUrl = "https://discord.com/api/webhooks/1075323981193826354/rCJrCgDxYIV3E-gpuhh6F8zh8smCnev9Tguil9flnMaI2fVMNTwbp2fYEh0yAwcWsDIX"
-//StartConfig.Notify.DiscordRobotThread = "1161959914185429053"
+//discordWebhookUrl = "https://discord.com/api/webhooks/1075323981193826354/rCJrCgDxYIV3E-gpuhh6F8zh8smCnev9Tguil9flnMaI2fVMNTwbp2fYEh0yAwcWsDIX"
+//discordRobotThread = "1161959914185429053"
 
-func sendDiscord(discordWebhookUrl, discordRobotThread, title, message string) {
+type DiscordMessage struct {
+	DiscordWebhookUrl  string
+	DiscordRobotThread string
 
-	client, err := webhook.NewWithURL(discordWebhookUrl)
-	if err != nil {
-		log.LogErrorf("init webhook fail failed,url:%v err: %v", discordWebhookUrl, err)
-		return
-	}
-	defer client.Close(context.Background())
+	AuthorName string
+	Title      string
+	Url        string
+	Message    string
+	FieldMap   map[string]string
 
-	eb := discord.NewEmbedBuilder()
-	eb.SetTitlef(title)
-	eb.SetDescriptionf(message)
-	eb.SetTimestamp(time.Now())
-	eb.SetColor(rand.Intn(0xffffff + 1))
+	UserName string
 
-	b := discord.NewWebhookMessageCreateBuilder()
-	b.AddEmbeds(eb.Build())
-
-	if discordRobotThread != "" {
-		threadID, _ := snowflake.Parse(discordRobotThread)
-		_, err = client.CreateMessageInThread(b.Build(), threadID)
-	} else {
-		_, err = client.CreateMessage(b.Build())
-	}
-
-	if err != nil {
-		log.LogErrorf("webhook.CreateMessage failed, err: %v", err)
-	}
+	DiscordFile *DisCordFile
 }
 
-func SendDiscordNoGoroutines(discordWebhookUrl, discordRobotThread, title, message string) {
+type DisCordFile struct {
+	FilePath string
+	Title    string
+	Desc     string
+}
 
-	log.LogErrorf("SendDiscord message:%v", message)
+func SendDiscordNoGoroutines(message *DiscordMessage) error {
 
-	if discordWebhookUrl == "" {
-		return
+	if message.DiscordWebhookUrl == "" {
+		return errors.Errorf("discordWebhookUrl is empty")
 	}
 
-	client, err := webhook.NewWithURL(discordWebhookUrl)
+	client, err := webhook.NewWithURL(message.DiscordWebhookUrl)
 	if err != nil {
-		log.LogErrorf("init webhook fail failed,url:%v err: %v", discordWebhookUrl, err)
-		return
+		return errors.Errorf("init webhook fail failed,url:%v err: %v", message.DiscordWebhookUrl, err)
 	}
 	defer client.Close(context.Background())
 
 	eb := discord.NewEmbedBuilder()
 
-	eb.SetTitlef(title)
-	eb.SetDescriptionf(message)
+	if message.AuthorName != "" {
+		eb.SetAuthorName(message.AuthorName)
+	}
+
+	eb.SetTitlef(message.Title)
+
+	if message.Url != "" {
+		eb.SetURL(message.Url)
+	}
+
+	eb.SetDescriptionf(message.Message)
 	eb.SetTimestamp(time.Now())
 	eb.SetColor(rand.Intn(0xffffff + 1))
 
+	if message.FieldMap != nil {
+		for k, v := range message.FieldMap {
+			eb.AddFields(discord.EmbedField{Name: k, Value: v})
+		}
+	}
+
 	b := discord.NewWebhookMessageCreateBuilder()
+
+	if message.UserName != "" {
+		b.SetUsername(message.UserName)
+	}
+
 	b.AddEmbeds(eb.Build())
 
-	if discordRobotThread != "" {
-		threadID, _ := snowflake.Parse(discordRobotThread)
+	if message.DiscordFile != nil && message.DiscordFile.FilePath != "" {
+		var f *os.File
+		f, err = os.Open(message.DiscordFile.FilePath)
+
+		if err != nil {
+			return errors.Errorf("open png file failed, err: %s", err)
+		}
+
+		b.AddFile(message.DiscordFile.Title, message.DiscordFile.Desc, f)
+	}
+
+	if message.DiscordRobotThread != "" {
+		threadID, _ := snowflake.Parse(message.DiscordRobotThread)
 		_, err = client.CreateMessageInThread(b.Build(), threadID)
 	} else {
 		_, err = client.CreateMessage(b.Build())
 	}
 
 	if err != nil {
-		log.LogErrorf("webhook.CreateMessage failed, err: %v", err)
+		return errors.Errorf("webhook.CreateMessage failed, err: %v", err)
 	}
+
+	return nil
 }

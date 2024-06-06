@@ -1,6 +1,8 @@
 package message
 
 import (
+	"github.com/lgrisa/lib/utils/call"
+	"github.com/lgrisa/lib/utils/log"
 	"github.com/pkg/errors"
 )
 
@@ -41,7 +43,15 @@ func (m *SendMessageClient) SendTextMessage(msg string) {
 		}
 
 		if m.discordWebhookUrl != "" {
-			sendDiscord(m.discordWebhookUrl, m.discordRobotThread, m.discordMessageTitle, message)
+			if err := SendDiscordNoGoroutines(
+				&DiscordMessage{
+					DiscordWebhookUrl:  m.discordWebhookUrl,
+					DiscordRobotThread: m.discordRobotThread,
+					Title:              m.discordMessageTitle,
+					Message:            message,
+				}); err != nil {
+				log.LogErrorf("SendDiscord error: %v", err)
+			}
 		}
 	})
 }

@@ -3,9 +3,12 @@ package file
 import (
 	"bufio"
 	"fmt"
+	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
 	"io"
 	"os"
 	"path"
+	"path/filepath"
 	"strings"
 )
 
@@ -104,4 +107,44 @@ func ReplaceFileContentField(filePath string, replaceField string, insteadFile s
 	}
 
 	return nil
+}
+
+func FindConfigPath(folderName string) (string, error) {
+
+	path0, err := filepath.Abs(".")
+	if err != nil {
+		return "", err
+	}
+	path0 = strings.ReplaceAll(path0, "\\", "/")
+
+	// 防御性，最多100次
+	for i := 0; i < 100; i++ {
+		confDir := path.Join(path0, folderName)
+		if IsDirExist(confDir) {
+			// 文件夹存在
+			return confDir, nil
+		}
+
+		parent := path.Dir(path0)
+		if parent == path0 {
+			return "", errors.Errorf("配置文件夹 %s 没找到", folderName)
+		}
+		path0 = parent
+		path0 = strings.ReplaceAll(path0, "\\", "/")
+	}
+
+	return "", errors.Errorf("配置文件夹 %s 没找到（100次都找不到）", folderName)
+}
+
+func IsDirExist(path string) bool {
+	fs, err := os.Stat(path)
+	if err != nil {
+		if !os.IsNotExist(err) {
+			logrus.WithError(err).Errorf("os.Data(%s) 出错", path)
+		}
+
+		return false
+	}
+
+	return fs.IsDir()
 }

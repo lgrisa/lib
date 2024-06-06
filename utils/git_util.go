@@ -3,6 +3,7 @@ package utils
 import (
 	"fmt"
 	"github.com/lgrisa/lib/utils/log"
+	"github.com/pkg/errors"
 	"strconv"
 	"strings"
 )
@@ -72,17 +73,26 @@ func GetPreviousBetweenCommit(tag string) string {
 	return strings.ReplaceAll(returnStr, "\n", "\n\n*")
 }
 
-func GetTagCommit(tag string) string {
+func GetTagCommit(gitPath string, tag string) (string, error) {
 	//获取tag之间的commit
-	output, err := RunCommandGetOutPut(fmt.Sprintf("git log %s --pretty=format:\"%%s\"", tag))
+	gitCmd := fmt.Sprintf("git log %s --pretty=format:\"%%s\"", tag)
+
+	if gitPath != "" {
+		gitCmd = fmt.Sprintf("cd %s && %s", gitPath, gitCmd)
+	}
+
+	output, err := RunCommandGetOutPut(gitCmd)
 
 	if err != nil {
-		log.LogErrorf("获取tag的commit失败: %s, err: %s\n", tag, err)
-		return ""
+		return "", errors.Errorf("get tag commit failed: %s, err: %s", tag, err)
 	}
 
 	//美化下返回值，每行中间加一行空白行
 	returnStr := "*" + string(output)
 
-	return strings.ReplaceAll(returnStr, "\n", "\n\n*")
+	if gitPath != "" {
+		_, _ = RunCommandGetOutPut("cd -")
+	}
+
+	return strings.ReplaceAll(returnStr, "\n", "\n\n*"), nil
 }

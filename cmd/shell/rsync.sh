@@ -126,17 +126,10 @@
 
 start=$(date +%s)
 
-sshpass -p LINGdi1535 \
-rsync -a \
-      --append \
-      --delete \
-      -m \
-      -P \
-      -r \
-      -e "ssh -p 22" \
-      --chmod=ugo=rwx \
-      Library/ jubin@192.168.0.200:Library/android
+sshpass -p LINGdi1535 rsync -arPz --delete -e "ssh -p 22" --chmod=ugo=rwx Library/ jubin@192.168.0.200:Library/android
 
 end=$(date +%s)
+
 take=$(( end - start ))
+
 echo Time taken to execute commands is ${take} seconds.
