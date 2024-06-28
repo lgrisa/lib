@@ -6,7 +6,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/guregu/dynamo"
 	"github.com/lgrisa/lib/db/dbdef"
-	"github.com/lgrisa/lib/utils/log"
+	"github.com/lgrisa/lib/log"
 	"github.com/pkg/errors"
 	"strings"
 )

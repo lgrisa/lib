@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"github.com/sirupsen/logrus"
+	"github.com/lgrisa/lib/log"
 	"math"
 	"runtime/debug"
 	"time"
@@ -57,22 +57,21 @@ func (fr *FrameRate) DurationToFrame(duration time.Duration) int64 {
 	return 0
 }
 
-//func (fr *FrameRate) FrameToSecond(frame int64) float64 {
-//	return float64(frame) / fr.rateF64
-//}
-//
-//func (fr *FrameRate) MillisToFrame(millis int64) int64 {
-//	time := float64(millis) / 1000
-//	return fr.TimeToFrame(time)
-//}
-//
-//func (fr *FrameRate) FrameToMillis(frame int64) int64 {
-//	return frame * 1000 / fr.rate
-//}
+func (fr *FrameRate) FrameToSecond(frame int64) float64 {
+	return float64(frame) / fr.rateF64
+}
+
+func (fr *FrameRate) MillisToFrame(millis int64) int64 {
+	return fr.TimeToFrame(float64(millis) / 1000)
+}
+
+func (fr *FrameRate) FrameToMillis(frame int64) int64 {
+	return frame * 1000 / fr.rate
+}
 
 func (fr *FrameRate) MoveFrame(startX, startY, endX, endY, speedPerSecond float64) int64 {
 	if speedPerSecond <= 0 {
-		logrus.WithField("stack", string(debug.Stack())).Errorf("计算需要的frame时, 速度<=0: %f", speedPerSecond)
+		log.LogErrorf("计算需要的frame时, 速度<=0: %f stack:%v", speedPerSecond, string(debug.Stack()))
 		return 1
 	}
 	diffX := startX - endX

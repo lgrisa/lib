@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"fmt"
+	consts "github.com/lgrisa/lib/utils/const"
 	"github.com/pkg/errors"
 	"io"
 	"net/url"
@@ -57,11 +58,11 @@ func (bm BodyMap) Get(key string) string {
 // 获取参数转换string
 func (bm BodyMap) GetString(key string) string {
 	if bm == nil {
-		return NULL
+		return consts.NULL
 	}
 	value, ok := bm[key]
 	if !ok {
-		return NULL
+		return consts.NULL
 	}
 	v, ok := value.(string)
 	if !ok {
@@ -144,12 +145,12 @@ func (bm BodyMap) MarshalXML(e *xml.Encoder, start xml.StartElement) (err error)
 	if len(bm) == 0 {
 		return nil
 	}
-	start.Name = xml.Name{Space: NULL, Local: "xml"}
+	start.Name = xml.Name{Space: consts.NULL, Local: "xml"}
 	if err = e.EncodeToken(start); err != nil {
 		return
 	}
 	for k := range bm {
-		if v := bm.GetString(k); v != NULL {
+		if v := bm.GetString(k); v != consts.NULL {
 			_ = e.Encode(xmlMapMarshal{XMLName: xml.Name{Local: k}, Value: v})
 		}
 	}
@@ -173,7 +174,7 @@ func (bm *BodyMap) UnmarshalXML(d *xml.Decoder, start xml.StartElement) (err err
 // ("bar=baz&foo=quux") sorted by key.
 func (bm BodyMap) EncodeWeChatSignParams(apiKey string) string {
 	if bm == nil {
-		return NULL
+		return consts.NULL
 	}
 	var (
 		buf     strings.Builder
@@ -184,7 +185,7 @@ func (bm BodyMap) EncodeWeChatSignParams(apiKey string) string {
 	}
 	sort.Strings(keyList)
 	for _, k := range keyList {
-		if v := bm.GetString(k); v != NULL {
+		if v := bm.GetString(k); v != consts.NULL {
 			buf.WriteString(k)
 			buf.WriteByte('=')
 			buf.WriteString(v)
@@ -200,7 +201,7 @@ func (bm BodyMap) EncodeWeChatSignParams(apiKey string) string {
 // ("bar=baz&foo=quux") sorted by key.
 func (bm BodyMap) EncodeAliPaySignParams() string {
 	if bm == nil {
-		return NULL
+		return consts.NULL
 	}
 	var (
 		buf     strings.Builder
@@ -211,7 +212,7 @@ func (bm BodyMap) EncodeAliPaySignParams() string {
 	}
 	sort.Strings(keyList)
 	for _, k := range keyList {
-		if v := bm.GetString(k); v != NULL {
+		if v := bm.GetString(k); v != consts.NULL {
 			buf.WriteString(k)
 			buf.WriteByte('=')
 			buf.WriteString(v)
@@ -219,7 +220,7 @@ func (bm BodyMap) EncodeAliPaySignParams() string {
 		}
 	}
 	if buf.Len() <= 0 {
-		return NULL
+		return consts.NULL
 	}
 	return buf.String()[:buf.Len()-1]
 }
@@ -227,7 +228,7 @@ func (bm BodyMap) EncodeAliPaySignParams() string {
 // ("bar=baz&foo=quux") sorted by key.
 func (bm BodyMap) EncodeURLParams() string {
 	if bm == nil {
-		return NULL
+		return consts.NULL
 	}
 	var (
 		buf  strings.Builder
@@ -238,7 +239,7 @@ func (bm BodyMap) EncodeURLParams() string {
 	}
 	sort.Strings(keys)
 	for _, k := range keys {
-		if v := bm.GetString(k); v != NULL {
+		if v := bm.GetString(k); v != consts.NULL {
 			buf.WriteString(url.QueryEscape(k))
 			buf.WriteByte('=')
 			buf.WriteString(url.QueryEscape(v))
@@ -246,7 +247,7 @@ func (bm BodyMap) EncodeURLParams() string {
 		}
 	}
 	if buf.Len() <= 0 {
-		return NULL
+		return consts.NULL
 	}
 	return buf.String()[:buf.Len()-1]
 }
@@ -254,7 +255,7 @@ func (bm BodyMap) EncodeURLParams() string {
 func (bm BodyMap) CheckEmptyError(keys ...string) error {
 	var emptyKeys []string
 	for _, k := range keys {
-		if v := bm.GetString(k); v == NULL {
+		if v := bm.GetString(k); v == consts.NULL {
 			emptyKeys = append(emptyKeys, k)
 		}
 	}
@@ -267,7 +268,7 @@ func (bm BodyMap) CheckEmptyError(keys ...string) error {
 func (bm BodyMap) CheckNotAllEmptyError(keys ...string) error {
 	var emptyKeys []string
 	for _, k := range keys {
-		if v := bm.GetString(k); v == NULL {
+		if v := bm.GetString(k); v == consts.NULL {
 			emptyKeys = append(emptyKeys, k)
 		}
 	}
@@ -280,14 +281,14 @@ func (bm BodyMap) CheckNotAllEmptyError(keys ...string) error {
 
 func convertToString(v any) (str string) {
 	if v == nil {
-		return NULL
+		return consts.NULL
 	}
 	var (
 		bs  []byte
 		err error
 	)
 	if bs, err = json.Marshal(v); err != nil {
-		return NULL
+		return consts.NULL
 	}
 	str = string(bs)
 	return

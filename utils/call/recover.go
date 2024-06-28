@@ -1,7 +1,7 @@
 package call
 
 import (
-	"github.com/lgrisa/lib/utils/log"
+	"github.com/lgrisa/lib/log"
 	"runtime/debug"
 )
 

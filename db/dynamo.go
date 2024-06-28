@@ -7,7 +7,7 @@ import (
 	"github.com/guregu/dynamo"
 	"github.com/lgrisa/lib/config"
 	"github.com/lgrisa/lib/dbv"
-	"github.com/lgrisa/lib/utils/log"
+	"github.com/lgrisa/lib/log"
 	"github.com/pkg/errors"
 )
 

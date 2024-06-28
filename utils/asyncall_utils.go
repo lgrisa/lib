@@ -2,7 +2,7 @@ package utils
 
 import (
 	"github.com/alitto/pond"
-	"github.com/lgrisa/lib/utils/log"
+	"github.com/lgrisa/lib/log"
 	"runtime/debug"
 )
 

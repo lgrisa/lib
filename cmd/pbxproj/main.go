@@ -2,21 +2,22 @@ package main
 
 import (
 	"fmt"
+	"github.com/lgrisa/lib/log"
 	"github.com/lgrisa/lib/pbxproj"
 	"github.com/lgrisa/lib/utils"
 	"os"
 	"strings"
 )
 
-// only for Mac
-
 func main() {
+	log.InitLog()
+
 	projPath, isFound := utils.FindProjectPath("")
 
-	fmt.Println(projPath, isFound)
+	log.LogDebugf("projPath:%v", projPath)
 
-	if projPath, isFound = utils.FindProjectPath(""); !isFound {
-		fmt.Println("not found project.pbxproj")
+	if !isFound {
+		log.LogDebugf("not found project.pbxproj")
 		return
 	}
 
@@ -24,43 +25,30 @@ func main() {
 	proj, err := pbxproj.NewPbxproj(projPath)
 
 	if err != nil {
-		fmt.Println(err)
+		log.LogErrorf("parse pbxproj err:%v", err)
 		return
 	}
 
-	str, err := proj.GetJson().Get("rootObject").String()
+	rootObjectUUid, err := proj.GetJson().Get("rootObject").String()
 
 	if err != nil {
-		fmt.Println(err)
+		log.LogDebugf("get rootObject err:%v", err)
 		return
 	}
 
-	fmt.Println("rootObject:", str)
+	log.LogDebugf("rootObject:%v", rootObjectUUid)
 
-	pBXProject, isFound := proj.ProjectSection[str]
+	pBXProject, isFound := proj.ProjectSection[rootObjectUUid]
 	if !isFound {
-		fmt.Println("not found PBXProject:", str)
+		log.LogDebugf("not found PBXProject:%v", rootObjectUUid)
 		return
 	}
-
-	fmt.Printf("unityIphoneTestsId:%v unityFrameworkId:%v \n", pBXProject.TargetsUnityIphoneTests, pBXProject.TargetsUnityFramework)
 
 	var shouldDeleteIds []string
 
-	if unityIphoneTarget, isFound := proj.NativeTargets[pBXProject.TargetsUnityIphoneTests]; isFound {
-
-		fmt.Println("unityFrameworkTarget.BuildPhasesFrameworks:", unityIphoneTarget.BuildPhasesFrameworks)
-
-		if buildPhase, isFound := proj.FrameworkBuildPhase[unityIphoneTarget.BuildPhasesFrameworks]; isFound {
-			for _, file := range buildPhase.Files {
-				shouldDeleteIds = append(shouldDeleteIds, file)
-			}
-		}
-	}
-
 	if unityFrameworkTarget, isFound := proj.NativeTargets[pBXProject.TargetsUnityFramework]; isFound {
 
-		fmt.Println("unityFrameworkTarget.BuildPhasesFrameworks:", unityFrameworkTarget.BuildPhasesFrameworks)
+		log.LogDebugf("unityFrameworkTarget.BuildPhasesFrameworks:%v", unityFrameworkTarget.BuildPhasesFrameworks)
 
 		if buildPhase, isFound := proj.FrameworkBuildPhase[unityFrameworkTarget.BuildPhasesFrameworks]; isFound {
 			for _, file := range buildPhase.Files {
@@ -71,7 +59,7 @@ func main() {
 
 	//删除Bugly.framework
 	if err = rmBuglyFramework(projPath, buglyStr, proj.Lines, shouldDeleteIds); err != nil {
-		fmt.Println("rmBuglyFramework err:", err)
+		log.LogDebugf("rmBuglyFramework err:%v", err)
 	}
 }
 

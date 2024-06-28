@@ -2,25 +2,9 @@ package main
 
 import (
 	"fmt"
-	"path"
-	"path/filepath"
+	"github.com/lgrisa/lib/utils"
 )
 
 func main() {
-	path0, err := filepath.Abs(".")
-
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	fmt.Println(path0)
-
-	pathDir := path.Dir(path0)
-
-	fmt.Println(pathDir)
-
-	pathBase := path.Join(path0, "conf")
-
-	fmt.Println(pathBase)
+	fmt.Printf("%s@%s", utils.GetUsername(), utils.GetHostname())
 }

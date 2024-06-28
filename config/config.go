@@ -31,6 +31,7 @@ type StartConfigStruct struct {
 
 	Log struct {
 		LogrusLevel string `mapstructure:"logrus_level"`
+		LogLevel    int    `mapstructure:"log_level"`
 	} `mapstructure:"log"`
 
 	HttpConfig struct {
@@ -55,6 +56,7 @@ var (
 
 func init() {
 	StartConfig.Log.LogrusLevel = "trace"
+	StartConfig.Log.LogLevel = 0
 }
 
 func (d *StartConfigStruct) OnLoaded() error {

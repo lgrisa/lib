@@ -2,7 +2,7 @@ package utils
 
 import (
 	"fmt"
-	"github.com/lgrisa/lib/utils/log"
+	"github.com/lgrisa/lib/log"
 	"github.com/pkg/errors"
 	"strconv"
 	"strings"

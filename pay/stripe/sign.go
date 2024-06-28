@@ -3,7 +3,7 @@ package stripe
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/lgrisa/lib/utils/log"
+	"github.com/lgrisa/lib/log"
 	"github.com/stripe/stripe-go/v78"
 	"github.com/stripe/stripe-go/v78/webhook"
 )

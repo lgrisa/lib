@@ -6,7 +6,7 @@ import (
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 	"github.com/lgrisa/lib/config"
-	"github.com/lgrisa/lib/utils/log"
+	"github.com/lgrisa/lib/log"
 	"github.com/pkg/errors"
 	"net/http"
 	"os"

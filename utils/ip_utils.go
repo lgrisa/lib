@@ -1,9 +1,18 @@
 package utils
 
 import (
+	"fmt"
+	"github.com/awslabs/aws-lambda-go-api-proxy/core"
+	"github.com/gin-gonic/gin"
+	"github.com/lgrisa/lib/config"
+	"github.com/lgrisa/lib/log"
+	consts "github.com/lgrisa/lib/utils/const"
+	"github.com/oschwald/geoip2-golang"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 	"net"
+	"os"
+	"os/user"
 	"strconv"
 	"strings"
 )
@@ -46,6 +55,7 @@ func ParseIPv4(ip string) ([]byte, error) {
 }
 
 // 解析本地地址
+
 func ParseLocalAddr(localAddr string) []byte {
 	var err error
 	if localAddr == "" {
@@ -124,4 +134,131 @@ func chooseBestLocalIp(ips []string) string {
 	}
 
 	return ips[0]
+}
+
+func GetIpCurrencyCode(context *gin.Context) (currencyCode string) {
+	var ok bool
+	currencyMap := map[string]string{
+		"CN": consts.CURRENCY_CNY,
+		"US": consts.CURRENCY_USD,
+		"JP": consts.CURRENCY_JPY,
+		"KR": consts.CURRENCY_KRW,
+		"PH": consts.CURRENCY_PHP,
+		"TW": consts.CURRENCY_TWD,
+		"MY": consts.CURRENCY_MYR,
+		"HK": consts.CURRENCY_HKD,
+		"SG": consts.CURRENCY_SGD,
+		"TH": consts.CURRENCY_THB,
+		"ID": consts.CURRENCY_IDR,
+		"GB": consts.CURRENCY_GBP,
+		"AU": consts.CURRENCY_AUD,
+		"VN": consts.CURRENCY_VND,
+		"CA": consts.CURRENCY_CAD,
+
+		"CH": consts.CURRENCY_CHF, //瑞士
+		"MO": consts.CURRENCY_MOP, //澳门
+		"BR": consts.CURRENCY_BRL, //巴西
+	}
+
+	ipRegion := GetIpRegion(context)
+
+	//欧元区
+	euros := []string{"AU", "BE", "HR", "CY", "EE", "FI", "FR", "DE", "GR", "IE", "IT", "LV", "LT", "LU", "MT", "NL", "PT", "SK", "SI", "ES"}
+	if InStringArray(ipRegion, euros, false) {
+		return consts.CURRENCY_EUR
+	}
+
+	currencyCode, ok = currencyMap[ipRegion]
+	if !ok {
+		return consts.CURRENCY_USD
+	}
+
+	return
+}
+
+func GetIpRegion(context *gin.Context) (isoCode string) {
+	clientIp := GetClientIp(context)
+	//db, err := geoip2.Open(IpDbPath)
+
+	//直接加载ip数据库，不使用缓存，因为geoip2库自己有缓存，而且我们的程序也不会频繁调用这个函数，所以不需要自己再加一层缓存
+	db, err := geoip2.FromBytes(config.IpDbFs)
+
+	if err != nil {
+		log.LogErrorf("open ip db error: %v", err)
+		return
+	}
+	defer db.Close()
+
+	netIP := net.ParseIP(clientIp)
+	record, err := db.City(netIP)
+	if err != nil {
+		log.LogErrorf("get ip region error: %v", err)
+		return
+	}
+
+	isoCode = record.Country.IsoCode
+	if isoCode == "" {
+		isoCode = "CN"
+	}
+	return
+}
+
+func GetClientIp(context *gin.Context) (ipAddress string) {
+	if context.GetHeader("iam-cf") == "true" {
+		ipAddress = context.GetHeader("Zen-Client-Ip")
+		if ipAddress != "" {
+			return
+		}
+
+		xForwardedFor := context.GetHeader("X-Forwarded-For")
+		arr := strings.Split(xForwardedFor, ",")
+		if len(arr) > 0 {
+			ipAddress = arr[0]
+			return
+		}
+	} else {
+		apiCtx, ok := core.GetAPIGatewayContextFromContext(context.Request.Context())
+		if ok {
+			ipAddress = apiCtx.Identity.SourceIP
+		}
+	}
+
+	if ipAddress == "" {
+		ipAddress = context.ClientIP()
+	}
+
+	return ipAddress
+}
+
+func GetUsername() string {
+	username := os.Getenv("USER")
+
+	if u, err := user.Current(); err == nil {
+		if username != u.Username {
+			username = fmt.Sprintf("%s(%s)", username, u.Username)
+			if u.Username != u.Name {
+				username = fmt.Sprintf("%s(%s)", username, u.Name)
+			}
+		} else {
+			if username != u.Name {
+				username = fmt.Sprintf("%s(%s)", username, u.Name)
+			}
+		}
+	}
+
+	return username
+}
+
+func GetHostname() string {
+	hostname := os.Getenv("HOSTNAME")
+	if hostname == "" {
+		hostname = os.Getenv("HOST")
+	}
+	if hostname == "" {
+		hostname, _ = os.Hostname()
+	}
+	if hostname == "" {
+		hostname = "localhost"
+	}
+	return hostname
 }

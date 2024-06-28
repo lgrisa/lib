@@ -1,9 +1,8 @@
 package utils
 
 import (
-	"bytes"
 	"fmt"
-	"github.com/lgrisa/lib/utils/log"
+	"github.com/lgrisa/lib/log"
 	"github.com/pkg/errors"
 	"io"
 	"os/exec"
@@ -12,31 +11,6 @@ import (
 	"sync"
 	"sync/atomic"
 )
-
-func RunCommand(name string, arg ...string) error {
-
-	cmd := exec.Command(name, arg...)
-	var stdout, stderr bytes.Buffer
-	cmd.Stdout = &stdout // 标准输出
-	cmd.Stderr = &stderr // 标准错误
-	err := cmd.Run()
-
-	if err != nil {
-		return errors.Wrapf(err, "执行命令失败，name: %s, arg: %v, stdout: %s, stderr: %s", name, arg, stdout.String(), stderr.String())
-	}
-
-	outStr, errStr := string(stdout.Bytes()), string(stderr.Bytes())
-
-	if len(outStr) > 0 {
-		fmt.Println(outStr)
-	}
-
-	if len(errStr) > 0 {
-		return errors.Errorf(errStr)
-	}
-
-	return nil
-}
 
 func asyncLog(reader io.ReadCloser) error {
 	bucket := make([]byte, 1024)

@@ -1,6 +1,7 @@
 package message
 
 import (
+	"bytes"
 	"context"
 	"crypto/hmac"
 	"crypto/sha256"
@@ -8,7 +9,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/lgrisa/lib/utils"
-	"io"
 	"net/http"
 	"regexp"
 	"time"
@@ -49,11 +49,11 @@ func SendMessageToDingDing(msg map[string]interface{}, token string, secret stri
 		return err
 	}
 
-	resp, err := utils.SendRequest(ctx, "POST", uri, header, b)
-	if resp.StatusCode != http.StatusOK {
-		body, _ := io.ReadAll(resp.Body)
-		return fmt.Errorf("send msg err: %s, token: %s, msg: %s", string(body), token, b)
+	_, respBody, err, code := utils.HttpRequest(ctx, "POST", uri, header, bytes.NewReader(b))
+	if code != http.StatusOK {
+		return fmt.Errorf("send msg err: %s, token: %s, msg: %s", string(respBody), token, b)
 	}
+
 	return nil
 }
 

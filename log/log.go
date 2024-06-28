@@ -6,6 +6,10 @@ import (
 	"github.com/lgrisa/lib/config"
 )
 
+func InitLog() {
+	log.SetLevel(log.Level(config.StartConfig.Log.LogLevel))
+}
+
 func LogTracef(format string, args ...interface{}) {
 	log.Tracef(format, args...)
 }
@@ -28,8 +32,4 @@ func LogErrorf(format string, args ...interface{}) {
 
 func LogPrintf(format string, args ...interface{}) {
 	fmt.Println(fmt.Sprintf(format, args...))
-}
-
-func InitLog() {
-	InitLogrus("", 0, config.StartConfig.Log.LogrusLevel)
 }

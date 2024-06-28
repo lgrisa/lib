@@ -2,7 +2,6 @@ package utils
 
 import "encoding/json"
 
-// Struct2Map struct to map，依赖 json tab
 func Struct2Map(r interface{}) (s map[string]string, err error) {
 	var temp map[string]interface{}
 	var result = make(map[string]string)
