@@ -61,26 +61,31 @@ func GetDayDuration(day int64) time.Duration {
 }
 
 // 每日0点重置，返回下一天的0点（传入今日0点，也返回下一天0点）
+
 func GetNextResetDailyTime(ctime time.Time, offset time.Duration) time.Time {
 	return GetNextResetTime(ctime, DailyTime, Day, offset)
 }
 
 // 每周重置，周日算新的一周
+
 func GetNextResetWeeklyTime(ctime time.Time, offset time.Duration) time.Time {
 	return GetNextResetTime(ctime, Sunday, Week, offset)
 }
 
 // 每周重置，周一算新的一周
+
 func GetNextResetWeeklyTimeIsMonday(ctime time.Time, offset time.Duration) time.Time {
 	return GetNextResetTime(ctime, Monday, Week, offset)
 }
 
 // 每月重置，返回下一月1日0点
+
 func GetNextResetMonthlyTime(ctime time.Time, offset time.Duration) time.Time {
 	return GetNextResetMonthlyDayTime(ctime, 1, offset)
 }
 
 // 每月重置，返回下一月指定日期的0点
+
 func GetNextResetMonthlyDayTime(ctime time.Time, monthDay int, offset time.Duration) time.Time {
 	// 每个月的天数是不是不固定的，所以循环时间需要每次计算
 	year, month, _ := ctime.Date()
@@ -165,6 +170,7 @@ func ParseSecondsLayout(value string) (time.Time, error) {
 }
 
 // 自动补全日期
+
 func CompletionMMDD(value, sep string) string {
 	// 2018-1-2 -> 2018-01-02
 

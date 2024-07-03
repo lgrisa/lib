@@ -15,8 +15,10 @@ import (
 	"encoding/pem"
 	"fmt"
 	consts "github.com/lgrisa/lib/utils/const"
+	"github.com/pkg/errors"
 	"hash"
 	"os"
+	"strings"
 )
 
 const (
@@ -157,4 +159,241 @@ func DecodePrivateKey(pemContent []byte) (privateKey *rsa.PrivateKey, err error)
 		}
 	}
 	return privateKey, nil
+}
+
+const (
+	PKCS1 PKCSType = 1 // 非java适用
+	PKCS8 PKCSType = 2 // java适用
+)
+
+type PKCSType uint8
+
+// FormatAlipayPrivateKey 格式化支付宝普通应用秘钥
+func FormatAlipayPrivateKey(privateKey string) (pKey string) {
+	var buffer strings.Builder
+	buffer.WriteString("-----BEGIN RSA PRIVATE KEY-----\n")
+	rawLen := 64
+	keyLen := len(privateKey)
+	raws := keyLen / rawLen
+	temp := keyLen % rawLen
+	if temp > 0 {
+		raws++
+	}
+	start := 0
+	end := start + rawLen
+	for i := 0; i < raws; i++ {
+		if i == raws-1 {
+			buffer.WriteString(privateKey[start:])
+		} else {
+			buffer.WriteString(privateKey[start:end])
+		}
+		buffer.WriteByte('\n')
+		start += rawLen
+		end = start + rawLen
+	}
+	buffer.WriteString("-----END RSA PRIVATE KEY-----\n")
+	pKey = buffer.String()
+	return
+}
+
+// FormatAlipayPublicKey 格式化支付宝普通支付宝公钥
+func FormatAlipayPublicKey(publicKey string) (pKey string) {
+	var buf strings.Builder
+	buf.WriteString("-----BEGIN PUBLIC KEY-----\n")
+	rawLen := 64
+	keyLen := len(publicKey)
+	raws := keyLen / rawLen
+	temp := keyLen % rawLen
+	if temp > 0 {
+		raws++
+	}
+	start := 0
+	end := start + rawLen
+	for i := 0; i < raws; i++ {
+		if i == raws-1 {
+			buf.WriteString(publicKey[start:])
+		} else {
+			buf.WriteString(publicKey[start:end])
+		}
+		buf.WriteByte('\n')
+		start += rawLen
+		end = start + rawLen
+	}
+	buf.WriteString("-----END PUBLIC KEY-----\n")
+	pKey = buf.String()
+	return
+}
+
+// RSA解密数据
+// t：PKCS1 或 PKCS8
+// cipherData：加密字符串byte数组
+// privateKey：私钥
+func RsaDecrypt(t PKCSType, cipherData []byte, privateKey string) (originData []byte, err error) {
+	var (
+		key *rsa.PrivateKey
+	)
+
+	block, _ := pem.Decode([]byte(privateKey))
+	if block == nil {
+		return nil, errors.New("privateKey decode error")
+	}
+
+	switch t {
+	case PKCS1:
+		if key, err = x509.ParsePKCS1PrivateKey(block.Bytes); err != nil {
+			return nil, err
+		}
+	case PKCS8:
+		pkcs8Key, e := x509.ParsePKCS8PrivateKey(block.Bytes)
+		if e != nil {
+			return nil, e
+		}
+		pk8, ok := pkcs8Key.(*rsa.PrivateKey)
+		if !ok {
+			return nil, errors.New("parse PKCS8 key error")
+		}
+		key = pk8
+	default:
+		if key, err = x509.ParsePKCS1PrivateKey(block.Bytes); err != nil {
+			return nil, err
+		}
+	}
+
+	originBytes, err := rsa.DecryptPKCS1v15(rand.Reader, key, cipherData)
+	if err != nil {
+		return nil, fmt.Errorf("xrsa.DecryptPKCS1v15：%w", err)
+	}
+	return originBytes, nil
+}
+
+// RSA解密数据
+// OAEPWithSHA-256AndMGF1Padding
+func RsaDecryptOAEP(h hash.Hash, t PKCSType, privateKey string, ciphertext, label []byte) (originData []byte, err error) {
+	var (
+		key *rsa.PrivateKey
+	)
+
+	block, _ := pem.Decode([]byte(privateKey))
+	if block == nil {
+		return nil, errors.New("privateKey decode error")
+	}
+
+	switch t {
+	case PKCS1:
+		if key, err = x509.ParsePKCS1PrivateKey(block.Bytes); err != nil {
+			return nil, err
+		}
+	case PKCS8:
+		pkcs8Key, e := x509.ParsePKCS8PrivateKey(block.Bytes)
+		if e != nil {
+			return nil, e
+		}
+		pk8, ok := pkcs8Key.(*rsa.PrivateKey)
+		if !ok {
+			return nil, errors.New("parse PKCS8 key error")
+		}
+		key = pk8
+	default:
+		if key, err = x509.ParsePKCS1PrivateKey(block.Bytes); err != nil {
+			return nil, err
+		}
+	}
+
+	originBytes, err := rsa.DecryptOAEP(h, rand.Reader, key, ciphertext, label)
+	if err != nil {
+		return nil, err
+	}
+	return originBytes, nil
+}
+
+// RSA加密数据
+// t：PKCS1 或 PKCS8
+// originData：原始字符串byte数组
+// publicKey：公钥
+func RsaEncrypt(t PKCSType, originData []byte, publicKey string) (cipherData []byte, err error) {
+	var (
+		key *rsa.PublicKey
+	)
+
+	block, _ := pem.Decode([]byte(publicKey))
+	if block == nil {
+		return nil, errors.New("publicKey decode error")
+	}
+
+	switch t {
+	case PKCS1:
+		pkcs1Key, e := x509.ParsePKCS1PublicKey(block.Bytes)
+		if e != nil {
+			return nil, e
+		}
+		key = pkcs1Key
+	case PKCS8:
+		pkcs8Key, e := x509.ParsePKIXPublicKey(block.Bytes)
+		if e != nil {
+			return nil, e
+		}
+		pk8, ok := pkcs8Key.(*rsa.PublicKey)
+		if !ok {
+			return nil, errors.New("parse PKCS8 key error")
+		}
+		key = pk8
+	default:
+		pkcs1Key, e := x509.ParsePKCS1PublicKey(block.Bytes)
+		if e != nil {
+			return nil, e
+		}
+		key = pkcs1Key
+	}
+
+	cipherBytes, err := rsa.EncryptPKCS1v15(rand.Reader, key, originData)
+	if err != nil {
+		return nil, fmt.Errorf("xrsa.EncryptPKCS1v15：%w", err)
+	}
+	return cipherBytes, nil
+}
+
+// RSA加密数据
+// OAEPWithSHA-256AndMGF1Padding
+func RsaEncryptOAEP(h hash.Hash, t PKCSType, publicKey string, originData, label []byte) (cipherData []byte, err error) {
+	var (
+		key *rsa.PublicKey
+	)
+	if len(originData) > 190 {
+		return nil, errors.New("message too long for RSA public key size")
+	}
+	block, _ := pem.Decode([]byte(publicKey))
+	if block == nil {
+		return nil, errors.New("publicKey decode error")
+	}
+
+	switch t {
+	case PKCS1:
+		pkcs1Key, e := x509.ParsePKCS1PublicKey(block.Bytes)
+		if e != nil {
+			return nil, e
+		}
+		key = pkcs1Key
+	case PKCS8:
+		pkcs8Key, e := x509.ParsePKIXPublicKey(block.Bytes)
+		if e != nil {
+			return nil, e
+		}
+		pk8, ok := pkcs8Key.(*rsa.PublicKey)
+		if !ok {
+			return nil, errors.New("parse PKCS8 key error")
+		}
+		key = pk8
+	default:
+		pkcs1Key, e := x509.ParsePKCS1PublicKey(block.Bytes)
+		if e != nil {
+			return nil, e
+		}
+		key = pkcs1Key
+	}
+
+	cipherBytes, err := rsa.EncryptOAEP(h, rand.Reader, key, originData, label)
+	if err != nil {
+		return nil, err
+	}
+	return cipherBytes, nil
 }
