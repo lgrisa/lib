@@ -4,7 +4,6 @@ import (
 	"crypto/rsa"
 	"github.com/lgrisa/lib/pay"
 	"github.com/lgrisa/lib/utils"
-	"github.com/lgrisa/lib/utils/xrsa"
 	"github.com/pkg/errors"
 )
 
@@ -29,7 +28,7 @@ func NewClient(clientId, privateKey, aliPublicKey string, webNotifyUrl, webRefun
 	if clientId == utils.NULL || privateKey == utils.NULL || aliPublicKey == utils.NULL {
 		return nil, MissAlipayInitParamErr
 	}
-	key := xrsa.FormatAlipayPrivateKey(privateKey)
+	key := utils.FormatAlipayPrivateKey(privateKey)
 	priKey, err := utils.DecodePrivateKey([]byte(key))
 	if err != nil {
 		return nil, errors.Errorf("InitAliPay xpem.DecodePrivateKey(%s)：%v", key, err)
@@ -38,7 +37,7 @@ func NewClient(clientId, privateKey, aliPublicKey string, webNotifyUrl, webRefun
 	return &GlobalAliPayClient{
 		clientId:           clientId,
 		privateKey:         priKey,
-		aliPublicKey:       xrsa.FormatAlipayPublicKey(aliPublicKey),
+		aliPublicKey:       utils.FormatAlipayPublicKey(aliPublicKey),
 		isProd:             isProd,
 		webNotifyUrl:       webNotifyUrl,
 		webRefundNotifyUrl: webRefundNotifyUrl,

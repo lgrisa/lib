@@ -21,6 +21,16 @@ const (
 	Sun
 )
 
+type WeekTime struct {
+	Week CnWeekday
+	Time time.Duration
+}
+
+type WeekDurTime struct {
+	*WeekTime
+	Dur time.Duration
+}
+
 func BuildWeekDurTime(str string, dur time.Duration) (t *WeekDurTime, err error) {
 	w, d, e := getWeekAndDuration(str)
 	if e != nil {
@@ -52,16 +62,6 @@ func getWeekAndDuration(str string) (w CnWeekday, t time.Duration, err error) {
 	}
 
 	return
-}
-
-type WeekDurTime struct {
-	*WeekTime
-	Dur time.Duration
-}
-
-type WeekTime struct {
-	Week CnWeekday
-	Time time.Duration
 }
 
 func (t *WeekDurTime) ToString() string {
