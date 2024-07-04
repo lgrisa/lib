@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"github.com/lgrisa/lib/log"
 	"math"
 	"runtime/debug"
 	"time"
@@ -71,7 +70,7 @@ func (fr *FrameRate) FrameToMillis(frame int64) int64 {
 
 func (fr *FrameRate) MoveFrame(startX, startY, endX, endY, speedPerSecond float64) int64 {
 	if speedPerSecond <= 0 {
-		log.LogErrorf("计算需要的frame时, 速度<=0: %f stack:%v", speedPerSecond, string(debug.Stack()))
+		LogErrorF("计算需要的frame时, 速度<=0: %f stack:%v", speedPerSecond, string(debug.Stack()))
 		return 1
 	}
 	diffX := startX - endX

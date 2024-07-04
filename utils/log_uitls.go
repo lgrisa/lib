@@ -1,7 +1,10 @@
-package log
+package utils
 
 import (
+	"fmt"
+	"github.com/disgoorg/log"
 	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
+	"github.com/lgrisa/lib/config"
 	"github.com/lgrisa/lib/utils/lfshook"
 	"github.com/sirupsen/logrus"
 	"strings"
@@ -42,4 +45,32 @@ func InitLogrus(logSavePath string, logSaveDay uint, loggersLevel string) {
 	}
 
 	logrus.Infof("设置日志等级: %s", logrus.GetLevel())
+}
+
+func InitLog() {
+	log.SetLevel(log.Level(config.StartConfig.Log.LogLevel))
+}
+
+func LogTraceF(format string, args ...interface{}) {
+	log.Tracef(format, args...)
+}
+
+func LogDebugF(format string, args ...interface{}) {
+	log.Debugf(format, args...)
+}
+
+func LogInfoF(format string, args ...interface{}) {
+	log.Infof(format, args...)
+}
+
+func LogWarnF(format string, args ...interface{}) {
+	log.Warnf(format, args...)
+}
+
+func LogErrorF(format string, args ...interface{}) {
+	log.Errorf(format, args...)
+}
+
+func LogPrintf(format string, args ...interface{}) {
+	fmt.Println(fmt.Sprintf(format, args...))
 }
