@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/lgrisa/lib/log"
 	"github.com/lgrisa/lib/utils"
 	"github.com/pkg/errors"
 	"net/http"
@@ -32,13 +31,13 @@ func (a *GlobalAliPayClient) sendRequest(ctx *gin.Context, method, api, body str
 	}
 
 	if a.isDebugMode() {
-		log.LogDebugf("Param：%s", body)
+		utils.LogDebugF("Param：%s", body)
 
-		log.LogDebugf("URL：%s", urlStr)
+		utils.LogDebugF("URL：%s", urlStr)
 
-		log.LogDebugf("Resp Header：%v", respHeader)
+		utils.LogDebugF("Resp Header：%v", respHeader)
 
-		log.LogDebugf("Resp Body：%s", string(respBody))
+		utils.LogDebugF("Resp Body：%s", string(respBody))
 	}
 
 	if httpCode != 200 {

@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"github.com/lgrisa/lib/log"
 	"github.com/lgrisa/lib/pbxproj"
 	"github.com/lgrisa/lib/utils"
 	"os"
@@ -10,14 +9,14 @@ import (
 )
 
 func main() {
-	log.InitLog()
+	utils.InitLog()
 
 	projPath, isFound := utils.FindProjectPath("")
 
-	log.LogDebugf("projPath:%v", projPath)
+	utils.LogDebugF("projPath:%v", projPath)
 
 	if !isFound {
-		log.LogDebugf("not found project.pbxproj")
+		utils.LogDebugF("not found project.pbxproj")
 		return
 	}
 
@@ -25,22 +24,22 @@ func main() {
 	proj, err := pbxproj.NewPbxproj(projPath)
 
 	if err != nil {
-		log.LogErrorf("parse pbxproj err:%v", err)
+		utils.LogErrorF("parse pbxproj err:%v", err)
 		return
 	}
 
 	rootObjectUUid, err := proj.GetJson().Get("rootObject").String()
 
 	if err != nil {
-		log.LogDebugf("get rootObject err:%v", err)
+		utils.LogDebugF("get rootObject err:%v", err)
 		return
 	}
 
-	log.LogDebugf("rootObject:%v", rootObjectUUid)
+	utils.LogDebugF("rootObject:%v", rootObjectUUid)
 
 	pBXProject, isFound := proj.ProjectSection[rootObjectUUid]
 	if !isFound {
-		log.LogDebugf("not found PBXProject:%v", rootObjectUUid)
+		utils.LogDebugF("not found PBXProject:%v", rootObjectUUid)
 		return
 	}
 
@@ -48,7 +47,7 @@ func main() {
 
 	if unityFrameworkTarget, isFound := proj.NativeTargets[pBXProject.TargetsUnityFramework]; isFound {
 
-		log.LogDebugf("unityFrameworkTarget.BuildPhasesFrameworks:%v", unityFrameworkTarget.BuildPhasesFrameworks)
+		utils.LogDebugF("unityFrameworkTarget.BuildPhasesFrameworks:%v", unityFrameworkTarget.BuildPhasesFrameworks)
 
 		if buildPhase, isFound := proj.FrameworkBuildPhase[unityFrameworkTarget.BuildPhasesFrameworks]; isFound {
 			for _, file := range buildPhase.Files {
@@ -59,7 +58,7 @@ func main() {
 
 	//删除Bugly.framework
 	if err = rmBuglyFramework(projPath, buglyStr, proj.Lines, shouldDeleteIds); err != nil {
-		log.LogDebugf("rmBuglyFramework err:%v", err)
+		utils.LogDebugF("rmBuglyFramework err:%v", err)
 	}
 }
 

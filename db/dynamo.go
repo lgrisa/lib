@@ -7,7 +7,7 @@ import (
 	"github.com/guregu/dynamo"
 	"github.com/lgrisa/lib/config"
 	"github.com/lgrisa/lib/dbv"
-	"github.com/lgrisa/lib/log"
+	"github.com/lgrisa/lib/utils"
 	"github.com/pkg/errors"
 )
 
@@ -55,7 +55,7 @@ func NewDynamoClient() (*DynamoDB, error) {
 	userIdCounter := newCounterTable(db, c.DynamoTablePrefix)
 
 	if c.CreateTableAnyway {
-		log.LogInfof("尝试创建db表")
+		utils.LogInfoF("尝试创建db表")
 
 		for _, t := range tableArray {
 			if err := t.CreateTable(db); err != nil {

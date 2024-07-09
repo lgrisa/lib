@@ -6,7 +6,7 @@ import (
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 	"github.com/lgrisa/lib/config"
-	"github.com/lgrisa/lib/log"
+	"github.com/lgrisa/lib/utils"
 	"github.com/pkg/errors"
 	"net/http"
 	"os"
@@ -92,31 +92,31 @@ func NewSimpleFileServer(StaticPath string, port int) {
 		keyFile := config.StartConfig.HttpConfig.KeyFile
 
 		if certFile != "" && keyFile != "" {
-			log.LogInfof("https server start at :%v", port)
+			utils.LogInfoF("https server start at :%v", port)
 
 			if err := srv.ListenAndServeTLS("conf/test46.sgameuser.com.pem", "conf/test46.sgameuser.com.key"); err != nil {
 				if !errors.Is(err, http.ErrServerClosed) {
-					log.LogErrorf("https server start fail:%v", err)
+					utils.LogErrorF("https server start fail:%v", err)
 				}
 			}
 
-			log.LogInfof("https server closed")
+			utils.LogInfoF("https server closed")
 		} else {
-			log.LogInfof("http server start at :%v", port)
+			utils.LogInfoF("http server start at :%v", port)
 
 			if err := srv.ListenAndServe(); err != nil {
 				if !errors.Is(err, http.ErrServerClosed) {
-					log.LogErrorf("http server start fail:%v", err)
+					utils.LogErrorF("http server start fail:%v", err)
 				}
 			}
 
-			log.LogInfof("httpServer closed")
+			utils.LogInfoF("httpServer closed")
 		}
 	}()
 	quit := make(chan os.Signal)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	<-quit
-	log.LogInfof("Shutdown Server ...")
+	utils.LogInfoF("Shutdown Server ...")
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()

@@ -6,7 +6,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/guregu/dynamo"
 	"github.com/lgrisa/lib/db/dbdef"
-	"github.com/lgrisa/lib/log"
+	"github.com/lgrisa/lib/utils"
 	"github.com/pkg/errors"
 	"strings"
 )
@@ -76,14 +76,14 @@ func (t *DynamoTable) CreateTableWithDefinition(ddb *dynamo.DB, from interface{}
 	if err != nil {
 		if aerr, ok := err.(awserr.Error); ok {
 			if aerr.Code() == dynamodb.ErrCodeResourceInUseException {
-				log.LogInfof("创建表: %v, 表已经存在，跳过", tableName)
+				utils.LogInfoF("创建表: %v, 表已经存在，跳过", tableName)
 				tableExist = true
 				goto ttl
 			}
 		}
 		return errors.Wrapf(err, tableName)
 	}
-	log.LogInfof("创建表: %v 成功", tableName)
+	utils.LogInfoF("创建表: %v 成功", tableName)
 
 ttl:
 
@@ -98,17 +98,17 @@ ttl:
 
 			switch ttl.Status {
 			case dynamo.TTLEnabled:
-				log.LogInfof("创建表: %v, ttl已经启用，跳过", tableName)
+				utils.LogInfoF("创建表: %v, ttl已经启用，跳过", tableName)
 			case dynamo.TTLDisabled:
 				if err := t.UpdateTTL(t.TtlKey.KeyName, true).Run(); err != nil {
 					return errors.Wrapf(err, "创建表: %v, 启用ttl出错", tableName)
 				} else {
-					log.LogInfof("创建表: %v, 启用ttl成功", tableName)
+					utils.LogInfoF("创建表: %v, 启用ttl成功", tableName)
 				}
 			case dynamo.TTLEnabling:
-				log.LogInfof("创建表: %v, ttl正在启用，跳过", tableName)
+				utils.LogInfoF("创建表: %v, ttl正在启用，跳过", tableName)
 			case dynamo.TTLDisabling:
-				log.LogInfof("创建表: %v, ttl正在禁用，跳过", tableName)
+				utils.LogInfoF("创建表: %v, ttl正在禁用，跳过", tableName)
 			default:
 				return errors.Errorf("创建表: %v, ttl状态未知: %v", tableName, ttl.Status)
 			}
