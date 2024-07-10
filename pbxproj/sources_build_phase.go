@@ -10,7 +10,7 @@ type SourcesBuildPhase struct {
 
 // parse PBXSourcesBuildPhase
 func parseSourcesBuildPhases(m map[string]interface{}) []SourcesBuildPhase {
-	ss := []SourcesBuildPhase{}
+	var ss []SourcesBuildPhase
 
 	for id, mm := range m {
 		obj := mm.(map[string]interface{})

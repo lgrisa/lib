@@ -1,6 +1,6 @@
 package pbxproj
 
-// ProjectSection represent isa PBXNativeTarget
+// FrameworkBuildPhase ProjectSection represent isa PBXNativeTarget
 type FrameworkBuildPhase struct {
 	Id    string
 	Files []string

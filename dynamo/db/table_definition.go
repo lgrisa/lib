@@ -1,6 +1,8 @@
 package db
 
-import "github.com/lgrisa/lib/db/dbdef"
+import (
+	"github.com/lgrisa/lib/dynamo/db/dbdef"
+)
 
 var CounterTableDefinition = &dbdef.TableDefinition{
 	TableName: "Counter",

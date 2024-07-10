@@ -6,7 +6,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/guregu/dynamo"
 	"github.com/lgrisa/lib/config"
-	"github.com/lgrisa/lib/dbv"
+	"github.com/lgrisa/lib/dynamo/dbv"
 	"github.com/lgrisa/lib/utils"
 	"github.com/pkg/errors"
 )

@@ -8,7 +8,7 @@ type BuildFile struct {
 
 // parse PBXBuildFile
 func parseBuildFiles(m map[string]interface{}) []BuildFile {
-	bs := []BuildFile{}
+	var bs []BuildFile
 
 	for id, mm := range m {
 		obj := mm.(map[string]interface{})

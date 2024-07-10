@@ -1,7 +1,7 @@
 package dbv
 
 import (
-	"github.com/lgrisa/lib/db/dbdef"
+	"github.com/lgrisa/lib/dynamo/db/dbdef"
 )
 
 var AccountTableDefinition = &dbdef.TableDefinition{

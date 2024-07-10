@@ -5,7 +5,7 @@ import "sort"
 // sectionNames get all distinct sorted section names
 // TOOD: modify string to some interface
 func parseSectionNames(m map[string]interface{}) []string {
-	ss := []string{}
+	var ss []string
 
 	for _, mm := range m {
 		for k, v := range mm.(map[string]interface{}) {

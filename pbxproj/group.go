@@ -26,7 +26,7 @@ func (g Group) expression() string {
 
 // parse PBXGroup
 func parseGroups(m map[string]interface{}) []Group {
-	gs := []Group{}
+	var gs []Group
 
 	for id, mm := range m {
 		obj := mm.(map[string]interface{})

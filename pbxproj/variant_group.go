@@ -10,7 +10,7 @@ type VariantGroup struct {
 
 // parse PBXVariantGroup
 func parseVariantGroups(m map[string]interface{}) []VariantGroup {
-	gs := []VariantGroup{}
+	var gs []VariantGroup
 
 	for id, mm := range m {
 		obj := mm.(map[string]interface{})

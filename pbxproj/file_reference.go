@@ -13,7 +13,7 @@ type FileReference struct {
 
 // parse PBXFileReference
 func parseFileReferences(m map[string]interface{}) []FileReference {
-	fs := []FileReference{}
+	var fs []FileReference
 
 	for id, mm := range m {
 		obj := mm.(map[string]interface{})

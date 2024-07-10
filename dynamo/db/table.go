@@ -5,7 +5,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/guregu/dynamo"
-	"github.com/lgrisa/lib/db/dbdef"
+	"github.com/lgrisa/lib/dynamo/db/dbdef"
 	"github.com/lgrisa/lib/utils"
 	"github.com/pkg/errors"
 	"strings"
