@@ -52,9 +52,9 @@ func createClient(accessKeyId, accessKeySecret string) (*ocr_api20210707.Client,
 	// 建议使用更安全的 STS 方式，更多鉴权访问方式请参见：https://help.aliyun.com/document_detail/378661.html。
 	config := &openapi.Config{
 		// 必填，请确保代码运行环境设置了环境变量 ALIBABA_CLOUD_ACCESS_KEY_ID。
-		AccessKeyId: tea.String("LTAI5tRpQYu9tz9gT6hVLPMT"),
+		AccessKeyId: tea.String(accessKeyId),
 		// 必填，请确保代码运行环境设置了环境变量 ALIBABA_CLOUD_ACCESS_KEY_SECRET。
-		AccessKeySecret: tea.String("4ifEMUWxBe9JxOI36MmoefS1ssQkqG"),
+		AccessKeySecret: tea.String(accessKeySecret),
 	}
 	// Endpoint 请参考 https://api.aliyun.com/product/ocr-api
 	config.Endpoint = tea.String("ocr-api.cn-hangzhou.aliyuncs.com")
