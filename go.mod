@@ -3,6 +3,7 @@ module github.com/lgrisa/lib
 go 1.20
 
 require (
+	github.com/Unknwon/goconfig v1.0.0
 	github.com/alibabacloud-go/darabonba-openapi/v2 v2.0.8
 	github.com/alibabacloud-go/ocr-api-20210707/v3 v3.0.0
 	github.com/alibabacloud-go/tea v1.2.2
