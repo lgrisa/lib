@@ -44,6 +44,7 @@ require (
 	github.com/stripe/stripe-go/v78 v78.1.0
 	github.com/tealeg/xlsx v1.0.5
 	github.com/tinylib/msgp v1.1.9
+	github.com/volcengine/volc-sdk-golang v1.0.178
 	go.uber.org/atomic v1.9.0
 	golang.org/x/exp v0.0.0-20240112132812-db7319d0e0e3
 	golang.org/x/net v0.24.0
@@ -95,6 +96,7 @@ require (
 	github.com/goccy/go-json v0.10.2 // indirect
 	github.com/golang/protobuf v1.5.4 // indirect
 	github.com/google/go-cmp v0.6.0 // indirect
+	github.com/google/uuid v1.5.0 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/jonboulle/clockwork v0.4.0 // indirect

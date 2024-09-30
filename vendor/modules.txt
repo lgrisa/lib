@@ -380,6 +380,9 @@ github.com/google/go-cmp/cmp/internal/diff
 github.com/google/go-cmp/cmp/internal/flags
 github.com/google/go-cmp/cmp/internal/function
 github.com/google/go-cmp/cmp/internal/value
+# github.com/google/uuid v1.5.0
+## explicit
+github.com/google/uuid
 # github.com/guregu/dynamo v1.22.0
 ## explicit; go 1.20
 github.com/guregu/dynamo
@@ -708,6 +711,9 @@ github.com/twitchyliquid64/golang-asm/unsafeheader
 # github.com/ugorji/go/codec v1.2.12
 ## explicit; go 1.11
 github.com/ugorji/go/codec
+# github.com/volcengine/volc-sdk-golang v1.0.178
+## explicit; go 1.14
+github.com/volcengine/volc-sdk-golang/base
 # go.uber.org/atomic v1.9.0
 ## explicit; go 1.13
 go.uber.org/atomic
@@ -734,6 +740,7 @@ golang.org/x/net/html
 golang.org/x/net/html/atom
 golang.org/x/net/html/charset
 golang.org/x/net/http/httpguts
+golang.org/x/net/http/httpproxy
 golang.org/x/net/http2
 golang.org/x/net/http2/h2c
 golang.org/x/net/http2/hpack
