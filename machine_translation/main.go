@@ -21,9 +21,13 @@ func main() {
 		return
 	}
 
+	//"AKLTMzJiZGE1MzAwODY0NDg5ODhmZjAzODQ4YWY5ZmEzZTI"
+
+	//"WWpCbE1EZGlPRGt4WVRFNU5EQXhOMkpqTVRsak4yVmxNR1kzWkdZNFlUaw=="
+
 	volcEngineClient := volc.NewVolcEngineTransClient(
-		"AKLTMzJiZGE1MzAwODY0NDg5ODhmZjAzODQ4YWY5ZmEzZTI",
-		"WWpCbE1EZGlPRGt4WVRFNU5EQXhOMkpqTVRsak4yVmxNR1kzWkdZNFlUaw==")
+		"",
+		"")
 
 	if errRegister := m.RegisterClient(machine_translation_manager.VolcEngine, volcEngineClient); errRegister != nil {
 		utils.LogErrorF(errors.WithStack(errRegister).Error())
