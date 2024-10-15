@@ -1,16 +1,18 @@
 package volc
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	trans "github.com/lgrisa/lib/machine_translation/machine_translation_engine"
+	"github.com/lgrisa/lib/utils"
+	"github.com/pkg/errors"
+	"github.com/volcengine/volc-sdk-golang/base"
+	"golang.org/x/time/rate"
 	"net/http"
 	"net/url"
 	"strings"
 	"time"
-
-	"github.com/pkg/errors"
-	"github.com/volcengine/volc-sdk-golang/base"
 )
 
 const (
@@ -23,7 +25,8 @@ const (
 // 火山引擎
 
 type Engine struct {
-	client *base.Client
+	client  *base.Client
+	limiter *rate.Limiter
 }
 
 func NewVolcEngineTransClient(appId, appSecret string) *Engine {
@@ -51,7 +54,8 @@ func NewVolcEngineTransClient(appId, appSecret string) *Engine {
 	client.SetSecretKey(appSecret)
 
 	return &Engine{
-		client: client,
+		client:  client,
+		limiter: rate.NewLimiter(rate.Every(time.Second/time.Duration(5)), 5),
 	}
 }
 
@@ -78,8 +82,11 @@ func (e *Engine) TranslateFor(text string, fromLanguage, toLanguage trans.Langua
 
 			return res, nil
 		} else {
+
+			utils.LogErrorF("火山翻译错误:%v", err)
+
 			// 如果错误包含 超过了每秒频率上限，那么等待1s
-			if strings.Contains(err.Error(), "超过了每秒频率上限") {
+			if strings.Contains(err.Error(), "超过了每秒频率上限") || strings.Contains(err.Error(), "limit") {
 
 			} else {
 				return "", err
@@ -93,6 +100,10 @@ func (e *Engine) TranslateFor(text string, fromLanguage, toLanguage trans.Langua
 func (e *Engine) Translate(text string, fromLanguage, toLanguage trans.LanguageType) (string, error) {
 	if e.client == nil {
 		return "", errors.New("火山引擎未初始化")
+	}
+
+	if err := e.limiter.Wait(context.Background()); err != nil {
+		return "", errors.Errorf("限流器等待错误: %v", err)
 	}
 
 	sourceLanguage := e.LanguageCode(fromLanguage)
