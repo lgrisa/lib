@@ -16,6 +16,10 @@ func main() {
 
 	flag.Parse()
 
+	utils.LogInfoF("翻译配置表路径:（%v） 翻译配置表路径:（%v）", *transPath, *configPath)
+
+	utils.InitLog()
+
 	if *transPath == "" || *configPath == "" {
 		utils.LogErrorF("transPath or configPath is empty")
 		return

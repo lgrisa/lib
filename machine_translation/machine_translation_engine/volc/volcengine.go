@@ -64,6 +64,8 @@ func (e *Engine) TranslateFor(text string, fromLanguage, toLanguage trans.Langua
 	text = strings.ReplaceAll(text, "\n", "\\n")
 
 	for {
+		utils.LogTraceF("火山翻译:%s", text)
+
 		if res, err := e.Translate(text, fromLanguage, toLanguage); err == nil {
 
 			//删除<>内的空格
@@ -83,10 +85,11 @@ func (e *Engine) TranslateFor(text string, fromLanguage, toLanguage trans.Langua
 			return res, nil
 		} else {
 
-			utils.LogErrorF("火山翻译错误:%v", err)
+			utils.LogErrorF("火山翻译(%s)错误:(%v)", text, err)
 
 			// 如果错误包含 超过了每秒频率上限，那么等待1s
-			if strings.Contains(err.Error(), "超过了每秒频率上限") || strings.Contains(err.Error(), "limit") {
+			if strings.Contains(err.Error(), "超过了每秒频率上限") ||
+				strings.Contains(err.Error(), "limit") {
 
 			} else {
 				return "", err
@@ -108,8 +111,15 @@ func (e *Engine) Translate(text string, fromLanguage, toLanguage trans.LanguageT
 
 	sourceLanguage := e.LanguageCode(fromLanguage)
 	targetLanguage := e.LanguageCode(toLanguage)
-	requestJson := fmt.Sprintf(`{"SourceLanguage":"%s","TargetLanguage":"%s","TextList":["%s"]}`, sourceLanguage, targetLanguage, text)
-	resp, code, err := e.client.Json("TranslateText", nil, requestJson)
+	request := Req{
+		SourceLanguage: sourceLanguage,
+		TargetLanguage: targetLanguage,
+		TextList:       []string{text},
+	}
+
+	requestJson, _ := json.Marshal(request)
+
+	resp, code, err := e.client.Json("TranslateText", nil, string(requestJson))
 	if err != nil {
 		return "", errors.WithStack(err)
 	}

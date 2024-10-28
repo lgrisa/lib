@@ -56,7 +56,7 @@ var (
 
 func init() {
 	StartConfig.Log.LogrusLevel = "trace"
-	StartConfig.Log.LogLevel = 0
+	StartConfig.Log.LogLevel = -1
 }
 
 func (d *StartConfigStruct) OnLoaded() error {
@@ -82,12 +82,12 @@ func doReadStartUpConfig() error {
 	}
 
 	if err := viper.ReadInConfig(); err != nil {
-		return errors.Wrap(err, "读fight启动配置文件出错")
+		return errors.Wrap(err, "读取server.yaml启动配置出错")
 	}
 
 	err := viper.Unmarshal(StartConfig)
 	if err != nil {
-		return errors.Wrap(err, "解析fight启动配置出错")
+		return errors.Wrap(err, "解析server.yaml启动配置出错")
 	}
 
 	if err := StartConfig.OnLoaded(); err != nil {

@@ -48,7 +48,14 @@ func InitLogrus(logSavePath string, logSaveDay uint, loggersLevel string) {
 }
 
 func InitLog() {
-	log.SetLevel(log.Level(config.StartConfig.Log.LogLevel))
+
+	logLevel := log.LevelDebug
+
+	if config.StartConfig.Log.LogLevel != -1 {
+		logLevel = log.Level(config.StartConfig.Log.LogLevel)
+	}
+
+	log.SetLevel(logLevel)
 }
 
 func LogTraceF(format string, args ...interface{}) {

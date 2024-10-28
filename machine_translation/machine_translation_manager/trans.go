@@ -303,8 +303,9 @@ var transValueCellIndex = 2
 
 func (m *Manager) startTranslateLanguageExcel(file os.DirEntry, languageInfo *TranslatedLanguageInfo) error {
 	// 解析文件
-
 	filename := languageInfo.path + "/" + file.Name()
+
+	utils.LogInfoF(fmt.Sprintf("开始处理表格: file: %v", filename))
 
 	f, err := xlsx.OpenFile(filename)
 
@@ -367,7 +368,7 @@ func (m *Manager) startTranslateLanguageExcel(file os.DirEntry, languageInfo *Tr
 			// 直接翻译
 			directTransCount++
 
-			transValue, err = m.TranslateFor(valueLocal, "zh", languageInfo.languageType)
+			transValue, err = m.TranslateFor(valueLocal, machine_translation_engine.LanguageTypeZh, languageInfo.languageType)
 
 			if err != nil {
 				return errors.Errorf("未翻译 转义接口报错: 文件名：%s keyID: %s error: %v", filename, keyID, err)

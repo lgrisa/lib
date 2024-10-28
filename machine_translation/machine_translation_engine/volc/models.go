@@ -17,3 +17,9 @@ type translationData struct {
 		} `json:"Error"`
 	} `json:"ResponseMetadata"`
 }
+
+type Req struct {
+	SourceLanguage string   `json:"SourceLanguage"`
+	TargetLanguage string   `json:"TargetLanguage"`
+	TextList       []string `json:"TextList"`
+}
