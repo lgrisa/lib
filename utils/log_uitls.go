@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/disgoorg/log"
 	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
-	"github.com/lgrisa/lib/config"
 	"github.com/lgrisa/lib/utils/lfshook"
 	"github.com/sirupsen/logrus"
 	"strings"
@@ -47,15 +46,8 @@ func InitLogrus(logSavePath string, logSaveDay uint, loggersLevel string) {
 	logrus.Infof("设置日志等级: %s", logrus.GetLevel())
 }
 
-func InitLog() {
-
-	logLevel := log.LevelDebug
-
-	if config.StartConfig.Log.LogLevel != -1 {
-		logLevel = log.Level(config.StartConfig.Log.LogLevel)
-	}
-
-	log.SetLevel(logLevel)
+func InitLog(logLevel int) {
+	log.SetLevel(log.Level(logLevel))
 }
 
 func LogTraceF(format string, args ...interface{}) {

@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	utils.InitLog()
+	utils.InitLog(0)
 
 	projPath, isFound := utils.FindProjectPath("")
 
