@@ -8,3 +8,8 @@ goMod:
 	go mod tidy
 	go mod vendor
 	cp vendor_ext/createtable_ext.gobak vendor/github.com/guregu/dynamo/createtable_ext.go
+
+reset:
+	git reset --hard HEAD
+	git clean -f -d
+	git pull
