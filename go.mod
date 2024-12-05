@@ -17,7 +17,6 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.53.1
 	github.com/aws/smithy-go v1.20.2
 	github.com/awslabs/aws-lambda-go-api-proxy v0.16.1
-	github.com/bitly/go-simplejson v0.5.1
 	github.com/disgoorg/disgo v0.16.11
 	github.com/disgoorg/log v1.2.1
 	github.com/disgoorg/snowflake/v2 v2.0.1

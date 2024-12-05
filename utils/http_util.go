@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"github.com/pkg/errors"
 	"golang.org/x/net/context/ctxhttp"
 	"io"
 	"net/http"
@@ -11,34 +12,6 @@ import (
 	"strings"
 	"time"
 )
-
-func HttpRequest(ctx context.Context, method string, url string, headers map[string]string, requestBody io.Reader) (responseHeader http.Header, body []byte, err error, returnCode int) {
-	req, err := http.NewRequest(method, url, requestBody)
-	if err != nil {
-		return nil, nil, err, 0
-	}
-
-	for k, v := range headers {
-		req.Header.Add(k, v)
-	}
-
-	ctx, cancel := context.WithTimeout(ctx, 25*time.Second)
-	defer cancel()
-
-	resp, err := ctxhttp.Do(ctx, nil, req)
-	if err != nil {
-		return nil, nil, err, 0
-	}
-
-	defer resp.Body.Close()
-
-	body, err = io.ReadAll(resp.Body)
-	if err != nil {
-		return nil, nil, err, 0
-	}
-
-	return resp.Header, body, nil, resp.StatusCode
-}
 
 const (
 	ContentTypeXWwwFormUrlencodedText = "application/x-www-form-urlencoded"
@@ -68,4 +41,40 @@ func BuildHttpBody(contentType string, dataMap map[string]interface{}) (io.Reade
 	}
 
 	return requestBody, nil
+}
+
+func Request(ctx context.Context, url string, method string, headers map[string]string, requestBody io.Reader) (responseHeader http.Header, returnCode int, body []byte, err error) {
+	req, err := http.NewRequest(method, url, requestBody)
+	if err != nil {
+		return nil, 0, nil, errors.Errorf("http.NewRequest fail: %v", err)
+	}
+
+	for k, v := range headers {
+		req.Header.Add(k, v)
+	}
+
+	ctx, cancel := context.WithTimeout(ctx, 25*time.Second)
+	defer cancel()
+
+	resp, err := ctxhttp.Do(ctx, nil, req)
+	if err != nil {
+		return nil, 0, nil, errors.Errorf("cxhttp.Do fail: %v", err)
+	}
+
+	defer func(Body io.ReadCloser) {
+		if err = Body.Close(); err != nil {
+			LogErrorF("Body.Close fail: %v", err)
+		}
+	}(resp.Body)
+
+	body, err = io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, 0, nil, errors.Errorf("io.ReadAll fail: %v", err)
+	}
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, resp.StatusCode, nil, errors.Errorf("http status code: %d", resp.StatusCode)
+	}
+
+	return resp.Header, resp.StatusCode, body, nil
 }

@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"github.com/gin-gonic/gin"
-	"github.com/lgrisa/lib/utils"
+	http2 "github.com/lgrisa/lib/utils"
 	"github.com/pkg/errors"
 	"net/http"
 )
@@ -44,14 +44,14 @@ func (c *Client) verifySign(context *gin.Context, webHookBody *[]byte) error {
 		"Authorization": "Bearer " + c.accessToken,
 	}
 
-	_, respBody, err, httpCode := utils.HttpRequest(context, "POST", urlProfile+verifyMethod, headers, bytes.NewBuffer(verifyReqJson))
+	_, respBody, err, httpCode := http2.Request(context, "POST", urlProfile+verifyMethod, headers, bytes.NewBuffer(verifyReqJson))
 
 	if err != nil {
-		return errors.Errorf("VerifyPaypalSign HttpRequest(%s,%s,%s) error: %v", "POST", urlProfile+verifyMethod, verifyReqJson, err)
+		return errors.Errorf("VerifyPaypalSign Request(%s,%s,%s) error: %v", "POST", urlProfile+verifyMethod, verifyReqJson, err)
 	}
 
 	if httpCode != 200 {
-		return errors.Errorf("VerifyPaypalSign HttpRequest(%s,%s,%s) httpCode: %d", "POST", urlProfile+verifyMethod, verifyReqJson, httpCode)
+		return errors.Errorf("VerifyPaypalSign Request(%s,%s,%s) httpCode: %d", "POST", urlProfile+verifyMethod, verifyReqJson, httpCode)
 	}
 
 	myVerifyResp := &verifyResp{}

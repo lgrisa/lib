@@ -223,9 +223,6 @@ github.com/aws/smithy-go/waiter
 # github.com/awslabs/aws-lambda-go-api-proxy v0.16.1
 ## explicit; go 1.21
 github.com/awslabs/aws-lambda-go-api-proxy/core
-# github.com/bitly/go-simplejson v0.5.1
-## explicit; go 1.17
-github.com/bitly/go-simplejson
 # github.com/bufbuild/protocompile v0.10.0
 ## explicit; go 1.20
 github.com/bufbuild/protocompile

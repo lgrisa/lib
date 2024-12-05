@@ -24,7 +24,7 @@ func (a *GlobalAliPayClient) sendRequest(ctx *gin.Context, method, api, body str
 		urlStr = AliUrlSandbox + api
 	}
 
-	respHeader, respBody, err, httpCode := utils.HttpRequest(ctx, "POST", urlStr, header, bytes.NewBuffer([]byte(body)))
+	respHeader, respBody, err, httpCode := utils.Request(ctx, "POST", urlStr, header, bytes.NewBuffer([]byte(body)))
 
 	if err != nil {
 		return nil, err
