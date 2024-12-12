@@ -2,8 +2,9 @@ package main
 
 import (
 	"flag"
-	"github.com/lgrisa/lib/machine_translation/machine_translation_engine/volc"
-	"github.com/lgrisa/lib/machine_translation/machine_translation_manager"
+	"github.com/lgrisa/lib/machine_trans/machine_trans_engine/huawei"
+	"github.com/lgrisa/lib/machine_trans/machine_trans_engine/volc"
+	"github.com/lgrisa/lib/machine_trans/machine_trans_manager"
 	"github.com/lgrisa/lib/utils"
 	"github.com/pkg/errors"
 	"time"
@@ -30,18 +31,32 @@ func main() {
 		return
 	}
 
-	m, err := machine_translation_manager.NewClient(*configPath, *transPath)
+	m, err := machine_trans_manager.NewClient(*configPath, *transPath)
 
 	if err != nil {
 		utils.LogErrorF(errors.WithStack(err).Error())
 		return
 	}
-	
-	volcEngineClient := volc.NewVolcEngineTransClient(
+
+	volcEngineClient := volc.NewClient(
 		"AKLTMzJiZGE1MzAwODY0NDg5ODhmZjAzODQ4YWY5ZmEzZTI",
 		"WWpCbE1EZGlPRGt4WVRFNU5EQXhOMkpqTVRsak4yVmxNR1kzWkdZNFlUaw==")
 
-	if errRegister := m.RegisterClient(machine_translation_manager.VolcEngine, volcEngineClient); errRegister != nil {
+	if errRegister := m.RegisterClient(machine_trans_manager.VolcEngine, volcEngineClient); errRegister != nil {
+		utils.LogErrorF(errors.WithStack(errRegister).Error())
+		return
+	}
+
+	huaWeiClient, err := huawei.NewClient(
+		"YCEXVLOW4BEXJQ1Z3QQU",
+		"gMrClgUnkFKIDFeaXA7sqghawCfRt6ILJTKTQLBe")
+
+	if err != nil {
+		utils.LogErrorF(errors.WithStack(err).Error())
+		return
+	}
+
+	if errRegister := m.RegisterClient(machine_trans_manager.HuaWei, huaWeiClient); errRegister != nil {
 		utils.LogErrorF(errors.WithStack(errRegister).Error())
 		return
 	}
