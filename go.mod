@@ -29,9 +29,11 @@ require (
 	github.com/golang/snappy v0.0.4
 	github.com/guregu/dynamo v1.22.0
 	github.com/huaweicloud/huaweicloud-sdk-go-v3 v0.1.124
+	github.com/jasonlvhit/gocron v0.0.1
 	github.com/jhump/protoreflect v1.16.0
 	github.com/json-iterator/go v1.1.12
 	github.com/lestrrat-go/file-rotatelogs v2.4.0+incompatible
+	github.com/liyiheng/zset v0.2.1
 	github.com/mattn/go-sqlite3 v1.14.22
 	github.com/onsi/gomega v1.27.7
 	github.com/oschwald/geoip2-golang v1.9.0

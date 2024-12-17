@@ -5,7 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	http2 "github.com/lgrisa/lib/utils"
+	"github.com/lgrisa/lib/utils"
 	"net/http"
 	"regexp"
 	"time"
@@ -27,7 +27,7 @@ func SendMessageToDingDing(msg map[string]interface{}, token string, secret stri
 		return err
 	}
 
-	_, respBody, err, code := http2.Request(ctx, "POST", uri, header, bytes.NewReader(b))
+	_, code, respBody, err := utils.Request(ctx, "POST", uri, header, bytes.NewReader(b))
 	if code != http.StatusOK {
 		return fmt.Errorf("send msg err: %s, token: %s, msg: %s", string(respBody), token, b)
 	}

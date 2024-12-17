@@ -14,6 +14,7 @@ const (
 	LanguageTypePt   LanguageType = "pt"    //	葡萄牙语
 	LanguageTypeEs   LanguageType = "es"    // 西班牙语
 	LanguageTypeTh   LanguageType = "th"    // 泰语
+	LanguageTypeKr   LanguageType = "kr"    // 韩语
 )
 
 func GetLanguageType(languageName string) (LanguageType, error) {
@@ -38,6 +39,8 @@ func GetLanguageType(languageName string) (LanguageType, error) {
 		return LanguageTypeEs, nil
 	case "th":
 		return LanguageTypeTh, nil
+	case "kr":
+		return LanguageTypeKr, nil
 	default:
 		return "", errors.Errorf("languageName: %s is not supported", languageName)
 	}
