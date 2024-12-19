@@ -45,5 +45,3 @@ func GetLanguageType(languageName string) (LanguageType, error) {
 		return "", errors.Errorf("languageName: %s is not supported", languageName)
 	}
 }
-
-var ErrLanguageTypeNotSupported = errors.New("language type not supported")

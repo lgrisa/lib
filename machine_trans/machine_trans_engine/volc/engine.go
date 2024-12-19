@@ -15,20 +15,6 @@ import (
 	"time"
 )
 
-const (
-	host            = "open.volcengineapi.com"
-	kServiceVersion = "2020-06-01"
-)
-
-// New returns a new volc machine_trans_engine
-
-// 火山引擎
-
-type Engine struct {
-	client  *base.Client
-	limiter *rate.Limiter
-}
-
 func NewClient(appId, appSecret string) *Engine {
 	serviceInfo := &base.ServiceInfo{
 		Timeout: 5 * time.Second,
@@ -127,8 +113,8 @@ func (e *Engine) Translate(text string, fromLanguage, toLanguage trans.LanguageT
 		return "", errors.Errorf("限流器等待错误: %v", err)
 	}
 
-	sourceLanguage := e.LanguageCode(fromLanguage)
-	targetLanguage := e.LanguageCode(toLanguage)
+	sourceLanguage := e.languageCode(fromLanguage)
+	targetLanguage := e.languageCode(toLanguage)
 	request := Req{
 		SourceLanguage: sourceLanguage,
 		TargetLanguage: targetLanguage,
@@ -145,30 +131,18 @@ func (e *Engine) Translate(text string, fromLanguage, toLanguage trans.LanguageT
 		return "", fmt.Errorf("火山翻译错误，返回错误码:%d", code)
 	}
 	data := translationData{}
-	err = json.Unmarshal(resp, &data)
-	if err != nil {
+
+	if err = json.Unmarshal(resp, &data); err != nil {
 		return "", err
 	}
+
 	if data.ResponseMetadata.Error.Code != "" {
 		return "", fmt.Errorf("火山翻译错误，返回错误码:%s，错误原因:%s", data.ResponseMetadata.Error.Code, data.ResponseMetadata.Error.Message)
 	}
+
 	if len(data.TranslationList) == 0 {
 		return "", fmt.Errorf("火山翻译错误，返回内容为空")
 	}
 
 	return data.TranslationList[0].Translation, nil
-}
-
-func (e *Engine) LanguageCode(code trans.LanguageType) string {
-
-	switch code {
-	case "auto":
-		return ""
-	case "zh-tw":
-		return "zh-Hant"
-	case "zh-TW":
-		return "zh-Hant"
-	}
-
-	return string(code)
 }

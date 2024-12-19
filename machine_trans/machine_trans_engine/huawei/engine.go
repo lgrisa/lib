@@ -62,13 +62,13 @@ func (c *Client) Translate(text string, fromLanguage, toLanguage trans.LanguageT
 	from, err := transFromLanguage(fromLanguage)
 
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("transFromLanguage Err: (%v)", err)
 	}
 
 	to, err := transToLanguage(toLanguage)
 
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("transToLanguage Err: (%v)", err)
 	}
 
 	request := &model.RunTextTranslationRequest{}
@@ -80,58 +80,12 @@ func (c *Client) Translate(text string, fromLanguage, toLanguage trans.LanguageT
 	response, err := c.client.RunTextTranslation(request)
 
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("RunTextTranslation Err: (%v)", err)
 	}
 
 	if response.ErrorCode != nil {
-		return "", fmt.Errorf("error code: %v, error msg: %v", *response.ErrorCode, *response.ErrorMsg)
+		return "", fmt.Errorf("ErrorCode Err: (%v)", *response.ErrorCode)
 	}
 
 	return *response.TranslatedText, nil
-}
-
-func transFromLanguage(fromLanguage trans.LanguageType) (model.TextTranslationReqFrom, error) {
-	switch fromLanguage {
-	case trans.LanguageTypeZh:
-		return model.GetTextTranslationReqFromEnum().ZH, nil
-	case trans.LanguageTypeZhTW:
-		return model.GetTextTranslationReqFromEnum().ZH_TW, nil
-	case trans.LanguageTypeEn:
-		return model.GetTextTranslationReqFromEnum().EN, nil
-	case trans.LanguageTypeDe:
-		return model.GetTextTranslationReqFromEnum().DE, nil
-	case trans.LanguageTypeFr:
-		return model.GetTextTranslationReqFromEnum().FR, nil
-	case trans.LanguageTypePt:
-		return model.GetTextTranslationReqFromEnum().PT, nil
-	case trans.LanguageTypeEs:
-		return model.GetTextTranslationReqFromEnum().ES, nil
-	case trans.LanguageTypeTh:
-		return model.GetTextTranslationReqFromEnum().TH, nil
-	default:
-		return model.TextTranslationReqFrom{}, fmt.Errorf("fromLanguage: %s is not supported", fromLanguage)
-	}
-}
-
-func transToLanguage(toLanguage trans.LanguageType) (model.TextTranslationReqTo, error) {
-	switch toLanguage {
-	case trans.LanguageTypeZh:
-		return model.GetTextTranslationReqToEnum().ZH, nil
-	//case trans.LanguageTypeZhTW: // 华为不支持繁体中文
-	//	return model.GetTextTranslationReqToEnum().ZH_TW, nil
-	case trans.LanguageTypeEn:
-		return model.GetTextTranslationReqToEnum().EN, nil
-	case trans.LanguageTypeDe:
-		return model.GetTextTranslationReqToEnum().DE, nil
-	case trans.LanguageTypeFr:
-		return model.GetTextTranslationReqToEnum().FR, nil
-	case trans.LanguageTypePt:
-		return model.GetTextTranslationReqToEnum().PT, nil
-	case trans.LanguageTypeEs:
-		return model.GetTextTranslationReqToEnum().ES, nil
-	case trans.LanguageTypeTh:
-		return model.GetTextTranslationReqToEnum().TH, nil
-	default:
-		return model.TextTranslationReqTo{}, trans.ErrLanguageTypeNotSupported
-	}
 }

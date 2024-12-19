@@ -193,7 +193,7 @@ func (m *Manager) translateLanguageExcel(file os.DirEntry, languageInfo *Transla
 			transValue, errTrans := m.engineTranslateFor(value.valueCn, "zh", languageInfo.languageType)
 
 			if errTrans != nil {
-				return errors.Errorf("新增 转义接口报错: 文件名：%s keyID: %s 中文: %s error: %v", filename, key, value.valueCn, errTrans)
+				return errors.Errorf("新增转义接口报错:文件名:(%s)\nkeyID:(%s)\n中文: (%s)\nerror:(%v)", filename, key, value.valueCn, errTrans)
 			}
 
 			row.AddCell().SetValue(getTransValue(transValue))
@@ -216,27 +216,15 @@ func (m *Manager) translateLanguageExcel(file os.DirEntry, languageInfo *Transla
 
 func (m *Manager) engineTranslateFor(text string, fromLanguage, toLanguage machine_trans_engine.LanguageType) (string, error) {
 
-	curEngine, isExist := m.TransClient[HuaWei]
-
-	if isExist {
-		if resp, err := curEngine.TranslateFor(text, fromLanguage, toLanguage); err != nil {
-			if !errors.Is(err, machine_trans_engine.ErrLanguageTypeNotSupported) {
-				return "", err
-			}
-
-			// 如果不支持的语言类型，尝试使用其他引擎
-		} else {
+	for name, engine := range m.TransClient {
+		if resp, err := engine.TranslateFor(text, fromLanguage, toLanguage); err == nil {
 			return resp, nil
+		} else {
+			utils.LogErrorF("%s 翻译(%s)错误:(%v)", name, text, err)
 		}
 	}
 
-	firstEngine, isExist := m.TransClient[VolcEngine]
-
-	if isExist {
-		return firstEngine.TranslateFor(text, fromLanguage, toLanguage)
-	}
-
-	return "", errors.New("无可用翻译引擎")
+	return "", fmt.Errorf("翻译失败")
 }
 
 func getTransValue(value string) string {

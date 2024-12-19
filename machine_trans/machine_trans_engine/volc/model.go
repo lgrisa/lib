@@ -1,5 +1,20 @@
 package volc
 
+import (
+	"github.com/volcengine/volc-sdk-golang/base"
+	"golang.org/x/time/rate"
+)
+
+const (
+	host            = "open.volcengineapi.com"
+	kServiceVersion = "2020-06-01"
+)
+
+type Engine struct {
+	client  *base.Client
+	limiter *rate.Limiter
+}
+
 type translationData struct {
 	TranslationList []struct {
 		Translation            string `json:"Translation"`

@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-func InitLogrus(logSavePath string, logSaveDay uint, loggersLevel string) {
+func InitLogRus(logSavePath string, logSaveDay uint, loggersLevel string) {
 	if path := logSavePath; len(path) > 0 {
 		writer, _ := rotatelogs.New(
 			path+".%Y%m%d",
