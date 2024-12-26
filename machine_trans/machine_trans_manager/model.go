@@ -9,7 +9,7 @@ type Manager struct {
 
 	TransConfigMap map[machine_trans_engine.LanguageType]*TranslatedLanguageInfo
 
-	TransClient map[EngineType]TranslatedClient
+	TransClient []TranslatedClient
 
 	excelPath string
 

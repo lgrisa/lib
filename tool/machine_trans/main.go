@@ -38,15 +38,6 @@ func main() {
 		return
 	}
 
-	volcEngineClient := volc.NewClient(
-		"AKLTMzJiZGE1MzAwODY0NDg5ODhmZjAzODQ4YWY5ZmEzZTI",
-		"WWpCbE1EZGlPRGt4WVRFNU5EQXhOMkpqTVRsak4yVmxNR1kzWkdZNFlUaw==")
-
-	if errRegister := m.RegisterClient(machine_trans_manager.VolcEngine, volcEngineClient); errRegister != nil {
-		utils.LogErrorF(errors.WithStack(errRegister).Error())
-		return
-	}
-
 	huaWeiClient, err := huawei.NewClient(
 		"YCEXVLOW4BEXJQ1Z3QQU",
 		"gMrClgUnkFKIDFeaXA7sqghawCfRt6ILJTKTQLBe")
@@ -57,6 +48,15 @@ func main() {
 	}
 
 	if errRegister := m.RegisterClient(machine_trans_manager.HuaWei, huaWeiClient); errRegister != nil {
+		utils.LogErrorF(errors.WithStack(errRegister).Error())
+		return
+	}
+
+	volcEngineClient := volc.NewClient(
+		"AKLTMzJiZGE1MzAwODY0NDg5ODhmZjAzODQ4YWY5ZmEzZTI",
+		"WWpCbE1EZGlPRGt4WVRFNU5EQXhOMkpqTVRsak4yVmxNR1kzWkdZNFlUaw==")
+
+	if errRegister := m.RegisterClient(machine_trans_manager.VolcEngine, volcEngineClient); errRegister != nil {
 		utils.LogErrorF(errors.WithStack(errRegister).Error())
 		return
 	}

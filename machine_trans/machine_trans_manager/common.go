@@ -10,7 +10,7 @@ func NewClient(configPath string, excelPath string) (*Manager, error) {
 	m := &Manager{
 		TransConfigMap:   make(map[machine_trans_engine.LanguageType]*TranslatedLanguageInfo),
 		OriginalExcelMap: make(map[string]map[string]*OriginalExcelInfo),
-		TransClient:      make(map[EngineType]TranslatedClient),
+		TransClient:      make([]TranslatedClient, 0),
 		excelPath:        excelPath,
 		configPath:       configPath,
 	}
@@ -24,7 +24,7 @@ func (m *Manager) RegisterClient(engineType EngineType, client TranslatedClient)
 		return errors.Errorf("RegisterClient:%v client is nil", engineType)
 	}
 
-	m.TransClient[engineType] = client
+	m.TransClient = append(m.TransClient, client)
 
 	return nil
 }
