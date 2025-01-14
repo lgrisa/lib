@@ -2,6 +2,8 @@ package reporter
 
 import (
 	"fmt"
+	"github.com/lgrisa/lib/config"
+	"github.com/lgrisa/lib/utils"
 	"net/http"
 	"runtime/debug"
 	"strings"
@@ -10,16 +12,16 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-var defaultFeishuReporter *feishuReporter
+var defaultFeiShuReporter *feishuReporter
 
-func InitFeishu() {
-	token := startconfig.StartConfig.ErrReporterToken
+func InitFeiShu() {
+	token := config.StartConfig.ErrReport.ErrReporterToken
 	if token == "" {
 		return
 	}
 
-	defaultFeishuReporter = &feishuReporter{
-		name:  hostname.GetValue(),
+	defaultFeiShuReporter = &feishuReporter{
+		name:  fmt.Sprintf("%s@%s", utils.GetUsername(), utils.GetHostname()),
 		token: token,
 	}
 }
@@ -33,7 +35,7 @@ func FormatStack(stack, format string, args ...interface{}) {
 }
 
 func Text(text string) {
-	if defaultFeishuReporter == nil {
+	if defaultFeiShuReporter == nil {
 		return
 	}
 
@@ -50,11 +52,11 @@ func Text(text string) {
 			fmt.Println(r, stack)
 		}
 	}()
-	defaultFeishuReporter.ReportText(text, stackString)
+	defaultFeiShuReporter.ReportText(text, stackString)
 }
 
 func TextStack(text, stackString string) {
-	if defaultFeishuReporter == nil {
+	if defaultFeiShuReporter == nil {
 		return
 	}
 
@@ -67,7 +69,7 @@ func TextStack(text, stackString string) {
 		logrus.WithField("err", r).Error("reporter recovered from panic!!! SERIOUS PROBLEM " + stack)
 		fmt.Println(r, stack)
 	}
-	defaultFeishuReporter.ReportText(text, stackString)
+	defaultFeiShuReporter.ReportText(text, stackString)
 
 }
 

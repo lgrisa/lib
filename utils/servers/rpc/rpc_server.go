@@ -1,6 +1,8 @@
 package rpc
 
 import (
+	"github.com/lgrisa/lib/config"
+	"github.com/lgrisa/lib/utils/call"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
@@ -26,7 +28,7 @@ type RpcServer struct {
 
 func GetOrNewRpcServer() (*RpcServer, error) {
 	createOnce.Do(func() {
-		port := startconfig.StartConfig.RpcPort
+		port := config.StartConfig.SwitchController.RpcPort
 		listener, err := net.Listen("tcp", ":"+strconv.Itoa(int(port)))
 		if err != nil {
 			cachedErr = errors.Wrapf(err, "监听rpc端口失败: %d", port)

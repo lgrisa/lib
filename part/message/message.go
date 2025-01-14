@@ -1,10 +1,10 @@
 package message
 
 import (
-	"github.com/lgrisa/lib/utils"
 	"github.com/lgrisa/lib/utils/call"
 	"github.com/lgrisa/lib/utils/dingding"
 	"github.com/lgrisa/lib/utils/discord"
+	"github.com/lgrisa/lib/utils/logutil"
 	"github.com/pkg/errors"
 )
 
@@ -32,7 +32,7 @@ func NewSendMessageClient(messagePrefix, dingDingAccessToken, dingDingSecret, di
 }
 
 func (m *SendMessageClient) SendTextMessage(msg string) {
-	utils.LogPrintf("SendMessage: %v", msg)
+	logutil.LogPrintf("SendMessage: %v", msg)
 
 	go call.CatchLoopPanic("SendMessage", func() {
 		message := m.messagePrefix + msg
@@ -40,7 +40,7 @@ func (m *SendMessageClient) SendTextMessage(msg string) {
 		if m.DingRobot != nil {
 			err := m.DingRobot.SendTextMessage(message)
 			if err != nil {
-				utils.LogErrorF("SendTextMessage DingDing error: %v", err)
+				logutil.LogErrorF("SendTextMessage DingDing error: %v", err)
 			}
 		}
 
@@ -52,7 +52,7 @@ func (m *SendMessageClient) SendTextMessage(msg string) {
 					Title:              m.discordMessageTitle,
 					Message:            message,
 				}); err != nil {
-				utils.LogErrorF("SendDiscord error: %v", err)
+				logutil.LogErrorF("SendDiscord error: %v", err)
 			}
 		}
 	})

@@ -6,7 +6,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/guregu/dynamo"
 	"github.com/lgrisa/lib/dynamo/db/dbdef"
-	"github.com/lgrisa/lib/utils"
+	"github.com/lgrisa/lib/utils/logutil"
 	"github.com/pkg/errors"
 	"strings"
 )
@@ -76,14 +76,14 @@ func (t *DynamoTable) CreateTableWithDefinition(ddb *dynamo.DB, from interface{}
 	if err != nil {
 		if aerr, ok := err.(awserr.Error); ok {
 			if aerr.Code() == dynamodb.ErrCodeResourceInUseException {
-				utils.LogInfoF("创建表: %v, 表已经存在，跳过", tableName)
+				logutil.LogInfoF("创建表: %v, 表已经存在，跳过", tableName)
 				tableExist = true
 				goto ttl
 			}
 		}
 		return errors.Wrapf(err, tableName)
 	}
-	utils.LogInfoF("创建表: %v 成功", tableName)
+	logutil.LogInfoF("创建表: %v 成功", tableName)
 
 ttl:
 
@@ -98,17 +98,17 @@ ttl:
 
 			switch ttl.Status {
 			case dynamo.TTLEnabled:
-				utils.LogInfoF("创建表: %v, ttl已经启用，跳过", tableName)
+				logutil.LogInfoF("创建表: %v, ttl已经启用，跳过", tableName)
 			case dynamo.TTLDisabled:
 				if err := t.UpdateTTL(t.TtlKey.KeyName, true).Run(); err != nil {
 					return errors.Wrapf(err, "创建表: %v, 启用ttl出错", tableName)
 				} else {
-					utils.LogInfoF("创建表: %v, 启用ttl成功", tableName)
+					logutil.LogInfoF("创建表: %v, 启用ttl成功", tableName)
 				}
 			case dynamo.TTLEnabling:
-				utils.LogInfoF("创建表: %v, ttl正在启用，跳过", tableName)
+				logutil.LogInfoF("创建表: %v, ttl正在启用，跳过", tableName)
 			case dynamo.TTLDisabling:
-				utils.LogInfoF("创建表: %v, ttl正在禁用，跳过", tableName)
+				logutil.LogInfoF("创建表: %v, ttl正在禁用，跳过", tableName)
 			default:
 				return errors.Errorf("创建表: %v, ttl状态未知: %v", tableName, ttl.Status)
 			}
@@ -132,7 +132,7 @@ ttl:
 			for _, gsi := range createTableInput.GlobalSecondaryIndexes {
 
 				if _, ok := existIndexMap[*gsi.IndexName]; ok {
-					log.LogInfof("创建表[%v]的索引[%v]，索引已经存在，跳过", tableName, *gsi.IndexName)
+					logutil.LogInfoF("创建表[%v]的索引[%v]，索引已经存在，跳过", tableName, *gsi.IndexName)
 					continue
 				}
 
@@ -153,13 +153,13 @@ ttl:
 				}); err != nil {
 					if aErr, ok := err.(awserr.Error); ok {
 						if strings.Contains(strings.ToLower(aErr.Message()), "exists") {
-							log.LogInfof("创建表[%v]的索引[%v]，索引已经存在，跳过, err: %v", tableName, *gsi.IndexName, err)
+							logutil.LogInfoF("创建表[%v]的索引[%v]，索引已经存在，跳过, err: %v", tableName, *gsi.IndexName, err)
 							continue
 						}
 					}
 					return errors.Wrapf(err, "创建索引[%v].[%v]失败", tableName, *gsi.IndexName)
 				} else {
-					log.LogInfof("创建表[%v]的索引[%v]成功, resp: %+v", tableName, *gsi.IndexName, resp)
+					logutil.LogInfoF("创建表[%v]的索引[%v]成功, resp: %+v", tableName, *gsi.IndexName, resp)
 				}
 			}
 		}

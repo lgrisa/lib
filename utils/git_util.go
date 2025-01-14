@@ -2,6 +2,7 @@ package utils
 
 import (
 	"fmt"
+	"github.com/lgrisa/lib/utils/logutil"
 	"github.com/pkg/errors"
 	"strconv"
 	"strings"
@@ -10,7 +11,7 @@ import (
 func GetPreviousBetweenCommit(tag string) string {
 	tagList := strings.Split(tag, ".")
 	if len(tagList) < 2 {
-		LogTraceF("tag format err: %s not get commit\n", tag)
+		logutil.LogTraceF("tag format err: %s not get commit\n", tag)
 		return ""
 	}
 
@@ -18,12 +19,12 @@ func GetPreviousBetweenCommit(tag string) string {
 
 	lastTagNumInt, err := strconv.Atoi(lastTagNum)
 	if err != nil {
-		LogTraceF("tag转换数字失败: %s, err: %s\n", lastTagNum, err)
+		logutil.LogTraceF("tag转换数字失败: %s, err: %s\n", lastTagNum, err)
 		return ""
 	}
 
 	if lastTagNumInt < 1 {
-		LogTraceF("tag num < 1: %s\n", lastTagNum)
+		logutil.LogTraceF("tag num < 1: %s\n", lastTagNum)
 		return ""
 	}
 
@@ -33,12 +34,12 @@ func GetPreviousBetweenCommit(tag string) string {
 	output, err := RunCommandGetOutPut(fmt.Sprintf("git tag -l %s", lastTagName))
 
 	if err != nil {
-		LogTraceF("获取tag失败: %s, err: %s\n", lastTagName, err)
+		logutil.LogTraceF("获取tag失败: %s, err: %s\n", lastTagName, err)
 		return ""
 	}
 
 	if string(output) == "" {
-		LogTraceF("tag不存在: %s\n", lastTagName)
+		logutil.LogTraceF("tag不存在: %s\n", lastTagName)
 		return ""
 	}
 
@@ -59,10 +60,10 @@ func GetPreviousBetweenCommit(tag string) string {
 	//%s    提交说明
 
 	//获取tag之间的commit
-	output, err = RunCommandGetOutPut(fmt.Sprintf("git log %s...%s --pretty=format:\"%%s\"", lastTagName, tag))
+	output, err = RunCommandGetOutPut(fmt.Sprintf("git logutil %s...%s --pretty=format:\"%%s\"", lastTagName, tag))
 
 	if err != nil {
-		LogErrorF("获取tag之间的commit失败: %s, err: %s\n", lastTagName, err)
+		logutil.LogErrorF("获取tag之间的commit失败: %s, err: %s\n", lastTagName, err)
 		return ""
 	}
 
@@ -74,7 +75,7 @@ func GetPreviousBetweenCommit(tag string) string {
 
 func GetTagCommit(gitPath string, tag string) (string, error) {
 	//获取tag之间的commit
-	gitCmd := fmt.Sprintf("git log %s --pretty=format:\"%%s\"", tag)
+	gitCmd := fmt.Sprintf("git logutil %s --pretty=format:\"%%s\"", tag)
 
 	if gitPath != "" {
 		gitCmd = fmt.Sprintf("cd %s && %s", gitPath, gitCmd)

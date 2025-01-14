@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/lgrisa/lib/config"
 	consts "github.com/lgrisa/lib/utils/const"
+	"github.com/lgrisa/lib/utils/logutil"
 	"github.com/oschwald/geoip2-golang"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
@@ -183,7 +184,7 @@ func GetIpRegion(context *gin.Context) (isoCode string) {
 	db, err := geoip2.FromBytes(config.IpDbFs)
 
 	if err != nil {
-		LogErrorF("open ip db error: %v", err)
+		logutil.LogErrorF("open ip db error: %v", err)
 		return
 	}
 	defer db.Close()
@@ -191,7 +192,7 @@ func GetIpRegion(context *gin.Context) (isoCode string) {
 	netIP := net.ParseIP(clientIp)
 	record, err := db.City(netIP)
 	if err != nil {
-		LogErrorF("get ip region error: %v", err)
+		logutil.LogErrorF("get ip region error: %v", err)
 		return
 	}
 

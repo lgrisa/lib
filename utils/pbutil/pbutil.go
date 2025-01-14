@@ -1,7 +1,7 @@
 package pbutil
 
 import (
-	"github.com/lgrisa/lib/tool/sqliteconfig/pool"
+	"github.com/lgrisa/lib/utils/pool"
 	"sync/atomic"
 )
 

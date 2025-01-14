@@ -2,6 +2,7 @@ package utils
 
 import (
 	"fmt"
+	"github.com/lgrisa/lib/utils/logutil"
 	"github.com/pkg/errors"
 	"io"
 	"os/exec"
@@ -49,7 +50,7 @@ func RunSyncCommand(shellCmd string) error {
 	stderr, _ := cmd.StderrPipe()
 
 	if err := cmd.Start(); err != nil {
-		LogErrorF("Error starting command: %s......", err.Error())
+		logutil.LogErrorF("Error starting command: %s......", err.Error())
 		return err
 	}
 
@@ -94,7 +95,7 @@ func RunSyncCommand(shellCmd string) error {
 	}
 
 	if err := cmd.Wait(); err != nil {
-		LogErrorF("Error waiting for command execution: %s......", err.Error())
+		logutil.LogErrorF("Error waiting for command execution: %s......", err.Error())
 		return err
 	}
 
@@ -102,7 +103,7 @@ func RunSyncCommand(shellCmd string) error {
 }
 
 func RunCommandGetOutPut(cmd string) ([]byte, error) {
-	LogTraceF("RunCommandGetOutPut: %s", cmd)
+	logutil.LogTraceF("RunCommandGetOutPut: %s", cmd)
 
 	pwdCmd := exec.Command("sh", "-c", cmd)
 	return pwdCmd.CombinedOutput()

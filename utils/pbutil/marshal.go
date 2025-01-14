@@ -1,15 +1,15 @@
 package pbutil
 
 import (
-	"github.com/lgrisa/lib/tool/sqliteconfig/pool"
+	"github.com/lgrisa/lib/utils/pool"
 )
 
-type Marshaler interface {
+type Marshaller interface {
 	MarshalToSizedBuffer([]byte) (int, error)
 	Size() int
 }
 
-func Marshal(v Marshaler) (pool.Buffer, error) {
+func Marshal(v Marshaller) (pool.Buffer, error) {
 	size := v.Size()
 	buf := pool.Pool.Alloc(size)
 

@@ -3,8 +3,13 @@ package reporter
 import (
 	"context"
 	"fmt"
+	"github.com/allegro/bigcache/v3"
 	jsoniter "github.com/json-iterator/go"
+	"github.com/lgrisa/lib/config"
+	"github.com/lgrisa/lib/utils"
+	"github.com/lgrisa/lib/utils/build"
 	"github.com/lgrisa/lib/utils/timeutil"
+	"github.com/redis/go-redis/v9"
 	"github.com/sirupsen/logrus"
 	"go.uber.org/atomic"
 	"net/http"
@@ -25,7 +30,7 @@ var (
 )
 
 func InitErrorReporter() {
-	if startconfig.StartConfig.ErrReporterToken == "" {
+	if config.StartConfig.ErrReport.ErrReporterToken == "" {
 		return
 	}
 
@@ -72,7 +77,7 @@ type errorReportedHook struct {
 
 func newErrorReportedHook() *errorReportedHook {
 	// 创建redisClient
-	redisConf := startconfig.StartConfig.Redis
+	redisConf := config.StartConfig.Redis
 	client := redis.NewUniversalClient(&redis.UniversalOptions{
 		Addrs:    []string{redisConf.Addr},
 		Password: redisConf.Password,
@@ -101,8 +106,8 @@ func newErrorReportedHook() *errorReportedHook {
 	}
 
 	hook := &errorReportedHook{
-		name:          hostname.GetValue(),
-		token:         startconfig.StartConfig.ErrReporterToken,
+		name:          fmt.Sprintf("%s@%s", utils.GetUsername(), utils.GetHostname()),
+		token:         config.StartConfig.ErrReport.ErrReporterToken,
 		levels:        []logrus.Level{logrus.ErrorLevel},
 		redisClient:   client,
 		errorMd5Cache: errorMd5Cache,
@@ -138,13 +143,13 @@ func (hook *errorReportedHook) Levels() []logrus.Level {
 }
 
 func (hook *errorReportedHook) OnErrorReported(errorType, version, content string) {
-	asyncall.AsyncCall(func() {
+	utils.AsyncCall(func() {
 		if !defaultErrorReportedHook.errorReported(content) {
 			return
 		}
 
 		// 成功记录，上报飞书
-		defaultErrorReportedHook.reportFeishuText(errorType, version, content)
+		defaultErrorReportedHook.reportFeiShuText(errorType, version, content)
 	})
 }
 
@@ -157,7 +162,7 @@ func (hook *errorReportedHook) errorReported(content string) bool {
 	hook.errorMd5Cache.Set(content, bigCacheValue)
 
 	// 使用错误内容生成一个md5key
-	md5key := fmt.Sprintf("ErrorReported_%v", md5.String([]byte(content)))
+	md5key := fmt.Sprintf("ErrorReported_%v", utils.Md5String([]byte(content)))
 
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
@@ -170,7 +175,7 @@ func (hook *errorReportedHook) errorReported(content string) bool {
 	return result
 }
 
-func (hook *errorReportedHook) reportFeishuText(errorType, version, content string) {
+func (hook *errorReportedHook) reportFeiShuText(errorType, version, content string) {
 	sb := strings.Builder{}
 	sb.WriteString("🔴 ErrorReported")
 	sb.WriteString("\n")

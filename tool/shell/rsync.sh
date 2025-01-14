@@ -107,8 +107,8 @@
 #-P 等同于--partial --progress
 #-i, --itemize-changes 输出对所有更新的变更摘要
 #    --out-format=FORMAT 用指定格式输出更新
-#    --log-file=FILE 将日志保存到指定文件
-#    --log-file-format=FMT 用指定格式更新日志
+#    --logutil-file=FILE 将日志保存到指定文件
+#    --logutil-file-format=FMT 用指定格式更新日志
 #    --password-file=FILE 从文件读取Daemon服务器密码
 #    --list-only 不复制而是只列出
 #    --bwlimit=RATE 限制套接字I/O带宽

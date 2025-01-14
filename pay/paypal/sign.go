@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"github.com/gin-gonic/gin"
-	http2 "github.com/lgrisa/lib/utils"
+	"github.com/lgrisa/lib/utils"
 	"github.com/pkg/errors"
 	"net/http"
 )
@@ -44,7 +44,7 @@ func (c *Client) verifySign(context *gin.Context, webHookBody *[]byte) error {
 		"Authorization": "Bearer " + c.accessToken,
 	}
 
-	_, respBody, err, httpCode := http2.Request(context, "POST", urlProfile+verifyMethod, headers, bytes.NewBuffer(verifyReqJson))
+	_, httpCode, respBody, err := utils.Request(context, "POST", urlProfile+verifyMethod, headers, bytes.NewBuffer(verifyReqJson))
 
 	if err != nil {
 		return errors.Errorf("VerifyPaypalSign Request(%s,%s,%s) error: %v", "POST", urlProfile+verifyMethod, verifyReqJson, err)

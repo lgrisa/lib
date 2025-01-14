@@ -5,7 +5,7 @@ import (
 	"github.com/lgrisa/lib/machine_trans/machine_trans_engine/huawei"
 	"github.com/lgrisa/lib/machine_trans/machine_trans_engine/volc"
 	"github.com/lgrisa/lib/machine_trans/machine_trans_manager"
-	"github.com/lgrisa/lib/utils"
+	"github.com/lgrisa/lib/utils/logutil"
 	"github.com/pkg/errors"
 	"time"
 )
@@ -22,19 +22,19 @@ func main() {
 
 	flag.Parse()
 
-	utils.LogInfoF("翻译配置表路径:（%v） 翻译配置表路径:（%v）", *transPath, *configPath)
+	logutil.LogInfoF("翻译配置表路径:（%v） 翻译配置表路径:（%v）", *transPath, *configPath)
 
-	utils.InitLog(*logLevel)
+	logutil.InitLog(*logLevel)
 
 	if *transPath == "" || *configPath == "" {
-		utils.LogErrorF("transPath or configPath is empty")
+		logutil.LogErrorF("transPath or configPath is empty")
 		return
 	}
 
 	m, err := machine_trans_manager.NewClient(*configPath, *transPath)
 
 	if err != nil {
-		utils.LogErrorF(errors.WithStack(err).Error())
+		logutil.LogErrorF(errors.WithStack(err).Error())
 		return
 	}
 
@@ -43,12 +43,12 @@ func main() {
 		"gMrClgUnkFKIDFeaXA7sqghawCfRt6ILJTKTQLBe")
 
 	if err != nil {
-		utils.LogErrorF(errors.WithStack(err).Error())
+		logutil.LogErrorF(errors.WithStack(err).Error())
 		return
 	}
 
 	if errRegister := m.RegisterClient(machine_trans_manager.HuaWei, huaWeiClient); errRegister != nil {
-		utils.LogErrorF(errors.WithStack(errRegister).Error())
+		logutil.LogErrorF(errors.WithStack(errRegister).Error())
 		return
 	}
 
@@ -57,16 +57,16 @@ func main() {
 		"WWpCbE1EZGlPRGt4WVRFNU5EQXhOMkpqTVRsak4yVmxNR1kzWkdZNFlUaw==")
 
 	if errRegister := m.RegisterClient(machine_trans_manager.VolcEngine, volcEngineClient); errRegister != nil {
-		utils.LogErrorF(errors.WithStack(errRegister).Error())
+		logutil.LogErrorF(errors.WithStack(errRegister).Error())
 		return
 	}
 
 	err = m.Start()
 
 	if err != nil {
-		utils.LogErrorF(errors.WithStack(err).Error())
+		logutil.LogErrorF(errors.WithStack(err).Error())
 		return
 	}
 
-	utils.LogInfoF("翻译配置表结束, 耗时:%v", time.Since(startTime))
+	logutil.LogInfoF("翻译配置表结束, 耗时:%v", time.Since(startTime))
 }

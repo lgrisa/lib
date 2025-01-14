@@ -15,14 +15,14 @@ import (
 // We are logging to file, strip colors to make the output more readable
 var txtFormatter = &logrus.TextFormatter{DisableColors: true}
 
-// Map for linking a log level to a log file
+// Map for linking a logutil level to a logutil file
 // Multiple levels may share a file, but multiple files may not be used for one level
 type PathMap map[logrus.Level]string
 
-// Alternatively map a log level to an io.Writer
+// Alternatively map a logutil level to an io.Writer
 type WriterMap map[logrus.Level]io.Writer
 
-// Hook to handle writing to local log files.
+// Hook to handle writing to local logutil files.
 type lfsHook struct {
 	paths     PathMap
 	writer    WriterMap
@@ -31,7 +31,7 @@ type lfsHook struct {
 	formatter logrus.Formatter
 }
 
-// Given a map with keys equal to log levels.
+// Given a map with keys equal to logutil levels.
 // We can generate our levels handled on the fly, and write to a specific file for each level.
 // We can also write to the same file for all levels. They just need to be specified.
 func NewHook(levelMap interface{}) *lfsHook {
@@ -81,7 +81,7 @@ func (hook *lfsHook) Fire(entry *logrus.Entry) error {
 	}
 }
 
-// Write a log line to an io.Writer
+// Write a logutil line to an io.Writer
 func (hook *lfsHook) ioWrite(entry *logrus.Entry) error {
 	var (
 		msg []byte
@@ -109,7 +109,7 @@ func (hook *lfsHook) ioWrite(entry *logrus.Entry) error {
 	return err
 }
 
-// Write a log line directly to a file
+// Write a logutil line directly to a file
 func (hook *lfsHook) fileWrite(entry *logrus.Entry) error {
 	var (
 		fd   *os.File
@@ -145,7 +145,7 @@ func (hook *lfsHook) fileWrite(entry *logrus.Entry) error {
 	return nil
 }
 
-// Return configured log levels
+// Return configured logutil levels
 func (hook *lfsHook) Levels() []logrus.Level {
 	return hook.levels
 }

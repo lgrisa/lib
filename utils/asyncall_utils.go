@@ -2,13 +2,14 @@ package utils
 
 import (
 	"github.com/alitto/pond"
+	"github.com/lgrisa/lib/utils/logutil"
 	"runtime/debug"
 )
 
 var (
 	panicHandler = func(p interface{}) {
 		stack := string(debug.Stack())
-		LogErrorF("pool recovered from panic!!! SERIOUS PROBLEM %v %s", p, stack)
+		logutil.LogErrorF("pool recovered from panic!!! SERIOUS PROBLEM %v %s", p, stack)
 	}
 
 	workerPool = pond.New(500, 2000, pond.Strategy(pond.Lazy()), pond.PanicHandler(panicHandler))

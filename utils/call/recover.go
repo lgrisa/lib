@@ -1,14 +1,14 @@
 package call
 
 import (
-	"github.com/lgrisa/lib/utils"
+	"github.com/lgrisa/lib/utils/logutil"
 	"runtime/debug"
 )
 
 func TryRecover(handlerName string) bool {
 	if r := recover(); r != nil {
 		stack := string(debug.Stack())
-		utils.LogErrorF(handlerName+" recovered from panic!!! SERIOUS PROBLEM, err: %v, stack: %v", r, stack)
+		logutil.LogErrorF(handlerName+" recovered from panic!!! SERIOUS PROBLEM, err: %v, stack: %v", r, stack)
 		return true
 	}
 	return false
@@ -17,7 +17,7 @@ func TryRecover(handlerName string) bool {
 func RecoverFunc(handlerName string, f func()) bool {
 	if r := recover(); r != nil {
 		stack := string(debug.Stack())
-		utils.LogErrorF(handlerName+" recovered from panic!!! SERIOUS PROBLEM, err: %v, stack: %v", r, stack)
+		logutil.LogErrorF(handlerName+" recovered from panic!!! SERIOUS PROBLEM, err: %v, stack: %v", r, stack)
 		f()
 		return true
 	}
@@ -27,7 +27,7 @@ func RecoverFunc(handlerName string, f func()) bool {
 func RecoverError(handlerName string, f func(err interface{})) bool {
 	if r := recover(); r != nil {
 		stack := string(debug.Stack())
-		utils.LogErrorF(handlerName+" recovered from panic!!! SERIOUS PROBLEM, err: %v, stack: %v", r, stack)
+		logutil.LogErrorF(handlerName+" recovered from panic!!! SERIOUS PROBLEM, err: %v, stack: %v", r, stack)
 		f(r)
 		return true
 	}

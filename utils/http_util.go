@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"github.com/lgrisa/lib/utils/logutil"
 	"github.com/pkg/errors"
 	"golang.org/x/net/context/ctxhttp"
 	"io"
@@ -63,7 +64,7 @@ func Request(ctx context.Context, url string, method string, headers map[string]
 
 	defer func(Body io.ReadCloser) {
 		if err = Body.Close(); err != nil {
-			LogErrorF("Body.Close fail: %v", err)
+			logutil.LogErrorF("Body.Close fail: %v", err)
 		}
 	}(resp.Body)
 

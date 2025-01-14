@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	trans "github.com/lgrisa/lib/machine_trans/machine_trans_engine"
-	"github.com/lgrisa/lib/utils"
+	"github.com/lgrisa/lib/utils/logutil"
 	"github.com/pkg/errors"
 	"github.com/volcengine/volc-sdk-golang/base"
 	"golang.org/x/time/rate"
@@ -50,7 +50,7 @@ func (e *Engine) TranslateFor(text string, fromLanguage, toLanguage trans.Langua
 	text = strings.ReplaceAll(text, "\n", "\\n")
 
 	for {
-		utils.LogTraceF("火山翻译:%s", text)
+		logutil.LogTraceF("火山翻译:%s", text)
 
 		if res, err := e.Translate(text, fromLanguage, toLanguage); err == nil {
 
@@ -89,7 +89,7 @@ func (e *Engine) TranslateFor(text string, fromLanguage, toLanguage trans.Langua
 			return res, nil
 		} else {
 
-			utils.LogErrorF("火山翻译(%s)错误:(%v)", text, err)
+			logutil.LogErrorF("火山翻译(%s)错误:(%v)", text, err)
 
 			// 如果错误包含 超过了每秒频率上限，那么等待1s
 			if strings.Contains(err.Error(), "超过了每秒频率上限") ||

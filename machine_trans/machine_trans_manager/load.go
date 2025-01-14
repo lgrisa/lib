@@ -3,7 +3,7 @@ package machine_trans_manager
 import (
 	"fmt"
 	"github.com/lgrisa/lib/machine_trans/machine_trans_engine"
-	"github.com/lgrisa/lib/utils"
+	"github.com/lgrisa/lib/utils/logutil"
 	"github.com/pkg/errors"
 	"github.com/tealeg/xlsx"
 	"os"
@@ -32,7 +32,7 @@ func (m *Manager) initConfig() error {
 		currentRow := configSheet.Rows[i]
 
 		if len(currentRow.Cells) < 4 {
-			utils.LogErrorF(fmt.Sprintf("initConfig: row %d cells length < 3", i))
+			logutil.LogErrorF(fmt.Sprintf("initConfig: row %d cells length < 3", i))
 			continue
 		}
 
@@ -41,7 +41,7 @@ func (m *Manager) initConfig() error {
 		isOpen := currentRow.Cells[3].String()
 
 		if isOpen != "1" {
-			utils.LogTraceF(fmt.Sprintf("initConfig: file %s is not open", fileN))
+			logutil.LogTraceF(fmt.Sprintf("initConfig: file %s is not open", fileN))
 			continue
 		}
 
@@ -68,10 +68,10 @@ func (m *Manager) initConfig() error {
 			path:         dirPath,
 		}
 
-		utils.LogInfoF(fmt.Sprintf("加载翻译配置表: 对应语言 %s 需要进行翻译", fileN))
+		logutil.LogInfoF(fmt.Sprintf("加载翻译配置表: 对应语言 %s 需要进行翻译", fileN))
 	}
 
-	utils.LogInfoF(fmt.Sprintf("加载翻译配置表:%v 成功", m.configPath))
+	logutil.LogInfoF(fmt.Sprintf("加载翻译配置表:%v 成功", m.configPath))
 
 	return nil
 }
@@ -110,7 +110,7 @@ func (m *Manager) LoadOriginExcel() error {
 				if r := recover(); r != nil {
 					// 打印堆栈
 
-					utils.LogErrorF(fmt.Sprintf("加载原始表: %v error: %v stack: %v", file.Name(), r, debug.Stack()))
+					logutil.LogErrorF(fmt.Sprintf("加载原始表: %v error: %v stack: %v", file.Name(), r, debug.Stack()))
 					errAtomic.Store(r)
 				}
 
@@ -131,7 +131,7 @@ func (m *Manager) LoadOriginExcel() error {
 		return errors.Errorf("LoadOriginExcel: error: %v", errWait)
 	}
 
-	utils.LogInfoF(fmt.Sprintf("加载原始表：%v 成功", m.excelPath))
+	logutil.LogInfoF(fmt.Sprintf("加载原始表：%v 成功", m.excelPath))
 
 	return nil
 }
@@ -166,7 +166,7 @@ func (m *Manager) loadExcel(file os.DirEntry) error {
 		}
 
 		if len(currentRow.Cells) < 2 {
-			utils.LogTraceF(fmt.Sprintf("LoadOriginExcel: file %s row %d cells length < 2", filename, i))
+			logutil.LogTraceF(fmt.Sprintf("LoadOriginExcel: file %s row %d cells length < 2", filename, i))
 			continue
 		}
 
@@ -174,7 +174,7 @@ func (m *Manager) loadExcel(file os.DirEntry) error {
 		valueCn := currentRow.Cells[1].String()
 
 		if keyID == "" {
-			utils.LogTraceF(fmt.Sprintf("LoadOriginExcel: file %s row %d keyID is empty", filename, i))
+			logutil.LogTraceF(fmt.Sprintf("LoadOriginExcel: file %s row %d keyID is empty", filename, i))
 			continue
 		}
 
@@ -184,7 +184,7 @@ func (m *Manager) loadExcel(file os.DirEntry) error {
 		}
 
 		if valueCn == "" {
-			utils.LogTraceF(fmt.Sprintf("解析原始文件: file %s row %d 中文不存在跳过", filename, i))
+			logutil.LogTraceF(fmt.Sprintf("解析原始文件: file %s row %d 中文不存在跳过", filename, i))
 			continue
 		}
 
@@ -195,7 +195,7 @@ func (m *Manager) loadExcel(file os.DirEntry) error {
 		}
 	}
 
-	utils.LogInfoF(fmt.Sprintf("加载原始中文表: 文件名称 %s 加载翻译数量: %d", filename, len(curMap)))
+	logutil.LogInfoF(fmt.Sprintf("加载原始中文表: 文件名称 %s 加载翻译数量: %d", filename, len(curMap)))
 
 	return nil
 }

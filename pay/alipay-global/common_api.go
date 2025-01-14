@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/lgrisa/lib/utils"
+	"github.com/lgrisa/lib/utils/logutil"
 	"github.com/pkg/errors"
 	"net/http"
 	"net/url"
@@ -24,20 +25,20 @@ func (a *GlobalAliPayClient) sendRequest(ctx *gin.Context, method, api, body str
 		urlStr = AliUrlSandbox + api
 	}
 
-	respHeader, respBody, err, httpCode := utils.Request(ctx, "POST", urlStr, header, bytes.NewBuffer([]byte(body)))
+	respHeader, httpCode, respBody, err := utils.Request(ctx, "POST", urlStr, header, bytes.NewBuffer([]byte(body)))
 
 	if err != nil {
 		return nil, err
 	}
 
 	if a.isDebugMode() {
-		utils.LogDebugF("Param：%s", body)
+		logutil.LogDebugF("Param：%s", body)
 
-		utils.LogDebugF("URL：%s", urlStr)
+		logutil.LogDebugF("URL：%s", urlStr)
 
-		utils.LogDebugF("Resp Header：%v", respHeader)
+		logutil.LogDebugF("Resp Header：%v", respHeader)
 
-		utils.LogDebugF("Resp Body：%s", string(respBody))
+		logutil.LogDebugF("Resp Body：%s", string(respBody))
 	}
 
 	if httpCode != 200 {

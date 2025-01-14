@@ -3,9 +3,9 @@ package lock
 import (
 	"context"
 	"fmt"
-	"github.com/lgrisa/lib/tool/sqliteconfig/pool"
 	"github.com/lgrisa/lib/utils/call"
 	"github.com/lgrisa/lib/utils/concurrentmap"
+	"github.com/lgrisa/lib/utils/pool"
 	"github.com/lgrisa/lib/utils/reporter"
 	ctxfunc "github.com/lgrisa/lib/utils/timeService"
 	"github.com/lgrisa/lib/utils/timeutil"

@@ -3,7 +3,7 @@ package machine_trans_manager
 import (
 	"fmt"
 	"github.com/lgrisa/lib/machine_trans/machine_trans_engine"
-	"github.com/lgrisa/lib/utils"
+	"github.com/lgrisa/lib/utils/logutil"
 	"github.com/pkg/errors"
 	"github.com/tealeg/xlsx"
 	"os"
@@ -49,7 +49,7 @@ func (m *Manager) translate() error {
 					if r := recover(); r != nil {
 						// 打印堆栈
 
-						utils.LogErrorF(fmt.Sprintf("translate:(%v) error: %v stack: %v", file.Name(), r, string(debug.Stack())))
+						logutil.LogErrorF(fmt.Sprintf("translate:(%v) error: %v stack: %v", file.Name(), r, string(debug.Stack())))
 						errAtomic.Store(r)
 					}
 
@@ -71,7 +71,7 @@ func (m *Manager) translate() error {
 		}
 	}
 
-	utils.LogInfoF("翻译结束")
+	logutil.LogInfoF("翻译结束")
 
 	return nil
 }
@@ -82,7 +82,7 @@ func (m *Manager) translateLanguageExcel(file os.DirEntry, languageInfo *Transla
 	// 解析文件
 	filename := languageInfo.path + "/" + file.Name()
 
-	utils.LogInfoF(fmt.Sprintf("开始处理表格: file: %v", filename))
+	logutil.LogInfoF(fmt.Sprintf("开始处理表格: file: %v", filename))
 
 	f, err := xlsx.OpenFile(filename)
 
@@ -117,7 +117,7 @@ func (m *Manager) translateLanguageExcel(file os.DirEntry, languageInfo *Transla
 		}
 
 		if len(currentRow.Cells) < 2 {
-			utils.LogTraceF(fmt.Sprintf("translateLanguageExcel: file %s row %d cells length < 2", filename, i))
+			logutil.LogTraceF(fmt.Sprintf("translateLanguageExcel: file %s row %d cells length < 2", filename, i))
 			continue
 		}
 
@@ -125,12 +125,12 @@ func (m *Manager) translateLanguageExcel(file os.DirEntry, languageInfo *Transla
 		valueLocal := currentRow.Cells[1].String()
 
 		if keyID == "" {
-			utils.LogTraceF(fmt.Sprintf("translateLanguageExcel: file %s row %d keyID is empty", filename, i))
+			logutil.LogTraceF(fmt.Sprintf("translateLanguageExcel: file %s row %d keyID is empty", filename, i))
 			continue
 		}
 
 		if valueLocal == "" {
-			utils.LogTraceF(fmt.Sprintf("translateLanguageExcel: file %s row %d keyID: %s 中文不存在,跳过", filename, i, keyID))
+			logutil.LogTraceF(fmt.Sprintf("translateLanguageExcel: file %s row %d keyID: %s 中文不存在,跳过", filename, i, keyID))
 			continue
 		}
 
@@ -171,7 +171,7 @@ func (m *Manager) translateLanguageExcel(file os.DirEntry, languageInfo *Transla
 		}
 	}
 
-	utils.LogInfoF(fmt.Sprintf("对应语言：%v file %s 原始中文表大小: %d, 当前对于语言表大小: %d 直接翻译数量: %d", languageInfo.languageType, filename, len(curOriginMap), len(curExcelMap), directTransCount))
+	logutil.LogInfoF(fmt.Sprintf("对应语言：%v file %s 原始中文表大小: %d, 当前对于语言表大小: %d 直接翻译数量: %d", languageInfo.languageType, filename, len(curOriginMap), len(curExcelMap), directTransCount))
 
 	newAddMap := make(map[string]*OriginalExcelInfo)
 	// 处理新增
@@ -200,7 +200,7 @@ func (m *Manager) translateLanguageExcel(file os.DirEntry, languageInfo *Transla
 		}
 	}
 
-	utils.LogInfoF(fmt.Sprintf("对应语言：%v file %s 新增翻译数量: %d", languageInfo.languageType, filename, len(newAddMap)))
+	logutil.LogInfoF(fmt.Sprintf("对应语言：%v file %s 新增翻译数量: %d", languageInfo.languageType, filename, len(newAddMap)))
 
 	// 保存到文件
 	if isNeedSave {
@@ -220,7 +220,7 @@ func (m *Manager) engineTranslateFor(text string, fromLanguage, toLanguage machi
 		if resp, err := engine.TranslateFor(text, fromLanguage, toLanguage); err == nil {
 			return resp, nil
 		} else {
-			utils.LogErrorF("%s 翻译(%s)错误:(%v)", name, text, err)
+			logutil.LogErrorF("%v 翻译(%v)错误:(%v)", name, text, err)
 		}
 	}
 

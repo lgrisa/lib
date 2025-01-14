@@ -215,7 +215,7 @@ func Export(export map[int]string, exportPath string) {
 
 	//urls, err := holiday.SearchPageUrls()
 	//if err != nil {
-	//	log.Fatalln(fmt.Sprintf("查询 %d 放假通知异常", year))
+	//	logutil.Fatalln(fmt.Sprintf("查询 %d 放假通知异常", year))
 	//}
 
 	for year, url := range export {

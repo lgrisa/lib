@@ -15,6 +15,7 @@ import (
 	"encoding/pem"
 	"fmt"
 	consts "github.com/lgrisa/lib/utils/const"
+	"github.com/lgrisa/lib/utils/logutil"
 	"github.com/pkg/errors"
 	"hash"
 	"os"
@@ -437,7 +438,7 @@ func BindJson(s interface{}) {
 				case reflect.Slice:
 					fieldValue.Set(reflect.MakeSlice(field.Type, 0, 0))
 				default:
-					LogErrorF("BindJson: unsupported type %v", field.Type.Kind())
+					logutil.LogErrorF("BindJson: unsupported type %v", field.Type.Kind())
 				}
 			}
 		}

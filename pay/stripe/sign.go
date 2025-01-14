@@ -3,7 +3,7 @@ package stripe
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/lgrisa/lib/utils"
+	"github.com/lgrisa/lib/utils/logutil"
 	"github.com/stripe/stripe-go/v78"
 	"github.com/stripe/stripe-go/v78/webhook"
 )
@@ -18,7 +18,7 @@ func (c *Client) WebHookVerifySign(context *gin.Context) (*stripe.Event, error) 
 		return nil, err
 	}
 
-	utils.LogTraceF("stripe webhook event.Type: %v", event.Type)
+	logutil.LogTraceF("stripe webhook event.Type: %v", event.Type)
 
 	if event.Data.Raw == nil {
 		return nil, fmt.Errorf("event.Data.Raw is nil")

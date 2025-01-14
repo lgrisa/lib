@@ -9,6 +9,11 @@ import (
 )
 
 type StartConfigStruct struct {
+	Log struct {
+		LogrusLevel string `mapstructure:"logrus_level"`
+		LogLevel    int    `mapstructure:"log_level"`
+	} `mapstructure:"logutil"`
+
 	Aws struct {
 		AwsRegion string `mapstructure:"aws_region"`
 
@@ -29,19 +34,25 @@ type StartConfigStruct struct {
 		CreateTableAnyway bool `mapstructure:"create_table_anyway"`
 	} `mapstructure:"aws"`
 
-	Log struct {
-		LogrusLevel string `mapstructure:"logrus_level"`
-		LogLevel    int    `mapstructure:"log_level"`
-	} `mapstructure:"log"`
+	Redis struct {
+		Addr     string
+		Password string
+		DB       int
+	} `mapstructure:"redis"`
 
 	HttpConfig struct {
 		CertFile string `mapstructure:"cert_file"` // 证书文件 "conf/test46.sgameuser.com.pem"
 		KeyFile  string `mapstructure:"key_file"`  // 私钥文件 "conf/test46.sgameuser.com.key"
 	}
 
+	ErrReport struct {
+		ErrReporterToken string `mapstructure:"err_reporter_token"`
+	}
+
 	SwitchController struct {
 		IsDebugMode   bool      `mapstructure:"is_debug_mode"`
 		SetServerTime time.Time `mapstructure:"server_time"`
+		RpcPort       int       `mapstructure:"rpc_port"`
 	} `mapstructure:"switch_controller"`
 }
 
