@@ -3,7 +3,7 @@ package event
 import (
 	"container/list"
 	"fmt"
-	"github.com/lgrisa/lib/utils/call"
+	"github.com/lgrisa/lib/utils/pool"
 	"sync"
 	"time"
 )
@@ -46,7 +46,7 @@ func NewParallelFuncQueue(n, workerCount uint64, name string) *ParallelFuncQueue
 		q.workers[i] = w
 	}
 
-	go call.CatchLoopPanic(name, q.loop)
+	go pool.CatchLoopPanic(name, q.loop)
 
 	return q
 }
@@ -67,7 +67,7 @@ func (s *ParallelFuncQueue) Close(immediately bool) {
 		for {
 			select {
 			case f := <-s.funcQueue:
-				call.CatchPanic(s.name, f)
+				pool.CatchPanic(s.name, f)
 			default:
 				break out
 			}
@@ -82,7 +82,7 @@ func (s *ParallelFuncQueue) Close(immediately bool) {
 			e = next
 
 			if f, ok := value.(func()); ok {
-				call.CatchPanic(s.name, f)
+				pool.CatchPanic(s.name, f)
 			}
 		}
 	}
@@ -219,7 +219,7 @@ func newWorker(name string, funcQueue chan func(), onFuncQueueEmpty func()) *wor
 		loopExitNotify:   make(chan struct{}),
 	}
 
-	go call.CatchLoopPanic(name, w.loop)
+	go pool.CatchLoopPanic(name, w.loop)
 
 	return w
 }
@@ -246,7 +246,7 @@ func (s *worker) loop() {
 	for {
 		select {
 		case f := <-s.funcQueue:
-			call.CatchPanic(s.name, f)
+			pool.CatchPanic(s.name, f)
 
 			if len(s.funcQueue) <= 0 {
 				s.onFuncQueueEmpty()

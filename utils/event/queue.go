@@ -1,8 +1,8 @@
 package event
 
 import (
-	"github.com/lgrisa/lib/utils/call"
 	"github.com/lgrisa/lib/utils/math/i64"
+	"github.com/lgrisa/lib/utils/pool"
 	"github.com/lgrisa/lib/utils/timer"
 	"github.com/sirupsen/logrus"
 	"time"
@@ -36,7 +36,7 @@ func NewEventQueue(queueLength uint64, timeout time.Duration, name string) *Even
 	m.queueTimeoutWheel = timer.NewTimingWheel(interval, buckets)
 	m.queueTimeout = timeout
 
-	go call.CatchLoopPanic(name, m.loop)
+	go pool.CatchLoopPanic(name, m.loop)
 
 	return m
 }
@@ -97,7 +97,7 @@ func (r *EventQueue) loop() {
 	for {
 		select {
 		case f := <-r.funcChan:
-			call.CatchPanic(r.name, f.f)
+			pool.CatchPanic(r.name, f.f)
 			close(f.called)
 		case <-r.closeNotifier:
 			return

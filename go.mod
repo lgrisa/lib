@@ -28,6 +28,7 @@ require (
 	github.com/lestrrat-go/file-rotatelogs v2.4.0+incompatible
 	github.com/onsi/gomega v1.27.7
 	github.com/oschwald/geoip2-golang v1.9.0
+	github.com/panjf2000/ants/v2 v2.11.0
 	github.com/pkg/errors v0.9.1
 	github.com/redis/go-redis/v9 v9.7.0
 	github.com/rs/zerolog v1.32.0
@@ -45,6 +46,7 @@ require (
 	golang.org/x/time v0.5.0
 	google.golang.org/grpc v1.61.0
 	google.golang.org/protobuf v1.34.0
+	gopkg.in/natefinch/lumberjack.v2 v2.0.0
 )
 
 require (

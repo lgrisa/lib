@@ -1,10 +1,10 @@
 package message
 
 import (
-	"github.com/lgrisa/lib/utils/call"
 	"github.com/lgrisa/lib/utils/dingding"
 	"github.com/lgrisa/lib/utils/discord"
 	"github.com/lgrisa/lib/utils/logutil"
+	"github.com/lgrisa/lib/utils/pool"
 	"github.com/pkg/errors"
 )
 
@@ -34,7 +34,7 @@ func NewSendMessageClient(messagePrefix, dingDingAccessToken, dingDingSecret, di
 func (m *SendMessageClient) SendTextMessage(msg string) {
 	logutil.LogPrintf("SendMessage: %v", msg)
 
-	go call.CatchLoopPanic("SendMessage", func() {
+	go pool.CatchLoopPanic("SendMessage", func() {
 		message := m.messagePrefix + msg
 
 		if m.DingRobot != nil {

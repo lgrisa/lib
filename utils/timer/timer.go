@@ -6,7 +6,7 @@ package timer
 //
 
 import (
-	"github.com/lgrisa/lib/utils/call"
+	"github.com/lgrisa/lib/utils/pool"
 	"sync"
 	"time"
 )
@@ -33,7 +33,7 @@ func NewTimingWheel(interval time.Duration, buckets int) *TimingWheel {
 	for i := range w.cs {
 		w.cs[i] = make(chan struct{})
 	}
-	go call.CatchLoopPanic("TimingWheel", w.run)
+	go pool.CatchLoopPanic("TimingWheel", w.run)
 	return w
 }
 

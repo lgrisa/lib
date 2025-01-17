@@ -1,6 +1,8 @@
 package async
 
-import "github.com/lgrisa/lib/utils/call"
+import (
+	"github.com/lgrisa/lib/utils/pool"
+)
 
 type Inviter[V any] struct {
 	initChan chan struct{}
@@ -28,7 +30,7 @@ func StartInitCatchPanic[V any](name string, f func() V) *Inviter[V] {
 	result := &Inviter[V]{
 		initChan: make(chan struct{}),
 	}
-	go call.CatchPanic(name, func() {
+	go pool.CatchPanic(name, func() {
 		defer close(result.initChan)
 
 		result.v = f()

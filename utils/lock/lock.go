@@ -3,7 +3,6 @@ package lock
 import (
 	"context"
 	"fmt"
-	"github.com/lgrisa/lib/utils/call"
 	"github.com/lgrisa/lib/utils/concurrentmap"
 	"github.com/lgrisa/lib/utils/pool"
 	"github.com/lgrisa/lib/utils/reporter"
@@ -49,9 +48,9 @@ func NewLockService[O LockObject](provider LockProvider[O], saveDuration, evictN
 		evictNotAccessedDuration: evictNotAccessedDuration,
 	}
 
-	go call.CatchLoopPanic(fmt.Sprintf("LockService.saveLoop(%v)", provider.Name()), result.saveLoop)
-	go call.CatchLoopPanic(fmt.Sprintf("LockService.evictLoop(%v)", provider.Name()), result.evictLoop)
-	go call.CatchLoopPanic(fmt.Sprintf("LockService.checkLoop(%v)", provider.Name()), result.checkLoop)
+	go pool.CatchLoopPanic(fmt.Sprintf("LockService.saveLoop(%v)", provider.Name()), result.saveLoop)
+	go pool.CatchLoopPanic(fmt.Sprintf("LockService.evictLoop(%v)", provider.Name()), result.evictLoop)
+	go pool.CatchLoopPanic(fmt.Sprintf("LockService.checkLoop(%v)", provider.Name()), result.checkLoop)
 	return result
 }
 
@@ -261,7 +260,7 @@ func (s *LockService[O]) evictLoop() {
 }
 
 func (s *LockService[O]) doEvictLoop(evictTime, saveTimeout time.Duration) {
-	defer call.TryRecover(fmt.Sprintf("LockService.%s.doEvictLoop", s.getProviderName()))
+	defer pool.TryRecover(fmt.Sprintf("LockService.%s.doEvictLoop", s.getProviderName()))
 
 	logrus.Debugf("LockService.%s.evictLoop扫描中", s.getProviderName())
 	entries := s.entries.Iter()
@@ -322,7 +321,7 @@ func (s *LockService[O]) saveLoop() {
 }
 
 func (s *LockService[O]) doSaveLoop(saveInterval time.Duration) {
-	defer call.TryRecover(fmt.Sprintf("LockService.%s.doSaveLoop", s.getProviderName()))
+	defer pool.TryRecover(fmt.Sprintf("LockService.%s.doSaveLoop", s.getProviderName()))
 	// 不直接取这里的时间. 可能db很慢很慢, 一个循环花很久, 导致不停在保存, 更增加了db压力
 	// 全量扫描保存
 	logrus.Debugf("LockService.%s保存检查中", s.getProviderName())
@@ -361,7 +360,7 @@ func (s *LockService[O]) getProviderName() string {
 }
 
 func (s *LockService[O]) createObject(o O) (err error) {
-	defer call.RecoverFunc(fmt.Sprintf("LockService.%s.createObject", s.getProviderName()), func() {
+	defer pool.RecoverFunc(fmt.Sprintf("LockService.%s.createObject", s.getProviderName()), func() {
 		err = errPanic
 	})
 
@@ -371,7 +370,7 @@ func (s *LockService[O]) createObject(o O) (err error) {
 }
 
 func (s *LockService[O]) loadObject(key int64) (o O, err error) {
-	defer call.RecoverFunc(fmt.Sprintf("LockService.%s.loadObject", s.getProviderName()), func() {
+	defer pool.RecoverFunc(fmt.Sprintf("LockService.%s.loadObject", s.getProviderName()), func() {
 		err = errPanic
 	})
 
@@ -383,7 +382,7 @@ func (s *LockService[O]) loadObject(key int64) (o O, err error) {
 }
 
 func (s *LockService[O]) saveObject(key int64, data O, timeout time.Duration, sort bool) (err error) {
-	defer call.RecoverFunc(fmt.Sprintf("LockService.%s.saveObject", s.getProviderName()), func() {
+	defer pool.RecoverFunc(fmt.Sprintf("LockService.%s.saveObject", s.getProviderName()), func() {
 		err = errPanic
 	})
 
@@ -419,7 +418,7 @@ func (s *LockService[O]) doCheckLoop() {
 	entries := s.entries.Iter()
 	timeout := time.After(5 * time.Second)
 
-	go call.CatchPanic("LockService.doCheckLoop", func() {
+	go pool.CatchPanic("LockService.doCheckLoop", func() {
 		select {
 		case <-shouldQuit:
 			return

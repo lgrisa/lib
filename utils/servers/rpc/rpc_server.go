@@ -2,7 +2,7 @@ package rpc
 
 import (
 	"github.com/lgrisa/lib/config"
-	"github.com/lgrisa/lib/utils/call"
+	"github.com/lgrisa/lib/utils/pool"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
@@ -77,7 +77,7 @@ func (r *RpcServer) Start() {
 		//	}
 		//})
 
-		go call.CatchLoopPanic("rpc service", func() {
+		go pool.CatchLoopPanic("rpc service", func() {
 			defer r.Close()
 			logrus.Infof("rpc service 启动: %s", r.listener.Addr().String())
 

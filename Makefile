@@ -16,3 +16,5 @@ reset:
 
 ctest:
 	go test ./...
+
+#go build -gcflags -m main.go 

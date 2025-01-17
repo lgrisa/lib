@@ -26,6 +26,8 @@ func transFromLanguage(fromLanguage trans.LanguageType) (model.TextTranslationRe
 		return model.GetTextTranslationReqFromEnum().TH, nil
 	case trans.LanguageTypeKr:
 		return model.GetTextTranslationReqFromEnum().KO, nil
+	case trans.LanguageTypeRu:
+		return model.GetTextTranslationReqFromEnum().RU, nil
 	default:
 		return model.TextTranslationReqFrom{}, fmt.Errorf("fromLanguage: %s is not supported", fromLanguage)
 	}
@@ -51,6 +53,8 @@ func transToLanguage(toLanguage trans.LanguageType) (model.TextTranslationReqTo,
 		return model.GetTextTranslationReqToEnum().TH, nil
 	case trans.LanguageTypeKr:
 		return model.GetTextTranslationReqToEnum().KO, nil
+	case trans.LanguageTypeRu:
+		return model.GetTextTranslationReqToEnum().RU, nil
 	default:
 		return model.TextTranslationReqTo{}, fmt.Errorf("toLanguage: %s is not supported", toLanguage)
 	}

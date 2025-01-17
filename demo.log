@@ -1,0 +1,122 @@
+{"level":"info","time":"2025-01-17T15:43:51.4577295+08:00","message":"加载翻译配置表: 对应语言 zh-tw 需要进行翻译"}
+{"level":"info","time":"2025-01-17T15:43:51.4692267+08:00","message":"加载翻译配置表: 对应语言 en 需要进行翻译"}
+{"level":"info","time":"2025-01-17T15:43:51.4692267+08:00","message":"加载翻译配置表: 对应语言 th 需要进行翻译"}
+{"level":"info","time":"2025-01-17T15:43:51.4692267+08:00","message":"加载翻译配置表: 对应语言 kr 需要进行翻译"}
+{"level":"info","time":"2025-01-17T15:43:51.4692267+08:00","message":"加载翻译配置表:D:/WarGameProject/tools/excel-tool/LocalizationTools工具翻译配置表.xlsx 成功"}
+{"level":"info","time":"2025-01-17T15:43:51.4880755+08:00","message":"加载原始中文表: 文件名称 D:/WarGameProject/Excel/Localization/LocalizationSystemTips系统提示表.xlsx 加载翻译数量: 620"}
+{"level":"info","time":"2025-01-17T15:43:51.5205474+08:00","message":"加载原始中文表: 文件名称 D:/WarGameProject/Excel/Localization/LocalizationSkill技能相关翻译.xlsx 加载翻译数量: 2994"}
+{"level":"info","time":"2025-01-17T15:43:51.5300902+08:00","message":"加载原始中文表: 文件名称 D:/WarGameProject/Excel/Localization/LocalizationItem道具相关翻译.xlsx 加载翻译数量: 2582"}
+{"level":"info","time":"2025-01-17T15:43:51.5540898+08:00","message":"加载原始中文表: 文件名称 D:/WarGameProject/Excel/Localization/Localization翻译表.xlsx 加载翻译数量: 6195"}
+{"level":"info","time":"2025-01-17T15:43:51.5540898+08:00","message":"加载原始表：D:/WarGameProject/Excel/Localization 成功"}
+{"level":"info","time":"2025-01-17T15:43:51.5540898+08:00","message":"开始处理表格: file: D:/WarGameProject/Excel/Localization/zh-tw/Localization翻译表.xlsx"}
+{"level":"info","time":"2025-01-17T15:43:51.5540898+08:00","message":"开始处理表格: file: D:/WarGameProject/Excel/Localization/zh-tw/LocalizationSkill技能相关翻译.xlsx"}
+{"level":"info","time":"2025-01-17T15:43:51.5540898+08:00","message":"开始处理表格: file: D:/WarGameProject/Excel/Localization/zh-tw/LocalizationSystemTips系统提示表.xlsx"}
+{"level":"info","time":"2025-01-17T15:43:51.5540898+08:00","message":"开始处理表格: file: D:/WarGameProject/Excel/Localization/zh-tw/LocalizationItem道具相关翻译.xlsx"}
+{"level":"info","time":"2025-01-17T15:43:51.5666079+08:00","message":"对应语言：zh-TW file D:/WarGameProject/Excel/Localization/zh-tw/LocalizationSystemTips系统提示表.xlsx 原始中文表大小: 620, 当前对于语言表大小: 620 直接翻译数量: 0"}
+{"level":"info","time":"2025-01-17T15:43:51.5666079+08:00","message":"对应语言：zh-TW file D:/WarGameProject/Excel/Localization/zh-tw/LocalizationSystemTips系统提示表.xlsx 新增翻译数量: 0"}
+{"level":"info","time":"2025-01-17T15:43:51.5921247+08:00","message":"对应语言：zh-TW file D:/WarGameProject/Excel/Localization/zh-tw/LocalizationItem道具相关翻译.xlsx 原始中文表大小: 2582, 当前对于语言表大小: 2582 直接翻译数量: 0"}
+{"level":"info","time":"2025-01-17T15:43:51.5921247+08:00","message":"对应语言：zh-TW file D:/WarGameProject/Excel/Localization/zh-tw/LocalizationItem道具相关翻译.xlsx 新增翻译数量: 0"}
+{"level":"info","time":"2025-01-17T15:43:51.6031244+08:00","message":"对应语言：zh-TW file D:/WarGameProject/Excel/Localization/zh-tw/LocalizationSkill技能相关翻译.xlsx 原始中文表大小: 2994, 当前对于语言表大小: 2994 直接翻译数量: 0"}
+{"level":"info","time":"2025-01-17T15:43:51.6031244+08:00","message":"对应语言：zh-TW file D:/WarGameProject/Excel/Localization/zh-tw/LocalizationSkill技能相关翻译.xlsx 新增翻译数量: 0"}
+{"level":"info","time":"2025-01-17T15:43:51.6391441+08:00","message":"对应语言：zh-TW file D:/WarGameProject/Excel/Localization/zh-tw/Localization翻译表.xlsx 原始中文表大小: 6195, 当前对于语言表大小: 6194 直接翻译数量: 0"}
+{"level":"error","time":"2025-01-17T15:43:51.6401442+08:00","message":"0 翻译(主线{0}解锁)错误:(transToLanguage Err: (toLanguage: zh-TW is not supported))"}
+{"level":"info","time":"2025-01-17T15:43:51.7884302+08:00","message":"对应语言：zh-TW file D:/WarGameProject/Excel/Localization/zh-tw/Localization翻译表.xlsx 新增翻译数量: 1"}
+{"level":"info","time":"2025-01-17T15:43:51.8456637+08:00","message":"开始处理表格: file: D:/WarGameProject/Excel/Localization/en/Localization翻译表.xlsx"}
+{"level":"info","time":"2025-01-17T15:43:51.8456637+08:00","message":"开始处理表格: file: D:/WarGameProject/Excel/Localization/en/LocalizationSkill技能相关翻译.xlsx"}
+{"level":"info","time":"2025-01-17T15:43:51.8456637+08:00","message":"开始处理表格: file: D:/WarGameProject/Excel/Localization/en/LocalizationItem道具相关翻译.xlsx"}
+{"level":"info","time":"2025-01-17T15:43:51.8456637+08:00","message":"开始处理表格: file: D:/WarGameProject/Excel/Localization/en/LocalizationSystemTips系统提示表.xlsx"}
+{"level":"info","time":"2025-01-17T15:43:51.8584617+08:00","message":"对应语言：en file D:/WarGameProject/Excel/Localization/en/LocalizationSystemTips系统提示表.xlsx 原始中文表大小: 620, 当前对于语言表大小: 620 直接翻译数量: 0"}
+{"level":"info","time":"2025-01-17T15:43:51.8584617+08:00","message":"对应语言：en file D:/WarGameProject/Excel/Localization/en/LocalizationSystemTips系统提示表.xlsx 新增翻译数量: 0"}
+{"level":"info","time":"2025-01-17T15:43:51.8891859+08:00","message":"对应语言：en file D:/WarGameProject/Excel/Localization/en/LocalizationItem道具相关翻译.xlsx 原始中文表大小: 2582, 当前对于语言表大小: 2582 直接翻译数量: 0"}
+{"level":"info","time":"2025-01-17T15:43:51.8891859+08:00","message":"对应语言：en file D:/WarGameProject/Excel/Localization/en/LocalizationItem道具相关翻译.xlsx 新增翻译数量: 0"}
+{"level":"info","time":"2025-01-17T15:43:51.8971571+08:00","message":"对应语言：en file D:/WarGameProject/Excel/Localization/en/LocalizationSkill技能相关翻译.xlsx 原始中文表大小: 2994, 当前对于语言表大小: 2994 直接翻译数量: 0"}
+{"level":"info","time":"2025-01-17T15:43:51.8971571+08:00","message":"对应语言：en file D:/WarGameProject/Excel/Localization/en/LocalizationSkill技能相关翻译.xlsx 新增翻译数量: 0"}
+{"level":"info","time":"2025-01-17T15:43:52.0707263+08:00","message":"对应语言：en file D:/WarGameProject/Excel/Localization/en/Localization翻译表.xlsx 原始中文表大小: 6195, 当前对于语言表大小: 6193 直接翻译数量: 0"}
+{"level":"error","time":"2025-01-17T15:43:52.3768659+08:00","message":"0 翻译( )错误:(RunTextTranslation Err: ({\"status_code\":400,\"request_id\":\"34d3f80527f21ccecfe15421fedf03db\",\"error_code\":\"NLP.0301\",\"error_message\":\"Param content error. 'Text' must not be blank\",\"encoded_authorization_message\":\"\"}\n))"}
+{"level":"info","time":"2025-01-17T15:43:52.4459608+08:00","message":"对应语言：en file D:/WarGameProject/Excel/Localization/en/Localization翻译表.xlsx 新增翻译数量: 2"}
+{"level":"info","time":"2025-01-17T15:43:52.5733778+08:00","message":"开始处理表格: file: D:/WarGameProject/Excel/Localization/th/Localization翻译表.xlsx"}
+{"level":"info","time":"2025-01-17T15:43:52.5733778+08:00","message":"开始处理表格: file: D:/WarGameProject/Excel/Localization/th/LocalizationSkill技能相关翻译.xlsx"}
+{"level":"info","time":"2025-01-17T15:43:52.5733778+08:00","message":"开始处理表格: file: D:/WarGameProject/Excel/Localization/th/LocalizationItem道具相关翻译.xlsx"}
+{"level":"info","time":"2025-01-17T15:43:52.5733778+08:00","message":"开始处理表格: file: D:/WarGameProject/Excel/Localization/th/LocalizationSystemTips系统提示表.xlsx"}
+{"level":"info","time":"2025-01-17T15:43:52.5853764+08:00","message":"对应语言：th file D:/WarGameProject/Excel/Localization/th/LocalizationSystemTips系统提示表.xlsx 原始中文表大小: 620, 当前对于语言表大小: 620 直接翻译数量: 0"}
+{"level":"info","time":"2025-01-17T15:43:52.5853764+08:00","message":"对应语言：th file D:/WarGameProject/Excel/Localization/th/LocalizationSystemTips系统提示表.xlsx 新增翻译数量: 0"}
+{"level":"info","time":"2025-01-17T15:43:52.6143376+08:00","message":"对应语言：th file D:/WarGameProject/Excel/Localization/th/LocalizationItem道具相关翻译.xlsx 原始中文表大小: 2582, 当前对于语言表大小: 2582 直接翻译数量: 0"}
+{"level":"info","time":"2025-01-17T15:43:52.6153384+08:00","message":"对应语言：th file D:/WarGameProject/Excel/Localization/th/LocalizationItem道具相关翻译.xlsx 新增翻译数量: 0"}
+{"level":"info","time":"2025-01-17T15:43:52.6279247+08:00","message":"对应语言：th file D:/WarGameProject/Excel/Localization/th/LocalizationSkill技能相关翻译.xlsx 原始中文表大小: 2994, 当前对于语言表大小: 2994 直接翻译数量: 0"}
+{"level":"info","time":"2025-01-17T15:43:52.6279247+08:00","message":"对应语言：th file D:/WarGameProject/Excel/Localization/th/LocalizationSkill技能相关翻译.xlsx 新增翻译数量: 0"}
+{"level":"info","time":"2025-01-17T15:43:52.7108917+08:00","message":"对应语言：th file D:/WarGameProject/Excel/Localization/th/Localization翻译表.xlsx 原始中文表大小: 6195, 当前对于语言表大小: 6194 直接翻译数量: 0"}
+{"level":"info","time":"2025-01-17T15:43:52.9631405+08:00","message":"对应语言：th file D:/WarGameProject/Excel/Localization/th/Localization翻译表.xlsx 新增翻译数量: 1"}
+{"level":"info","time":"2025-01-17T15:43:53.0561012+08:00","message":"开始处理表格: file: D:/WarGameProject/Excel/Localization/kr/Localization翻译表.xlsx"}
+{"level":"info","time":"2025-01-17T15:43:53.0561012+08:00","message":"开始处理表格: file: D:/WarGameProject/Excel/Localization/kr/LocalizationSkill技能相关翻译.xlsx"}
+{"level":"info","time":"2025-01-17T15:43:53.0561012+08:00","message":"开始处理表格: file: D:/WarGameProject/Excel/Localization/kr/LocalizationItem道具相关翻译.xlsx"}
+{"level":"info","time":"2025-01-17T15:43:53.0561012+08:00","message":"开始处理表格: file: D:/WarGameProject/Excel/Localization/kr/LocalizationSystemTips系统提示表.xlsx"}
+{"level":"info","time":"2025-01-17T15:43:53.0686734+08:00","message":"对应语言：kr file D:/WarGameProject/Excel/Localization/kr/LocalizationSystemTips系统提示表.xlsx 原始中文表大小: 620, 当前对于语言表大小: 620 直接翻译数量: 0"}
+{"level":"info","time":"2025-01-17T15:43:53.0686734+08:00","message":"对应语言：kr file D:/WarGameProject/Excel/Localization/kr/LocalizationSystemTips系统提示表.xlsx 新增翻译数量: 0"}
+{"level":"info","time":"2025-01-17T15:43:53.099876+08:00","message":"对应语言：kr file D:/WarGameProject/Excel/Localization/kr/LocalizationItem道具相关翻译.xlsx 原始中文表大小: 2582, 当前对于语言表大小: 2582 直接翻译数量: 0"}
+{"level":"info","time":"2025-01-17T15:43:53.100875+08:00","message":"对应语言：kr file D:/WarGameProject/Excel/Localization/kr/LocalizationItem道具相关翻译.xlsx 新增翻译数量: 0"}
+{"level":"info","time":"2025-01-17T15:43:53.1083891+08:00","message":"对应语言：kr file D:/WarGameProject/Excel/Localization/kr/LocalizationSkill技能相关翻译.xlsx 原始中文表大小: 2994, 当前对于语言表大小: 2994 直接翻译数量: 0"}
+{"level":"info","time":"2025-01-17T15:43:53.1093893+08:00","message":"对应语言：kr file D:/WarGameProject/Excel/Localization/kr/LocalizationSkill技能相关翻译.xlsx 新增翻译数量: 0"}
+{"level":"info","time":"2025-01-17T15:43:53.1427747+08:00","message":"对应语言：kr file D:/WarGameProject/Excel/Localization/kr/Localization翻译表.xlsx 原始中文表大小: 6195, 当前对于语言表大小: 6194 直接翻译数量: 0"}
+{"level":"info","time":"2025-01-17T15:43:53.3737962+08:00","message":"对应语言：kr file D:/WarGameProject/Excel/Localization/kr/Localization翻译表.xlsx 新增翻译数量: 1"}
+{"level":"info","time":"2025-01-17T15:43:53.4317932+08:00","message":"翻译结束"}
+{"level":"info","time":"2025-01-17T15:43:53.432795+08:00","message":"翻译配置表结束, 耗时:2.1149302s"}
+{"level":"info","time":"2025-01-17T15:45:06.639318+08:00","message":"加载翻译配置表: 对应语言 zh-tw 需要进行翻译"}
+{"level":"info","time":"2025-01-17T15:45:06.6502953+08:00","message":"加载翻译配置表: 对应语言 en 需要进行翻译"}
+{"level":"info","time":"2025-01-17T15:45:06.6508319+08:00","message":"加载翻译配置表: 对应语言 th 需要进行翻译"}
+{"level":"info","time":"2025-01-17T15:45:06.6508319+08:00","message":"加载翻译配置表: 对应语言 kr 需要进行翻译"}
+{"level":"info","time":"2025-01-17T15:45:06.6508319+08:00","message":"加载翻译配置表:D:/WarGameProject/tools/excel-tool/LocalizationTools工具翻译配置表.xlsx 成功"}
+{"level":"info","time":"2025-01-17T15:45:06.6685215+08:00","message":"加载原始中文表: 文件名称 D:/WarGameProject/Excel/Localization/LocalizationSystemTips系统提示表.xlsx 加载翻译数量: 620"}
+{"level":"info","time":"2025-01-17T15:45:06.6998047+08:00","message":"加载原始中文表: 文件名称 D:/WarGameProject/Excel/Localization/LocalizationSkill技能相关翻译.xlsx 加载翻译数量: 2994"}
+{"level":"info","time":"2025-01-17T15:45:06.7150469+08:00","message":"加载原始中文表: 文件名称 D:/WarGameProject/Excel/Localization/LocalizationItem道具相关翻译.xlsx 加载翻译数量: 2582"}
+{"level":"info","time":"2025-01-17T15:45:06.739654+08:00","message":"加载原始中文表: 文件名称 D:/WarGameProject/Excel/Localization/Localization翻译表.xlsx 加载翻译数量: 6195"}
+{"level":"info","time":"2025-01-17T15:45:06.739654+08:00","message":"加载原始表：D:/WarGameProject/Excel/Localization 成功"}
+{"level":"info","time":"2025-01-17T15:45:06.739654+08:00","message":"开始处理表格: file: D:/WarGameProject/Excel/Localization/kr/Localization翻译表.xlsx"}
+{"level":"info","time":"2025-01-17T15:45:06.739654+08:00","message":"开始处理表格: file: D:/WarGameProject/Excel/Localization/kr/LocalizationSkill技能相关翻译.xlsx"}
+{"level":"info","time":"2025-01-17T15:45:06.739654+08:00","message":"开始处理表格: file: D:/WarGameProject/Excel/Localization/kr/LocalizationItem道具相关翻译.xlsx"}
+{"level":"info","time":"2025-01-17T15:45:06.739654+08:00","message":"开始处理表格: file: D:/WarGameProject/Excel/Localization/kr/LocalizationSystemTips系统提示表.xlsx"}
+{"level":"info","time":"2025-01-17T15:45:06.7518109+08:00","message":"对应语言：kr file D:/WarGameProject/Excel/Localization/kr/LocalizationSystemTips系统提示表.xlsx 原始中文表大小: 620, 当前对于语言表大小: 620 直接翻译数量: 0"}
+{"level":"info","time":"2025-01-17T15:45:06.7518109+08:00","message":"对应语言：kr file D:/WarGameProject/Excel/Localization/kr/LocalizationSystemTips系统提示表.xlsx 新增翻译数量: 0"}
+{"level":"info","time":"2025-01-17T15:45:06.7848302+08:00","message":"对应语言：kr file D:/WarGameProject/Excel/Localization/kr/LocalizationItem道具相关翻译.xlsx 原始中文表大小: 2582, 当前对于语言表大小: 2582 直接翻译数量: 0"}
+{"level":"info","time":"2025-01-17T15:45:06.7858302+08:00","message":"对应语言：kr file D:/WarGameProject/Excel/Localization/kr/LocalizationItem道具相关翻译.xlsx 新增翻译数量: 0"}
+{"level":"info","time":"2025-01-17T15:45:06.7963398+08:00","message":"对应语言：kr file D:/WarGameProject/Excel/Localization/kr/LocalizationSkill技能相关翻译.xlsx 原始中文表大小: 2994, 当前对于语言表大小: 2994 直接翻译数量: 0"}
+{"level":"info","time":"2025-01-17T15:45:06.7963398+08:00","message":"对应语言：kr file D:/WarGameProject/Excel/Localization/kr/LocalizationSkill技能相关翻译.xlsx 新增翻译数量: 0"}
+{"level":"info","time":"2025-01-17T15:45:06.8304+08:00","message":"对应语言：kr file D:/WarGameProject/Excel/Localization/kr/Localization翻译表.xlsx 原始中文表大小: 6195, 当前对于语言表大小: 6195 直接翻译数量: 0"}
+{"level":"info","time":"2025-01-17T15:45:06.8304+08:00","message":"对应语言：kr file D:/WarGameProject/Excel/Localization/kr/Localization翻译表.xlsx 新增翻译数量: 0"}
+{"level":"info","time":"2025-01-17T15:45:06.8313999+08:00","message":"开始处理表格: file: D:/WarGameProject/Excel/Localization/zh-tw/Localization翻译表.xlsx"}
+{"level":"info","time":"2025-01-17T15:45:06.8313999+08:00","message":"开始处理表格: file: D:/WarGameProject/Excel/Localization/zh-tw/LocalizationSkill技能相关翻译.xlsx"}
+{"level":"info","time":"2025-01-17T15:45:06.8313999+08:00","message":"开始处理表格: file: D:/WarGameProject/Excel/Localization/zh-tw/LocalizationSystemTips系统提示表.xlsx"}
+{"level":"info","time":"2025-01-17T15:45:06.8313999+08:00","message":"开始处理表格: file: D:/WarGameProject/Excel/Localization/zh-tw/LocalizationItem道具相关翻译.xlsx"}
+{"level":"info","time":"2025-01-17T15:45:06.8429123+08:00","message":"对应语言：zh-TW file D:/WarGameProject/Excel/Localization/zh-tw/LocalizationSystemTips系统提示表.xlsx 原始中文表大小: 620, 当前对于语言表大小: 620 直接翻译数量: 0"}
+{"level":"info","time":"2025-01-17T15:45:06.8429123+08:00","message":"对应语言：zh-TW file D:/WarGameProject/Excel/Localization/zh-tw/LocalizationSystemTips系统提示表.xlsx 新增翻译数量: 0"}
+{"level":"info","time":"2025-01-17T15:45:06.866858+08:00","message":"对应语言：zh-TW file D:/WarGameProject/Excel/Localization/zh-tw/LocalizationItem道具相关翻译.xlsx 原始中文表大小: 2582, 当前对于语言表大小: 2582 直接翻译数量: 0"}
+{"level":"info","time":"2025-01-17T15:45:06.866858+08:00","message":"对应语言：zh-TW file D:/WarGameProject/Excel/Localization/zh-tw/LocalizationItem道具相关翻译.xlsx 新增翻译数量: 0"}
+{"level":"info","time":"2025-01-17T15:45:06.8803661+08:00","message":"对应语言：zh-TW file D:/WarGameProject/Excel/Localization/zh-tw/LocalizationSkill技能相关翻译.xlsx 原始中文表大小: 2994, 当前对于语言表大小: 2994 直接翻译数量: 0"}
+{"level":"info","time":"2025-01-17T15:45:06.8813669+08:00","message":"对应语言：zh-TW file D:/WarGameProject/Excel/Localization/zh-tw/LocalizationSkill技能相关翻译.xlsx 新增翻译数量: 0"}
+{"level":"info","time":"2025-01-17T15:45:06.9138948+08:00","message":"对应语言：zh-TW file D:/WarGameProject/Excel/Localization/zh-tw/Localization翻译表.xlsx 原始中文表大小: 6195, 当前对于语言表大小: 6195 直接翻译数量: 0"}
+{"level":"info","time":"2025-01-17T15:45:06.9148953+08:00","message":"对应语言：zh-TW file D:/WarGameProject/Excel/Localization/zh-tw/Localization翻译表.xlsx 新增翻译数量: 0"}
+{"level":"info","time":"2025-01-17T15:45:06.9148953+08:00","message":"开始处理表格: file: D:/WarGameProject/Excel/Localization/en/Localization翻译表.xlsx"}
+{"level":"info","time":"2025-01-17T15:45:06.9148953+08:00","message":"开始处理表格: file: D:/WarGameProject/Excel/Localization/en/LocalizationSkill技能相关翻译.xlsx"}
+{"level":"info","time":"2025-01-17T15:45:06.9148953+08:00","message":"开始处理表格: file: D:/WarGameProject/Excel/Localization/en/LocalizationItem道具相关翻译.xlsx"}
+{"level":"info","time":"2025-01-17T15:45:06.9148953+08:00","message":"开始处理表格: file: D:/WarGameProject/Excel/Localization/en/LocalizationSystemTips系统提示表.xlsx"}
+{"level":"info","time":"2025-01-17T15:45:06.924895+08:00","message":"对应语言：en file D:/WarGameProject/Excel/Localization/en/LocalizationSystemTips系统提示表.xlsx 原始中文表大小: 620, 当前对于语言表大小: 620 直接翻译数量: 0"}
+{"level":"info","time":"2025-01-17T15:45:06.924895+08:00","message":"对应语言：en file D:/WarGameProject/Excel/Localization/en/LocalizationSystemTips系统提示表.xlsx 新增翻译数量: 0"}
+{"level":"info","time":"2025-01-17T15:45:06.9489126+08:00","message":"对应语言：en file D:/WarGameProject/Excel/Localization/en/LocalizationItem道具相关翻译.xlsx 原始中文表大小: 2582, 当前对于语言表大小: 2582 直接翻译数量: 0"}
+{"level":"info","time":"2025-01-17T15:45:06.9489126+08:00","message":"对应语言：en file D:/WarGameProject/Excel/Localization/en/LocalizationItem道具相关翻译.xlsx 新增翻译数量: 0"}
+{"level":"info","time":"2025-01-17T15:45:06.954422+08:00","message":"对应语言：en file D:/WarGameProject/Excel/Localization/en/LocalizationSkill技能相关翻译.xlsx 原始中文表大小: 2994, 当前对于语言表大小: 2994 直接翻译数量: 0"}
+{"level":"info","time":"2025-01-17T15:45:06.954422+08:00","message":"对应语言：en file D:/WarGameProject/Excel/Localization/en/LocalizationSkill技能相关翻译.xlsx 新增翻译数量: 0"}
+{"level":"info","time":"2025-01-17T15:45:07.0885002+08:00","message":"对应语言：en file D:/WarGameProject/Excel/Localization/en/Localization翻译表.xlsx 原始中文表大小: 6195, 当前对于语言表大小: 6195 直接翻译数量: 0"}
+{"level":"info","time":"2025-01-17T15:45:07.0894523+08:00","message":"对应语言：en file D:/WarGameProject/Excel/Localization/en/Localization翻译表.xlsx 新增翻译数量: 0"}
+{"level":"info","time":"2025-01-17T15:45:07.0894523+08:00","message":"开始处理表格: file: D:/WarGameProject/Excel/Localization/th/Localization翻译表.xlsx"}
+{"level":"info","time":"2025-01-17T15:45:07.0894523+08:00","message":"开始处理表格: file: D:/WarGameProject/Excel/Localization/th/LocalizationSkill技能相关翻译.xlsx"}
+{"level":"info","time":"2025-01-17T15:45:07.0894523+08:00","message":"开始处理表格: file: D:/WarGameProject/Excel/Localization/th/LocalizationSystemTips系统提示表.xlsx"}
+{"level":"info","time":"2025-01-17T15:45:07.0894523+08:00","message":"开始处理表格: file: D:/WarGameProject/Excel/Localization/th/LocalizationItem道具相关翻译.xlsx"}
+{"level":"info","time":"2025-01-17T15:45:07.1000013+08:00","message":"对应语言：th file D:/WarGameProject/Excel/Localization/th/LocalizationSystemTips系统提示表.xlsx 原始中文表大小: 620, 当前对于语言表大小: 620 直接翻译数量: 0"}
+{"level":"info","time":"2025-01-17T15:45:07.1000013+08:00","message":"对应语言：th file D:/WarGameProject/Excel/Localization/th/LocalizationSystemTips系统提示表.xlsx 新增翻译数量: 0"}
+{"level":"info","time":"2025-01-17T15:45:07.1290136+08:00","message":"对应语言：th file D:/WarGameProject/Excel/Localization/th/LocalizationItem道具相关翻译.xlsx 原始中文表大小: 2582, 当前对于语言表大小: 2582 直接翻译数量: 0"}
+{"level":"info","time":"2025-01-17T15:45:07.1290136+08:00","message":"对应语言：th file D:/WarGameProject/Excel/Localization/th/LocalizationItem道具相关翻译.xlsx 新增翻译数量: 0"}
+{"level":"info","time":"2025-01-17T15:45:07.1378641+08:00","message":"对应语言：th file D:/WarGameProject/Excel/Localization/th/LocalizationSkill技能相关翻译.xlsx 原始中文表大小: 2994, 当前对于语言表大小: 2994 直接翻译数量: 0"}
+{"level":"info","time":"2025-01-17T15:45:07.1388637+08:00","message":"对应语言：th file D:/WarGameProject/Excel/Localization/th/LocalizationSkill技能相关翻译.xlsx 新增翻译数量: 0"}
+{"level":"info","time":"2025-01-17T15:45:07.2147962+08:00","message":"对应语言：th file D:/WarGameProject/Excel/Localization/th/Localization翻译表.xlsx 原始中文表大小: 6195, 当前对于语言表大小: 6195 直接翻译数量: 0"}
+{"level":"info","time":"2025-01-17T15:45:07.2147962+08:00","message":"对应语言：th file D:/WarGameProject/Excel/Localization/th/Localization翻译表.xlsx 新增翻译数量: 0"}
+{"level":"info","time":"2025-01-17T15:45:07.2147962+08:00","message":"翻译结束"}
+{"level":"info","time":"2025-01-17T15:45:07.2147962+08:00","message":"翻译配置表结束, 耗时:656.9001ms"}

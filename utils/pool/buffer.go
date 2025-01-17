@@ -1,11 +1,11 @@
 package pool
 
 const (
-	MAX_CACHE_SIZE = 1 << 24 // 16MB
+	MaxCacheSize = 1 << 24 // 16MB
 )
 
 var (
-	Pool = newSyncPool(16, MAX_CACHE_SIZE, 2)
+	Pool = newSyncPool(16, MaxCacheSize, 2)
 
 	Empty = Buffer(nil)
 )

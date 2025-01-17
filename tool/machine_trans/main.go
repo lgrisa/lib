@@ -14,7 +14,7 @@ var transPath = flag.String("transPath", "D:/WarGameProject/Excel/Localization",
 
 var configPath = flag.String("configPath", "D:/WarGameProject/tools/excel-tool/LocalizationTools工具翻译配置表.xlsx", "翻译配置表路径") //"../excel-tool/LocalizationTools工具翻译配置表.xlsx"
 
-var logLevel = flag.Int("logLevel", 0, "日志等级")
+var logLevel = flag.Int("logLevel", -1, "日志等级")
 
 func main() {
 
@@ -24,7 +24,7 @@ func main() {
 
 	logutil.LogInfoF("翻译配置表路径:（%v） 翻译配置表路径:（%v）", *transPath, *configPath)
 
-	logutil.InitLog(*logLevel)
+	logutil.InitZeroLog(*logLevel, true)
 
 	if *transPath == "" || *configPath == "" {
 		logutil.LogErrorF("transPath or configPath is empty")

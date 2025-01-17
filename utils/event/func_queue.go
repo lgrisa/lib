@@ -2,7 +2,7 @@ package event
 
 import (
 	"container/list"
-	"github.com/lgrisa/lib/utils/call"
+	"github.com/lgrisa/lib/utils/pool"
 	"sync"
 	"time"
 )
@@ -31,7 +31,7 @@ func NewFuncQueue(n uint64, name string) *FuncQueue {
 		loopExitNotify: make(chan struct{}),
 	}
 
-	go call.CatchLoopPanic(name, q.loop)
+	go pool.CatchLoopPanic(name, q.loop)
 
 	return q
 }
@@ -42,7 +42,7 @@ func (s *FuncQueue) loop() {
 	for {
 		select {
 		case f := <-s.funcQueue:
-			call.CatchPanic(s.name, f)
+			pool.CatchPanic(s.name, f)
 
 			if len(s.funcQueue) <= 0 {
 				// 队列中没有数据，处理缓存中的数据
@@ -66,7 +66,7 @@ func (s *FuncQueue) Close(immediately bool) {
 		for {
 			select {
 			case f := <-s.funcQueue:
-				call.CatchPanic(s.name, f)
+				pool.CatchPanic(s.name, f)
 			default:
 				break out
 			}
@@ -81,7 +81,7 @@ func (s *FuncQueue) Close(immediately bool) {
 			e = next
 
 			if f, ok := value.(func()); ok {
-				call.CatchPanic(s.name, f)
+				pool.CatchPanic(s.name, f)
 			}
 		}
 	}
