@@ -10,11 +10,14 @@ import (
 	"github.com/oschwald/geoip2-golang"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
+	"io"
 	"net"
+	"net/http"
 	"os"
 	"os/user"
 	"strconv"
 	"strings"
+	"time"
 )
 
 func ToU32Ip(addr [4]byte) uint32 {
@@ -261,4 +264,37 @@ func GetHostname() string {
 		hostname = "localhost"
 	}
 	return hostname
+}
+
+// o.Copy将下载的数据流写入到io.Discard（一个虚拟的空写入器），并返回成功写入的字节数。这种方式避免了保存数据到文件的额外开销。
+
+func MeasureDownloadSpeed(url string) (float64, error) {
+	start := time.Now()
+	response, err := http.Get(url)
+	if err != nil {
+		return 0, err
+	}
+	defer response.Body.Close()
+
+	bytesDownloaded, err := io.Copy(io.Discard, response.Body)
+	if err != nil {
+		return 0, err
+	}
+
+	duration := time.Since(start).Seconds()
+	return float64(bytesDownloaded) / duration / (1024 * 1024), nil
+}
+
+func MeasureUploadSpeed(url string, dataSize int) (float64, error) {
+	data := make([]byte, dataSize)
+	start := time.Now()
+
+	response, err := http.Post(url, "application/octet-stream", io.NopCloser(strings.NewReader(string(data))))
+	if err != nil {
+		return 0, err
+	}
+	defer response.Body.Close()
+
+	duration := time.Since(start).Seconds()
+	return float64(dataSize) / duration / (1024 * 1024), nil
 }
