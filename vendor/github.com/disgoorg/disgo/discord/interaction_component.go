@@ -3,13 +3,11 @@ package discord
 import (
 	"fmt"
 
-	"github.com/disgoorg/json"
+	"github.com/disgoorg/json/v2"
 	"github.com/disgoorg/snowflake/v2"
 )
 
-var (
-	_ Interaction = (*ComponentInteraction)(nil)
-)
+var _ Interaction = (*ComponentInteraction)(nil)
 
 type ComponentInteraction struct {
 	baseInteraction
@@ -40,32 +38,32 @@ func (i *ComponentInteraction) UnmarshalJSON(data []byte) error {
 	)
 	switch cType.Type {
 	case ComponentTypeButton:
-		v := ButtonInteractionData{}
+		var v ButtonInteractionData
 		err = json.Unmarshal(interaction.Data, &v)
 		interactionData = v
 
 	case ComponentTypeStringSelectMenu:
-		v := StringSelectMenuInteractionData{}
+		var v StringSelectMenuInteractionData
 		err = json.Unmarshal(interaction.Data, &v)
 		interactionData = v
 
 	case ComponentTypeUserSelectMenu:
-		v := UserSelectMenuInteractionData{}
+		var v UserSelectMenuInteractionData
 		err = json.Unmarshal(interaction.Data, &v)
 		interactionData = v
 
 	case ComponentTypeRoleSelectMenu:
-		v := RoleSelectMenuInteractionData{}
+		var v RoleSelectMenuInteractionData
 		err = json.Unmarshal(interaction.Data, &v)
 		interactionData = v
 
 	case ComponentTypeMentionableSelectMenu:
-		v := MentionableSelectMenuInteractionData{}
+		var v MentionableSelectMenuInteractionData
 		err = json.Unmarshal(interaction.Data, &v)
 		interactionData = v
 
 	case ComponentTypeChannelSelectMenu:
-		v := ChannelSelectMenuInteractionData{}
+		var v ChannelSelectMenuInteractionData
 		err = json.Unmarshal(interaction.Data, &v)
 		interactionData = v
 
@@ -76,23 +74,30 @@ func (i *ComponentInteraction) UnmarshalJSON(data []byte) error {
 		return err
 	}
 
-	i.baseInteraction.id = interaction.ID
-	i.baseInteraction.applicationID = interaction.ApplicationID
-	i.baseInteraction.token = interaction.Token
-	i.baseInteraction.version = interaction.Version
-	i.baseInteraction.guildID = interaction.GuildID
-	i.baseInteraction.channelID = interaction.ChannelID
-	i.baseInteraction.channel = interaction.Channel
-	i.baseInteraction.locale = interaction.Locale
-	i.baseInteraction.guildLocale = interaction.GuildLocale
-	i.baseInteraction.member = interaction.Member
-	i.baseInteraction.user = interaction.User
-	i.baseInteraction.appPermissions = interaction.AppPermissions
-	i.baseInteraction.entitlements = interaction.Entitlements
+	i.id = interaction.ID
+	i.applicationID = interaction.ApplicationID
+	i.token = interaction.Token
+	i.version = interaction.Version
+	i.guild = interaction.Guild
+	i.guildID = interaction.GuildID
+	i.channel = interaction.Channel
+	i.locale = interaction.Locale
+	i.guildLocale = interaction.GuildLocale
+	i.member = interaction.Member
+	i.user = interaction.User
+	i.appPermissions = interaction.AppPermissions
+	i.entitlements = interaction.Entitlements
+	i.authorizingIntegrationOwners = interaction.AuthorizingIntegrationOwners
+	i.context = interaction.Context
+	i.attachmentSizeLimit = interaction.AttachmentSizeLimit
+
+	if i.member != nil && i.guildID != nil {
+		i.member.GuildID = *i.guildID
+	}
 
 	i.Data = interactionData
 	i.Message = interaction.Message
-	i.Message.GuildID = i.baseInteraction.guildID
+	i.Message.GuildID = i.guildID
 	return nil
 }
 
@@ -103,20 +108,23 @@ func (i ComponentInteraction) MarshalJSON() ([]byte, error) {
 		Message Message                  `json:"message"`
 	}{
 		rawInteraction: rawInteraction{
-			ID:             i.id,
-			Type:           i.Type(),
-			ApplicationID:  i.applicationID,
-			Token:          i.token,
-			Version:        i.version,
-			GuildID:        i.guildID,
-			ChannelID:      i.channelID,
-			Channel:        i.channel,
-			Locale:         i.locale,
-			GuildLocale:    i.guildLocale,
-			Member:         i.member,
-			User:           i.user,
-			AppPermissions: i.appPermissions,
-			Entitlements:   i.entitlements,
+			ID:                           i.id,
+			Type:                         i.Type(),
+			ApplicationID:                i.applicationID,
+			Token:                        i.token,
+			Version:                      i.version,
+			Guild:                        i.guild,
+			GuildID:                      i.guildID,
+			Channel:                      i.channel,
+			Locale:                       i.locale,
+			GuildLocale:                  i.guildLocale,
+			Member:                       i.member,
+			User:                         i.user,
+			AppPermissions:               i.appPermissions,
+			Entitlements:                 i.entitlements,
+			AuthorizingIntegrationOwners: i.authorizingIntegrationOwners,
+			Context:                      i.context,
+			AttachmentSizeLimit:          i.attachmentSizeLimit,
 		},
 		Data:    i.Data,
 		Message: i.Message,

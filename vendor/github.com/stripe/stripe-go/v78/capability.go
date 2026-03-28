@@ -6,13 +6,11 @@
 
 package stripe
 
-// If the capability is disabled, this string describes why. Can be `requirements.past_due`, `requirements.pending_verification`, `listed`, `platform_paused`, `rejected.fraud`, `rejected.listed`, `rejected.terms_of_service`, `rejected.other`, `under_review`, or `other`.
+// If the capability is disabled, this string describes why. [Learn more about handling verification issues](https://stripe.com/docs/connect/handling-api-verification). Can be `requirements.fields_needed`, `pending.onboarding`, `pending.review`, `rejected.other`, `platform_paused`, `rejected.inactivty`, or `rejected.unsupported_business`.
 //
-// `rejected.unsupported_business` means that the account's business is not supported by the capability. For example, payment methods may restrict the businesses they support in their terms of service:
+// `rejected.unsupported_business` means that the account's business is not supported by the capability. For example, payment methods may restrict the businesses they support in their terms of service, such as in [Afterpay Clearpay's terms of service](https://stripe.com/afterpay-clearpay/legal#restricted-businesses).
 //
-// - [Afterpay Clearpay's terms of service](https://stripe.com/afterpay-clearpay/legal#restricted-businesses)
-//
-// If you believe that the rejection is in error, please contact support at https://support.stripe.com/contact/ for assistance.
+// `rejected.inactivity` means that the capability has been paused for inactivity. This disabled reason currently only applies to the Issuing capability. See [Issuing: Managing Inactive Connects](https://support.stripe.com/questions/issuing-managing-inactive-connect-accounts) for more details.
 type CapabilityDisabledReason string
 
 // List of values that CapabilityDisabledReason can take
@@ -58,7 +56,7 @@ type CapabilityParams struct {
 	Expand []*string `form:"expand"`
 	// To request a new capability for an account, pass true. There can be a delay before the requested capability becomes active. If the capability has any activation requirements, the response includes them in the `requirements` arrays.
 	//
-	// If a capability isn't permanent, you can remove it from the account by passing false. Most capabilities are permanent after they've been requested. Attempting to remove a permanent capability returns an error.
+	// If a capability isn't permanent, you can remove it from the account by passing false. Some capabilities are permanent after they've been requested. Attempting to remove a permanent capability returns an error.
 	Requested *bool `form:"requested"`
 }
 
@@ -117,13 +115,11 @@ type CapabilityRequirements struct {
 	CurrentDeadline int64 `json:"current_deadline"`
 	// Fields that need to be collected to keep the capability enabled. If not collected by `current_deadline`, these fields appear in `past_due` as well, and the capability is disabled.
 	CurrentlyDue []string `json:"currently_due"`
-	// If the capability is disabled, this string describes why. Can be `requirements.past_due`, `requirements.pending_verification`, `listed`, `platform_paused`, `rejected.fraud`, `rejected.listed`, `rejected.terms_of_service`, `rejected.other`, `under_review`, or `other`.
+	// If the capability is disabled, this string describes why. [Learn more about handling verification issues](https://stripe.com/docs/connect/handling-api-verification). Can be `requirements.fields_needed`, `pending.onboarding`, `pending.review`, `rejected.other`, `platform_paused`, `rejected.inactivty`, or `rejected.unsupported_business`.
 	//
-	// `rejected.unsupported_business` means that the account's business is not supported by the capability. For example, payment methods may restrict the businesses they support in their terms of service:
+	// `rejected.unsupported_business` means that the account's business is not supported by the capability. For example, payment methods may restrict the businesses they support in their terms of service, such as in [Afterpay Clearpay's terms of service](https://stripe.com/afterpay-clearpay/legal#restricted-businesses).
 	//
-	// - [Afterpay Clearpay's terms of service](https://stripe.com/afterpay-clearpay/legal#restricted-businesses)
-	//
-	// If you believe that the rejection is in error, please contact support at https://support.stripe.com/contact/ for assistance.
+	// `rejected.inactivity` means that the capability has been paused for inactivity. This disabled reason currently only applies to the Issuing capability. See [Issuing: Managing Inactive Connects](https://support.stripe.com/questions/issuing-managing-inactive-connect-accounts) for more details.
 	DisabledReason CapabilityDisabledReason `json:"disabled_reason"`
 	// Fields that are `currently_due` and need to be collected again because validation or verification failed.
 	Errors []*AccountRequirementsError `json:"errors"`

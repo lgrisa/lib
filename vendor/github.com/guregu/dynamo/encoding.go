@@ -16,17 +16,20 @@ var typeCache sync.Map // unmarshalKey → *typedef
 type typedef struct {
 	decoders map[unmarshalKey]decodeFunc
 	fields   []structField
+	info     *structInfo
 }
 
 func newTypedef(rt reflect.Type) (*typedef, error) {
 	def := &typedef{
 		decoders: make(map[unmarshalKey]decodeFunc),
+		// encoders: make(map[encodeKey]encodeFunc),
 	}
 	err := def.init(rt)
 	return def, err
 }
 
 func (def *typedef) init(rt reflect.Type) error {
+	rt0 := rt
 	for rt.Kind() == reflect.Pointer {
 		rt = rt.Elem()
 	}
@@ -37,9 +40,20 @@ func (def *typedef) init(rt reflect.Type) error {
 		return nil
 	}
 
-	var err error
-	def.fields, err = structFields(rt)
-	return err
+	// skip visiting struct fields if encoding will be bypassed by a custom marshaler
+	if shouldBypassEncodeItem(rt0) || shouldBypassEncodeItem(rt) {
+		return nil
+	}
+
+	info, err := def.structInfo(rt, nil)
+	if err != nil {
+		return err
+	}
+	for _, field := range info.fields {
+		def.fields = append(def.fields, *field)
+	}
+	def.info = info
+	return nil
 }
 
 func registerTypedef(gotype reflect.Type, def *typedef) *typedef {
@@ -88,7 +102,7 @@ func (def *typedef) encodeItem(rv reflect.Value) (Item, error) {
 	case reflect.Struct:
 		return encodeItem(def.fields, rv)
 	case reflect.Map:
-		enc, err := encodeMapM(rv.Type(), flagNone)
+		enc, err := def.encodeMapM(rv.Type(), flagNone, def.info)
 		if err != nil {
 			return nil, err
 		}
@@ -386,26 +400,6 @@ type structField struct {
 	flags  encodeFlags
 	enc    encodeFunc
 	isZero func(reflect.Value) bool
-}
-
-func structFields(rt reflect.Type) ([]structField, error) {
-	var fields []structField
-	err := visitTypeFields(rt, nil, nil, func(name string, index []int, flags encodeFlags, vt reflect.Type) error {
-		enc, err := encodeType(vt, flags)
-		if err != nil {
-			return err
-		}
-		field := structField{
-			index:  index,
-			name:   name,
-			flags:  flags,
-			enc:    enc,
-			isZero: isZeroFunc(vt),
-		}
-		fields = append(fields, field)
-		return nil
-	})
-	return fields, err
 }
 
 var (

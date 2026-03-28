@@ -2,14 +2,16 @@ package discord
 
 import (
 	"context"
-	"github.com/disgoorg/disgo/discord"
-	"github.com/disgoorg/disgo/webhook"
-	"github.com/disgoorg/snowflake/v2"
-	"github.com/pkg/errors"
 	"math/rand"
 	"os"
 	"strings"
 	"time"
+
+	"github.com/disgoorg/disgo/discord"
+	"github.com/disgoorg/disgo/rest"
+	"github.com/disgoorg/disgo/webhook"
+	"github.com/disgoorg/snowflake/v2"
+	"github.com/pkg/errors"
 )
 
 func SendDiscordNoGoroutines(message *Message) error {
@@ -24,59 +26,58 @@ func SendDiscordNoGoroutines(message *Message) error {
 	}
 	defer client.Close(context.Background())
 
-	eb := discord.NewEmbedBuilder()
+	eb := &discord.Embed{}
 
 	if message.AuthorName != "" {
-		eb.SetAuthorName(message.AuthorName)
+		eb.Author = &discord.EmbedAuthor{Name: message.AuthorName}
 	}
 
-	eb.SetTitlef(message.Title)
+	eb.Title = message.Title
 
 	if message.Url != "" {
-		eb.SetURL(message.Url)
+		eb.URL = message.Url
 	}
 
-	eb.SetDescriptionf(message.Message)
-	eb.SetTimestamp(time.Now())
-	eb.SetColor(rand.Intn(0xffffff + 1))
+	eb.Description = message.Message
+	eb.Timestamp = &time.Time{}
+	*eb.Timestamp = time.Now()
+	eb.Color = rand.Intn(0xffffff + 1)
 
 	if message.FieldMap != nil {
 		for k, v := range message.FieldMap {
-			eb.AddFields(discord.EmbedField{Name: k, Value: v})
+			eb.Fields = append(eb.Fields, discord.EmbedField{Name: k, Value: v})
 		}
 	}
 
-	b := discord.NewWebhookMessageCreateBuilder()
+	b := &discord.WebhookMessageCreate{}
 
 	//存在换行符没有生效
 	if strings.Contains(message.Content, "\\n") {
 		message.Content = strings.ReplaceAll(message.Content, "\\n", "\n")
 	}
 
-	b.SetContent(message.Content)
+	b.Content = message.Content
 
 	if message.UserName != "" {
-		b.SetUsername(message.UserName)
+		b.Username = message.UserName
 	}
 
-	b.AddEmbeds(eb.Build())
+	b.Embeds = []discord.Embed{*eb}
 
 	if message.DiscordFile != nil && message.DiscordFile.FilePath != "" {
 		var f *os.File
 		f, err = os.Open(message.DiscordFile.FilePath)
-
 		if err != nil {
 			return errors.Errorf("open png file failed, err: %s", err)
 		}
-
-		b.AddFile(message.DiscordFile.Title, message.DiscordFile.Desc, f)
+		b.Files = []*discord.File{{Name: message.DiscordFile.Title, Description: message.DiscordFile.Desc, Reader: f}}
 	}
 
 	if message.DiscordRobotThread != "" {
 		threadID, _ := snowflake.Parse(message.DiscordRobotThread)
-		_, err = client.CreateMessageInThread(b.Build(), threadID)
+		_, err = client.CreateMessageInThread(*b, threadID)
 	} else {
-		_, err = client.CreateMessage(b.Build())
+		_, err = client.CreateMessage(*b, rest.CreateWebhookMessageParams{})
 	}
 
 	if err != nil {

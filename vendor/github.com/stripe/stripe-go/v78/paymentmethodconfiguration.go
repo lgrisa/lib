@@ -482,6 +482,44 @@ const (
 )
 
 // The account's display preference.
+type PaymentMethodConfigurationMobilepayDisplayPreferencePreference string
+
+// List of values that PaymentMethodConfigurationMobilepayDisplayPreferencePreference can take
+const (
+	PaymentMethodConfigurationMobilepayDisplayPreferencePreferenceNone PaymentMethodConfigurationMobilepayDisplayPreferencePreference = "none"
+	PaymentMethodConfigurationMobilepayDisplayPreferencePreferenceOff  PaymentMethodConfigurationMobilepayDisplayPreferencePreference = "off"
+	PaymentMethodConfigurationMobilepayDisplayPreferencePreferenceOn   PaymentMethodConfigurationMobilepayDisplayPreferencePreference = "on"
+)
+
+// The effective display preference value.
+type PaymentMethodConfigurationMobilepayDisplayPreferenceValue string
+
+// List of values that PaymentMethodConfigurationMobilepayDisplayPreferenceValue can take
+const (
+	PaymentMethodConfigurationMobilepayDisplayPreferenceValueOff PaymentMethodConfigurationMobilepayDisplayPreferenceValue = "off"
+	PaymentMethodConfigurationMobilepayDisplayPreferenceValueOn  PaymentMethodConfigurationMobilepayDisplayPreferenceValue = "on"
+)
+
+// The account's display preference.
+type PaymentMethodConfigurationMultibancoDisplayPreferencePreference string
+
+// List of values that PaymentMethodConfigurationMultibancoDisplayPreferencePreference can take
+const (
+	PaymentMethodConfigurationMultibancoDisplayPreferencePreferenceNone PaymentMethodConfigurationMultibancoDisplayPreferencePreference = "none"
+	PaymentMethodConfigurationMultibancoDisplayPreferencePreferenceOff  PaymentMethodConfigurationMultibancoDisplayPreferencePreference = "off"
+	PaymentMethodConfigurationMultibancoDisplayPreferencePreferenceOn   PaymentMethodConfigurationMultibancoDisplayPreferencePreference = "on"
+)
+
+// The effective display preference value.
+type PaymentMethodConfigurationMultibancoDisplayPreferenceValue string
+
+// List of values that PaymentMethodConfigurationMultibancoDisplayPreferenceValue can take
+const (
+	PaymentMethodConfigurationMultibancoDisplayPreferenceValueOff PaymentMethodConfigurationMultibancoDisplayPreferenceValue = "off"
+	PaymentMethodConfigurationMultibancoDisplayPreferenceValueOn  PaymentMethodConfigurationMultibancoDisplayPreferenceValue = "on"
+)
+
+// The account's display preference.
 type PaymentMethodConfigurationOXXODisplayPreferencePreference string
 
 // List of values that PaymentMethodConfigurationOXXODisplayPreferencePreference can take
@@ -631,6 +669,25 @@ type PaymentMethodConfigurationSofortDisplayPreferenceValue string
 const (
 	PaymentMethodConfigurationSofortDisplayPreferenceValueOff PaymentMethodConfigurationSofortDisplayPreferenceValue = "off"
 	PaymentMethodConfigurationSofortDisplayPreferenceValueOn  PaymentMethodConfigurationSofortDisplayPreferenceValue = "on"
+)
+
+// The account's display preference.
+type PaymentMethodConfigurationSwishDisplayPreferencePreference string
+
+// List of values that PaymentMethodConfigurationSwishDisplayPreferencePreference can take
+const (
+	PaymentMethodConfigurationSwishDisplayPreferencePreferenceNone PaymentMethodConfigurationSwishDisplayPreferencePreference = "none"
+	PaymentMethodConfigurationSwishDisplayPreferencePreferenceOff  PaymentMethodConfigurationSwishDisplayPreferencePreference = "off"
+	PaymentMethodConfigurationSwishDisplayPreferencePreferenceOn   PaymentMethodConfigurationSwishDisplayPreferencePreference = "on"
+)
+
+// The effective display preference value.
+type PaymentMethodConfigurationSwishDisplayPreferenceValue string
+
+// List of values that PaymentMethodConfigurationSwishDisplayPreferenceValue can take
+const (
+	PaymentMethodConfigurationSwishDisplayPreferenceValueOff PaymentMethodConfigurationSwishDisplayPreferenceValue = "off"
+	PaymentMethodConfigurationSwishDisplayPreferenceValueOn  PaymentMethodConfigurationSwishDisplayPreferenceValue = "on"
 )
 
 // The account's display preference.
@@ -1017,6 +1074,30 @@ type PaymentMethodConfigurationLinkParams struct {
 }
 
 // Whether or not the payment method should be displayed.
+type PaymentMethodConfigurationMobilepayDisplayPreferenceParams struct {
+	// The account's preference for whether or not to display this payment method.
+	Preference *string `form:"preference"`
+}
+
+// MobilePay is a [single-use](https://stripe.com/docs/payments/payment-methods#usage) card wallet payment method used in Denmark and Finland. It allows customers to [authenticate and approve](https://stripe.com/docs/payments/payment-methods#customer-actions) payments using the MobilePay app. Check this [page](https://stripe.com/docs/payments/mobilepay) for more details.
+type PaymentMethodConfigurationMobilepayParams struct {
+	// Whether or not the payment method should be displayed.
+	DisplayPreference *PaymentMethodConfigurationMobilepayDisplayPreferenceParams `form:"display_preference"`
+}
+
+// Whether or not the payment method should be displayed.
+type PaymentMethodConfigurationMultibancoDisplayPreferenceParams struct {
+	// The account's preference for whether or not to display this payment method.
+	Preference *string `form:"preference"`
+}
+
+// Stripe users in Europe and the United States can accept Multibanco payments from customers in Portugal using [Sources](https://stripe.com/docs/sources)—a single integration path for creating payments using any supported method.
+type PaymentMethodConfigurationMultibancoParams struct {
+	// Whether or not the payment method should be displayed.
+	DisplayPreference *PaymentMethodConfigurationMultibancoDisplayPreferenceParams `form:"display_preference"`
+}
+
+// Whether or not the payment method should be displayed.
 type PaymentMethodConfigurationOXXODisplayPreferenceParams struct {
 	// The account's preference for whether or not to display this payment method.
 	Preference *string `form:"preference"`
@@ -1110,6 +1191,18 @@ type PaymentMethodConfigurationSofortDisplayPreferenceParams struct {
 type PaymentMethodConfigurationSofortParams struct {
 	// Whether or not the payment method should be displayed.
 	DisplayPreference *PaymentMethodConfigurationSofortDisplayPreferenceParams `form:"display_preference"`
+}
+
+// Whether or not the payment method should be displayed.
+type PaymentMethodConfigurationSwishDisplayPreferenceParams struct {
+	// The account's preference for whether or not to display this payment method.
+	Preference *string `form:"preference"`
+}
+
+// Swish is a [real-time](https://stripe.com/docs/payments/real-time) payment method popular in Sweden. It allows customers to [authenticate and approve](https://stripe.com/docs/payments/payment-methods#customer-actions) payments using the Swish mobile app and the Swedish BankID mobile app. Check this [page](https://stripe.com/docs/payments/swish) for more details.
+type PaymentMethodConfigurationSwishParams struct {
+	// Whether or not the payment method should be displayed.
+	DisplayPreference *PaymentMethodConfigurationSwishDisplayPreferenceParams `form:"display_preference"`
 }
 
 // Whether or not the payment method should be displayed.
@@ -1207,6 +1300,10 @@ type PaymentMethodConfigurationParams struct {
 	Konbini *PaymentMethodConfigurationKonbiniParams `form:"konbini"`
 	// [Link](https://stripe.com/docs/payments/link) is a payment method network. With Link, users save their payment details once, then reuse that information to pay with one click for any business on the network.
 	Link *PaymentMethodConfigurationLinkParams `form:"link"`
+	// MobilePay is a [single-use](https://stripe.com/docs/payments/payment-methods#usage) card wallet payment method used in Denmark and Finland. It allows customers to [authenticate and approve](https://stripe.com/docs/payments/payment-methods#customer-actions) payments using the MobilePay app. Check this [page](https://stripe.com/docs/payments/mobilepay) for more details.
+	Mobilepay *PaymentMethodConfigurationMobilepayParams `form:"mobilepay"`
+	// Stripe users in Europe and the United States can accept Multibanco payments from customers in Portugal using [Sources](https://stripe.com/docs/sources)—a single integration path for creating payments using any supported method.
+	Multibanco *PaymentMethodConfigurationMultibancoParams `form:"multibanco"`
 	// Configuration name.
 	Name *string `form:"name"`
 	// OXXO is a Mexican chain of convenience stores with thousands of locations across Latin America and represents nearly 20% of online transactions in Mexico. OXXO allows customers to pay bills and online purchases in-store with cash. Check this [page](https://stripe.com/docs/payments/oxxo) for more details.
@@ -1227,6 +1324,8 @@ type PaymentMethodConfigurationParams struct {
 	SEPADebit *PaymentMethodConfigurationSEPADebitParams `form:"sepa_debit"`
 	// Stripe users in Europe and the United States can use the [Payment Intents API](https://stripe.com/docs/payments/payment-intents)—a single integration path for creating payments using any supported method—to accept [Sofort](https://www.sofort.com/) payments from customers. Check this [page](https://stripe.com/docs/payments/sofort) for more details.
 	Sofort *PaymentMethodConfigurationSofortParams `form:"sofort"`
+	// Swish is a [real-time](https://stripe.com/docs/payments/real-time) payment method popular in Sweden. It allows customers to [authenticate and approve](https://stripe.com/docs/payments/payment-methods#customer-actions) payments using the Swish mobile app and the Swedish BankID mobile app. Check this [page](https://stripe.com/docs/payments/swish) for more details.
+	Swish *PaymentMethodConfigurationSwishParams `form:"swish"`
 	// Stripe users in the United States can accept ACH direct debit payments from customers with a US bank account using the Automated Clearing House (ACH) payments system operated by Nacha. Check this [page](https://stripe.com/docs/payments/ach-debit) for more details.
 	USBankAccount *PaymentMethodConfigurationUSBankAccountParams `form:"us_bank_account"`
 	// WeChat, owned by Tencent, is China's leading mobile app with over 1 billion monthly active users. Chinese consumers can use WeChat Pay to pay for goods and services inside of businesses' apps and websites. WeChat Pay users buy most frequently in gaming, e-commerce, travel, online education, and food/nutrition. Check this [page](https://stripe.com/docs/payments/wechat-pay) for more details.
@@ -1565,6 +1664,32 @@ type PaymentMethodConfigurationLink struct {
 	Available         bool                                             `json:"available"`
 	DisplayPreference *PaymentMethodConfigurationLinkDisplayPreference `json:"display_preference"`
 }
+type PaymentMethodConfigurationMobilepayDisplayPreference struct {
+	// For child configs, whether or not the account's preference will be observed. If `false`, the parent configuration's default is used.
+	Overridable bool `json:"overridable"`
+	// The account's display preference.
+	Preference PaymentMethodConfigurationMobilepayDisplayPreferencePreference `json:"preference"`
+	// The effective display preference value.
+	Value PaymentMethodConfigurationMobilepayDisplayPreferenceValue `json:"value"`
+}
+type PaymentMethodConfigurationMobilepay struct {
+	// Whether this payment method may be offered at checkout. True if `display_preference` is `on` and the payment method's capability is active.
+	Available         bool                                                  `json:"available"`
+	DisplayPreference *PaymentMethodConfigurationMobilepayDisplayPreference `json:"display_preference"`
+}
+type PaymentMethodConfigurationMultibancoDisplayPreference struct {
+	// For child configs, whether or not the account's preference will be observed. If `false`, the parent configuration's default is used.
+	Overridable bool `json:"overridable"`
+	// The account's display preference.
+	Preference PaymentMethodConfigurationMultibancoDisplayPreferencePreference `json:"preference"`
+	// The effective display preference value.
+	Value PaymentMethodConfigurationMultibancoDisplayPreferenceValue `json:"value"`
+}
+type PaymentMethodConfigurationMultibanco struct {
+	// Whether this payment method may be offered at checkout. True if `display_preference` is `on` and the payment method's capability is active.
+	Available         bool                                                   `json:"available"`
+	DisplayPreference *PaymentMethodConfigurationMultibancoDisplayPreference `json:"display_preference"`
+}
 type PaymentMethodConfigurationOXXODisplayPreference struct {
 	// For child configs, whether or not the account's preference will be observed. If `false`, the parent configuration's default is used.
 	Overridable bool `json:"overridable"`
@@ -1669,6 +1794,19 @@ type PaymentMethodConfigurationSofort struct {
 	Available         bool                                               `json:"available"`
 	DisplayPreference *PaymentMethodConfigurationSofortDisplayPreference `json:"display_preference"`
 }
+type PaymentMethodConfigurationSwishDisplayPreference struct {
+	// For child configs, whether or not the account's preference will be observed. If `false`, the parent configuration's default is used.
+	Overridable bool `json:"overridable"`
+	// The account's display preference.
+	Preference PaymentMethodConfigurationSwishDisplayPreferencePreference `json:"preference"`
+	// The effective display preference value.
+	Value PaymentMethodConfigurationSwishDisplayPreferenceValue `json:"value"`
+}
+type PaymentMethodConfigurationSwish struct {
+	// Whether this payment method may be offered at checkout. True if `display_preference` is `on` and the payment method's capability is active.
+	Available         bool                                              `json:"available"`
+	DisplayPreference *PaymentMethodConfigurationSwishDisplayPreference `json:"display_preference"`
+}
 type PaymentMethodConfigurationUSBankAccountDisplayPreference struct {
 	// For child configs, whether or not the account's preference will be observed. If `false`, the parent configuration's default is used.
 	Overridable bool `json:"overridable"`
@@ -1759,7 +1897,9 @@ type PaymentMethodConfiguration struct {
 	Konbini   *PaymentMethodConfigurationKonbini `json:"konbini"`
 	Link      *PaymentMethodConfigurationLink    `json:"link"`
 	// Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
-	Livemode bool `json:"livemode"`
+	Livemode   bool                                  `json:"livemode"`
+	Mobilepay  *PaymentMethodConfigurationMobilepay  `json:"mobilepay"`
+	Multibanco *PaymentMethodConfigurationMultibanco `json:"multibanco"`
 	// The configuration's name.
 	Name string `json:"name"`
 	// String representing the object's type. Objects of the same type share the same value.
@@ -1774,6 +1914,7 @@ type PaymentMethodConfiguration struct {
 	RevolutPay    *PaymentMethodConfigurationRevolutPay    `json:"revolut_pay"`
 	SEPADebit     *PaymentMethodConfigurationSEPADebit     `json:"sepa_debit"`
 	Sofort        *PaymentMethodConfigurationSofort        `json:"sofort"`
+	Swish         *PaymentMethodConfigurationSwish         `json:"swish"`
 	USBankAccount *PaymentMethodConfigurationUSBankAccount `json:"us_bank_account"`
 	WeChatPay     *PaymentMethodConfigurationWeChatPay     `json:"wechat_pay"`
 	Zip           *PaymentMethodConfigurationZip           `json:"zip"`

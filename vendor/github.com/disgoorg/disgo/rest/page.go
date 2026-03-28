@@ -2,6 +2,7 @@ package rest
 
 import (
 	"errors"
+	"time"
 
 	"github.com/disgoorg/snowflake/v2"
 
@@ -112,6 +113,56 @@ func (p *ThreadMemberPage) Next() bool {
 	}
 
 	p.Items, p.Err = p.getItems(p.ID)
+	if p.Err == nil && len(p.Items) == 0 {
+		p.Err = ErrNoMorePages
+	}
+	return p.Err == nil
+}
+
+type PollAnswerVotesPage struct {
+	getItems func(after snowflake.ID) ([]discord.User, error)
+
+	Items []discord.User
+	Err   error
+
+	ID snowflake.ID
+}
+
+func (p *PollAnswerVotesPage) Next() bool {
+	if p.Err != nil {
+		return false
+	}
+
+	if len(p.Items) > 0 {
+		p.ID = p.Items[0].ID
+	}
+
+	p.Items, p.Err = p.getItems(p.ID)
+	if p.Err == nil && len(p.Items) == 0 {
+		p.Err = ErrNoMorePages
+	}
+	return p.Err == nil
+}
+
+type ChannelPinsPage struct {
+	getItems func(before time.Time) ([]discord.MessagePin, error)
+
+	Items []discord.MessagePin
+	Err   error
+
+	Time time.Time
+}
+
+func (p *ChannelPinsPage) Previous() bool {
+	if p.Err != nil {
+		return false
+	}
+
+	if len(p.Items) > 0 {
+		p.Time = p.Items[len(p.Items)-1].PinnedAt
+	}
+
+	p.Items, p.Err = p.getItems(p.Time)
 	if p.Err == nil && len(p.Items) == 0 {
 		p.Err = ErrNoMorePages
 	}

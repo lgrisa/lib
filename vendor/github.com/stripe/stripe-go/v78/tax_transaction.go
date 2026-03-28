@@ -15,7 +15,7 @@ const (
 	TaxTransactionCustomerDetailsAddressSourceShipping TaxTransactionCustomerDetailsAddressSource = "shipping"
 )
 
-// The type of the tax ID, one of `ad_nrt`, `ar_cuit`, `eu_vat`, `bo_tin`, `br_cnpj`, `br_cpf`, `cn_tin`, `co_nit`, `cr_tin`, `do_rcn`, `ec_ruc`, `eu_oss_vat`, `pe_ruc`, `ro_tin`, `rs_pib`, `sv_nit`, `uy_ruc`, `ve_rif`, `vn_tin`, `gb_vat`, `nz_gst`, `au_abn`, `au_arn`, `in_gst`, `no_vat`, `no_voec`, `za_vat`, `ch_vat`, `mx_rfc`, `sg_uen`, `ru_inn`, `ru_kpp`, `ca_bn`, `hk_br`, `es_cif`, `tw_vat`, `th_vat`, `jp_cn`, `jp_rn`, `jp_trn`, `li_uid`, `my_itn`, `us_ein`, `kr_brn`, `ca_qst`, `ca_gst_hst`, `ca_pst_bc`, `ca_pst_mb`, `ca_pst_sk`, `my_sst`, `sg_gst`, `ae_trn`, `cl_tin`, `sa_vat`, `id_npwp`, `my_frp`, `il_vat`, `ge_vat`, `ua_vat`, `is_vat`, `bg_uic`, `hu_tin`, `si_tin`, `ke_pin`, `tr_tin`, `eg_tin`, `ph_tin`, `bh_vat`, `kz_bin`, `ng_tin`, `om_vat`, or `unknown`
+// The type of the tax ID, one of `ad_nrt`, `ar_cuit`, `eu_vat`, `bo_tin`, `br_cnpj`, `br_cpf`, `cn_tin`, `co_nit`, `cr_tin`, `do_rcn`, `ec_ruc`, `eu_oss_vat`, `pe_ruc`, `ro_tin`, `rs_pib`, `sv_nit`, `uy_ruc`, `ve_rif`, `vn_tin`, `gb_vat`, `nz_gst`, `au_abn`, `au_arn`, `in_gst`, `no_vat`, `no_voec`, `za_vat`, `ch_vat`, `mx_rfc`, `sg_uen`, `ru_inn`, `ru_kpp`, `ca_bn`, `hk_br`, `es_cif`, `tw_vat`, `th_vat`, `jp_cn`, `jp_rn`, `jp_trn`, `li_uid`, `my_itn`, `us_ein`, `kr_brn`, `ca_qst`, `ca_gst_hst`, `ca_pst_bc`, `ca_pst_mb`, `ca_pst_sk`, `my_sst`, `sg_gst`, `ae_trn`, `cl_tin`, `sa_vat`, `id_npwp`, `my_frp`, `il_vat`, `ge_vat`, `ua_vat`, `is_vat`, `bg_uic`, `hu_tin`, `si_tin`, `ke_pin`, `tr_tin`, `eg_tin`, `ph_tin`, `bh_vat`, `kz_bin`, `ng_tin`, `om_vat`, `de_stn`, or `unknown`
 type TaxTransactionCustomerDetailsTaxIDType string
 
 // List of values that TaxTransactionCustomerDetailsTaxIDType can take
@@ -41,6 +41,7 @@ const (
 	TaxTransactionCustomerDetailsTaxIDTypeCNTIN    TaxTransactionCustomerDetailsTaxIDType = "cn_tin"
 	TaxTransactionCustomerDetailsTaxIDTypeCONIT    TaxTransactionCustomerDetailsTaxIDType = "co_nit"
 	TaxTransactionCustomerDetailsTaxIDTypeCRTIN    TaxTransactionCustomerDetailsTaxIDType = "cr_tin"
+	TaxTransactionCustomerDetailsTaxIDTypeDEStn    TaxTransactionCustomerDetailsTaxIDType = "de_stn"
 	TaxTransactionCustomerDetailsTaxIDTypeDORCN    TaxTransactionCustomerDetailsTaxIDType = "do_rcn"
 	TaxTransactionCustomerDetailsTaxIDTypeECRUC    TaxTransactionCustomerDetailsTaxIDType = "ec_ruc"
 	TaxTransactionCustomerDetailsTaxIDTypeEGTIN    TaxTransactionCustomerDetailsTaxIDType = "eg_tin"
@@ -209,7 +210,7 @@ func (p *TaxTransactionListLineItemsParams) AddExpand(f string) {
 	p.Expand = append(p.Expand, &f)
 }
 
-// Creates a Tax Transaction from a calculation.
+// Creates a Tax Transaction from a calculation, if that calculation hasn't expired. Calculations expire after 90 days.
 type TaxTransactionCreateFromCalculationParams struct {
 	Params `form:"*"`
 	// Tax Calculation ID to be used as input when creating the transaction.
@@ -306,7 +307,7 @@ func (p *TaxTransactionCreateReversalParams) AddMetadata(key string, value strin
 
 // The customer's tax IDs (for example, EU VAT numbers).
 type TaxTransactionCustomerDetailsTaxID struct {
-	// The type of the tax ID, one of `ad_nrt`, `ar_cuit`, `eu_vat`, `bo_tin`, `br_cnpj`, `br_cpf`, `cn_tin`, `co_nit`, `cr_tin`, `do_rcn`, `ec_ruc`, `eu_oss_vat`, `pe_ruc`, `ro_tin`, `rs_pib`, `sv_nit`, `uy_ruc`, `ve_rif`, `vn_tin`, `gb_vat`, `nz_gst`, `au_abn`, `au_arn`, `in_gst`, `no_vat`, `no_voec`, `za_vat`, `ch_vat`, `mx_rfc`, `sg_uen`, `ru_inn`, `ru_kpp`, `ca_bn`, `hk_br`, `es_cif`, `tw_vat`, `th_vat`, `jp_cn`, `jp_rn`, `jp_trn`, `li_uid`, `my_itn`, `us_ein`, `kr_brn`, `ca_qst`, `ca_gst_hst`, `ca_pst_bc`, `ca_pst_mb`, `ca_pst_sk`, `my_sst`, `sg_gst`, `ae_trn`, `cl_tin`, `sa_vat`, `id_npwp`, `my_frp`, `il_vat`, `ge_vat`, `ua_vat`, `is_vat`, `bg_uic`, `hu_tin`, `si_tin`, `ke_pin`, `tr_tin`, `eg_tin`, `ph_tin`, `bh_vat`, `kz_bin`, `ng_tin`, `om_vat`, or `unknown`
+	// The type of the tax ID, one of `ad_nrt`, `ar_cuit`, `eu_vat`, `bo_tin`, `br_cnpj`, `br_cpf`, `cn_tin`, `co_nit`, `cr_tin`, `do_rcn`, `ec_ruc`, `eu_oss_vat`, `pe_ruc`, `ro_tin`, `rs_pib`, `sv_nit`, `uy_ruc`, `ve_rif`, `vn_tin`, `gb_vat`, `nz_gst`, `au_abn`, `au_arn`, `in_gst`, `no_vat`, `no_voec`, `za_vat`, `ch_vat`, `mx_rfc`, `sg_uen`, `ru_inn`, `ru_kpp`, `ca_bn`, `hk_br`, `es_cif`, `tw_vat`, `th_vat`, `jp_cn`, `jp_rn`, `jp_trn`, `li_uid`, `my_itn`, `us_ein`, `kr_brn`, `ca_qst`, `ca_gst_hst`, `ca_pst_bc`, `ca_pst_mb`, `ca_pst_sk`, `my_sst`, `sg_gst`, `ae_trn`, `cl_tin`, `sa_vat`, `id_npwp`, `my_frp`, `il_vat`, `ge_vat`, `ua_vat`, `is_vat`, `bg_uic`, `hu_tin`, `si_tin`, `ke_pin`, `tr_tin`, `eg_tin`, `ph_tin`, `bh_vat`, `kz_bin`, `ng_tin`, `om_vat`, `de_stn`, or `unknown`
 	Type TaxTransactionCustomerDetailsTaxIDType `json:"type"`
 	// The value of the tax ID.
 	Value string `json:"value"`
@@ -328,6 +329,11 @@ type TaxTransactionCustomerDetails struct {
 type TaxTransactionReversal struct {
 	// The `id` of the reversed `Transaction` object.
 	OriginalTransaction string `json:"original_transaction"`
+}
+
+// The details of the ship from location, such as the address.
+type TaxTransactionShipFromDetails struct {
+	Address *Address `json:"address"`
 }
 type TaxTransactionShippingCostTaxBreakdownJurisdiction struct {
 	// Two-letter country code ([ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)).
@@ -407,6 +413,8 @@ type TaxTransaction struct {
 	Reference string `json:"reference"`
 	// If `type=reversal`, contains information about what was reversed.
 	Reversal *TaxTransactionReversal `json:"reversal"`
+	// The details of the ship from location, such as the address.
+	ShipFromDetails *TaxTransactionShipFromDetails `json:"ship_from_details"`
 	// The shipping cost details for the transaction.
 	ShippingCost *TaxTransactionShippingCost `json:"shipping_cost"`
 	// Timestamp of date at which the tax rules and rates in effect applies for the calculation.

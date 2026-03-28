@@ -892,6 +892,8 @@ type ChargePaymentMethodDetailsCardPresent struct {
 	Offline *ChargePaymentMethodDetailsCardPresentOffline `json:"offline"`
 	// Defines whether the authorized amount can be over-captured or not
 	OvercaptureSupported bool `json:"overcapture_supported"`
+	// EMV tag 5F2D. Preferred languages specified by the integrated circuit chip.
+	PreferredLocales []string `json:"preferred_locales"`
 	// How card details were read in this transaction.
 	ReadMethod string `json:"read_method"`
 	// A collection of fields required to be displayed on receipts. Only required for EMV transactions.
@@ -1026,7 +1028,7 @@ type ChargePaymentMethodDetailsKlarna struct {
 	// Can be one of `pay_later`, `pay_now`, `pay_with_financing`, or `pay_in_installments`
 	PaymentMethodCategory ChargePaymentMethodDetailsKlarnaPaymentMethodCategory `json:"payment_method_category"`
 	// Preferred language of the Klarna authorization page that the customer is redirected to.
-	// Can be one of `de-AT`, `en-AT`, `nl-BE`, `fr-BE`, `en-BE`, `de-DE`, `en-DE`, `da-DK`, `en-DK`, `es-ES`, `en-ES`, `fi-FI`, `sv-FI`, `en-FI`, `en-GB`, `en-IE`, `it-IT`, `en-IT`, `nl-NL`, `en-NL`, `nb-NO`, `en-NO`, `sv-SE`, `en-SE`, `en-US`, `es-US`, `fr-FR`, `en-FR`, `cs-CZ`, `en-CZ`, `el-GR`, `en-GR`, `en-AU`, `en-NZ`, `en-CA`, `fr-CA`, `pl-PL`, `en-PL`, `pt-PT`, `en-PT`, `de-CH`, `fr-CH`, `it-CH`, or `en-CH`
+	// Can be one of `de-AT`, `en-AT`, `nl-BE`, `fr-BE`, `en-BE`, `de-DE`, `en-DE`, `da-DK`, `en-DK`, `es-ES`, `en-ES`, `fi-FI`, `sv-FI`, `en-FI`, `en-GB`, `en-IE`, `it-IT`, `en-IT`, `nl-NL`, `en-NL`, `nb-NO`, `en-NO`, `sv-SE`, `en-SE`, `en-US`, `es-US`, `fr-FR`, `en-FR`, `cs-CZ`, `en-CZ`, `ro-RO`, `en-RO`, `el-GR`, `en-GR`, `en-AU`, `en-NZ`, `en-CA`, `fr-CA`, `pl-PL`, `en-PL`, `pt-PT`, `en-PT`, `de-CH`, `fr-CH`, `it-CH`, or `en-CH`
 	PreferredLocale string `json:"preferred_locale"`
 }
 
@@ -1044,6 +1046,8 @@ type ChargePaymentMethodDetailsLink struct {
 	// You could use this attribute to get a sense of international fees.
 	Country string `json:"country"`
 }
+
+// Internal card details
 type ChargePaymentMethodDetailsMobilepayCard struct {
 	// Brand of the card used in the transaction
 	Brand string `json:"brand"`
@@ -1057,6 +1061,7 @@ type ChargePaymentMethodDetailsMobilepayCard struct {
 	Last4 string `json:"last4"`
 }
 type ChargePaymentMethodDetailsMobilepay struct {
+	// Internal card details
 	Card *ChargePaymentMethodDetailsMobilepayCard `json:"card"`
 }
 type ChargePaymentMethodDetailsMultibanco struct {
@@ -1167,6 +1172,7 @@ type ChargePaymentMethodDetailsSwish struct {
 	// The last four digits of the Swish account phone number
 	VerifiedPhoneLast4 string `json:"verified_phone_last4"`
 }
+type ChargePaymentMethodDetailsTWINT struct{}
 type ChargePaymentMethodDetailsUSBankAccount struct {
 	// Account holder type: individual or company.
 	AccountHolderType ChargePaymentMethodDetailsUSBankAccountAccountHolderType `json:"account_holder_type"`
@@ -1235,6 +1241,7 @@ type ChargePaymentMethodDetails struct {
 	Sofort             *ChargePaymentMethodDetailsSofort             `json:"sofort"`
 	StripeAccount      *ChargePaymentMethodDetailsStripeAccount      `json:"stripe_account"`
 	Swish              *ChargePaymentMethodDetailsSwish              `json:"swish"`
+	TWINT              *ChargePaymentMethodDetailsTWINT              `json:"twint"`
 	// The type of transaction-specific details of the payment method used in the payment, one of `ach_credit_transfer`, `ach_debit`, `acss_debit`, `alipay`, `au_becs_debit`, `bancontact`, `card`, `card_present`, `eps`, `giropay`, `ideal`, `klarna`, `multibanco`, `p24`, `sepa_debit`, `sofort`, `stripe_account`, or `wechat`.
 	// An additional hash is included on `payment_method_details` with a name matching this value.
 	// It contains information specific to the payment method.

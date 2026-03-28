@@ -9,23 +9,30 @@ import (
 type Entitlement struct {
 	ID             snowflake.ID    `json:"id"`
 	SkuID          snowflake.ID    `json:"sku_id"`
-	UserID         *snowflake.ID   `json:"user_id"`
-	GuildID        *snowflake.ID   `json:"guild_id"`
 	ApplicationID  snowflake.ID    `json:"application_id"`
-	Type           EntitlementType `json:"type"`
-	Consumed       bool            `json:"consumed"`
-	StartsAt       *time.Time      `json:"starts_at"`
-	EndsAt         *time.Time      `json:"ends_at"`
+	UserID         *snowflake.ID   `json:"user_id"`
 	PromotionID    *snowflake.ID   `json:"promotion_id"`
+	Type           EntitlementType `json:"type"`
 	Deleted        bool            `json:"deleted"`
 	GiftCodeFlags  int             `json:"gift_code_flags"`
+	Consumed       *bool           `json:"consumed"`
+	StartsAt       *time.Time      `json:"starts_at"`
+	EndsAt         *time.Time      `json:"ends_at"`
+	GuildID        *snowflake.ID   `json:"guild_id"`
 	SubscriptionID *snowflake.ID   `json:"subscription_id"`
 }
 
 type EntitlementType int
 
 const (
-	EntitlementTypeApplicationSubscription EntitlementType = 8
+	EntitlementTypePurchase EntitlementType = iota + 1
+	EntitlementTypePremiumSubscription
+	EntitlementTypeDeveloperGift
+	EntitlementTypeTestModePurchase
+	EntitlementTypeFreePurchase
+	EntitlementTypeUserGift
+	EntitlementTypePremiumPurchase
+	EntitlementTypeApplicationSubscription
 )
 
 type TestEntitlementCreate struct {

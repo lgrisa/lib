@@ -413,6 +413,9 @@ type SetupIntentPaymentMethodDataLinkParams struct{}
 // If this is a `mobilepay` PaymentMethod, this hash contains details about the MobilePay payment method.
 type SetupIntentPaymentMethodDataMobilepayParams struct{}
 
+// If this is a `multibanco` PaymentMethod, this hash contains details about the Multibanco payment method.
+type SetupIntentPaymentMethodDataMultibancoParams struct{}
+
 // If this is an `oxxo` PaymentMethod, this hash contains details about the OXXO payment method.
 type SetupIntentPaymentMethodDataOXXOParams struct{}
 
@@ -458,6 +461,9 @@ type SetupIntentPaymentMethodDataSofortParams struct {
 // If this is a `swish` PaymentMethod, this hash contains details about the Swish payment method.
 type SetupIntentPaymentMethodDataSwishParams struct{}
 
+// If this is a TWINT PaymentMethod, this hash contains details about the TWINT payment method.
+type SetupIntentPaymentMethodDataTWINTParams struct{}
+
 // If this is an `us_bank_account` PaymentMethod, this hash contains details about the US bank account payment method.
 type SetupIntentPaymentMethodDataUSBankAccountParams struct {
 	// Account holder type: individual or company.
@@ -489,6 +495,8 @@ type SetupIntentPaymentMethodDataParams struct {
 	AfterpayClearpay *SetupIntentPaymentMethodDataAfterpayClearpayParams `form:"afterpay_clearpay"`
 	// If this is an `Alipay` PaymentMethod, this hash contains details about the Alipay payment method.
 	Alipay *SetupIntentPaymentMethodDataAlipayParams `form:"alipay"`
+	// This field indicates whether this payment method can be shown again to its customer in a checkout flow. Stripe products such as Checkout and Elements use this field to determine whether a payment method can be shown as a saved payment method in a checkout flow. The field defaults to `unspecified`.
+	AllowRedisplay *string `form:"allow_redisplay"`
 	// If this is a AmazonPay PaymentMethod, this hash contains details about the AmazonPay payment method.
 	AmazonPay *SetupIntentPaymentMethodDataAmazonPayParams `form:"amazon_pay"`
 	// If this is an `au_becs_debit` PaymentMethod, this hash contains details about the bank account.
@@ -529,6 +537,8 @@ type SetupIntentPaymentMethodDataParams struct {
 	Metadata map[string]string `form:"metadata"`
 	// If this is a `mobilepay` PaymentMethod, this hash contains details about the MobilePay payment method.
 	Mobilepay *SetupIntentPaymentMethodDataMobilepayParams `form:"mobilepay"`
+	// If this is a `multibanco` PaymentMethod, this hash contains details about the Multibanco payment method.
+	Multibanco *SetupIntentPaymentMethodDataMultibancoParams `form:"multibanco"`
 	// If this is an `oxxo` PaymentMethod, this hash contains details about the OXXO payment method.
 	OXXO *SetupIntentPaymentMethodDataOXXOParams `form:"oxxo"`
 	// If this is a `p24` PaymentMethod, this hash contains details about the P24 payment method.
@@ -551,6 +561,8 @@ type SetupIntentPaymentMethodDataParams struct {
 	Sofort *SetupIntentPaymentMethodDataSofortParams `form:"sofort"`
 	// If this is a `swish` PaymentMethod, this hash contains details about the Swish payment method.
 	Swish *SetupIntentPaymentMethodDataSwishParams `form:"swish"`
+	// If this is a TWINT PaymentMethod, this hash contains details about the TWINT payment method.
+	TWINT *SetupIntentPaymentMethodDataTWINTParams `form:"twint"`
 	// The type of the PaymentMethod. An additional hash is included on the PaymentMethod with a name matching this value. It contains additional information specific to the PaymentMethod type.
 	Type *string `form:"type"`
 	// If this is an `us_bank_account` PaymentMethod, this hash contains details about the US bank account payment method.
@@ -697,6 +709,7 @@ type SetupIntentPaymentMethodOptionsCardPresentParams struct{}
 // If this is a `link` PaymentMethod, this sub-hash contains details about the Link payment method options.
 type SetupIntentPaymentMethodOptionsLinkParams struct {
 	// [Deprecated] This is a legacy parameter that no longer has any function.
+	// Deprecated:
 	PersistentToken *string `form:"persistent_token"`
 }
 
@@ -852,7 +865,7 @@ func (p *SetupIntentParams) AddMetadata(key string, value string) {
 
 // You can cancel a SetupIntent object when it's in one of these statuses: requires_payment_method, requires_confirmation, or requires_action.
 //
-// After you cancel it, setup is abandoned and any operations on the SetupIntent fail with an error.
+// After you cancel it, setup is abandoned and any operations on the SetupIntent fail with an error. You can't cancel the SetupIntent for a Checkout Session. [Expire the Checkout Session](https://stripe.com/docs/api/checkout/sessions/expire) instead.
 type SetupIntentCancelParams struct {
 	Params `form:"*"`
 	// Reason for canceling this SetupIntent. Possible values are: `abandoned`, `requested_by_customer`, or `duplicate`
@@ -988,6 +1001,9 @@ type SetupIntentConfirmPaymentMethodDataLinkParams struct{}
 // If this is a `mobilepay` PaymentMethod, this hash contains details about the MobilePay payment method.
 type SetupIntentConfirmPaymentMethodDataMobilepayParams struct{}
 
+// If this is a `multibanco` PaymentMethod, this hash contains details about the Multibanco payment method.
+type SetupIntentConfirmPaymentMethodDataMultibancoParams struct{}
+
 // If this is an `oxxo` PaymentMethod, this hash contains details about the OXXO payment method.
 type SetupIntentConfirmPaymentMethodDataOXXOParams struct{}
 
@@ -1033,6 +1049,9 @@ type SetupIntentConfirmPaymentMethodDataSofortParams struct {
 // If this is a `swish` PaymentMethod, this hash contains details about the Swish payment method.
 type SetupIntentConfirmPaymentMethodDataSwishParams struct{}
 
+// If this is a TWINT PaymentMethod, this hash contains details about the TWINT payment method.
+type SetupIntentConfirmPaymentMethodDataTWINTParams struct{}
+
 // If this is an `us_bank_account` PaymentMethod, this hash contains details about the US bank account payment method.
 type SetupIntentConfirmPaymentMethodDataUSBankAccountParams struct {
 	// Account holder type: individual or company.
@@ -1064,6 +1083,8 @@ type SetupIntentConfirmPaymentMethodDataParams struct {
 	AfterpayClearpay *SetupIntentConfirmPaymentMethodDataAfterpayClearpayParams `form:"afterpay_clearpay"`
 	// If this is an `Alipay` PaymentMethod, this hash contains details about the Alipay payment method.
 	Alipay *SetupIntentConfirmPaymentMethodDataAlipayParams `form:"alipay"`
+	// This field indicates whether this payment method can be shown again to its customer in a checkout flow. Stripe products such as Checkout and Elements use this field to determine whether a payment method can be shown as a saved payment method in a checkout flow. The field defaults to `unspecified`.
+	AllowRedisplay *string `form:"allow_redisplay"`
 	// If this is a AmazonPay PaymentMethod, this hash contains details about the AmazonPay payment method.
 	AmazonPay *SetupIntentConfirmPaymentMethodDataAmazonPayParams `form:"amazon_pay"`
 	// If this is an `au_becs_debit` PaymentMethod, this hash contains details about the bank account.
@@ -1104,6 +1125,8 @@ type SetupIntentConfirmPaymentMethodDataParams struct {
 	Metadata map[string]string `form:"metadata"`
 	// If this is a `mobilepay` PaymentMethod, this hash contains details about the MobilePay payment method.
 	Mobilepay *SetupIntentConfirmPaymentMethodDataMobilepayParams `form:"mobilepay"`
+	// If this is a `multibanco` PaymentMethod, this hash contains details about the Multibanco payment method.
+	Multibanco *SetupIntentConfirmPaymentMethodDataMultibancoParams `form:"multibanco"`
 	// If this is an `oxxo` PaymentMethod, this hash contains details about the OXXO payment method.
 	OXXO *SetupIntentConfirmPaymentMethodDataOXXOParams `form:"oxxo"`
 	// If this is a `p24` PaymentMethod, this hash contains details about the P24 payment method.
@@ -1126,6 +1149,8 @@ type SetupIntentConfirmPaymentMethodDataParams struct {
 	Sofort *SetupIntentConfirmPaymentMethodDataSofortParams `form:"sofort"`
 	// If this is a `swish` PaymentMethod, this hash contains details about the Swish payment method.
 	Swish *SetupIntentConfirmPaymentMethodDataSwishParams `form:"swish"`
+	// If this is a TWINT PaymentMethod, this hash contains details about the TWINT payment method.
+	TWINT *SetupIntentConfirmPaymentMethodDataTWINTParams `form:"twint"`
 	// The type of the PaymentMethod. An additional hash is included on the PaymentMethod with a name matching this value. It contains additional information specific to the PaymentMethod type.
 	Type *string `form:"type"`
 	// If this is an `us_bank_account` PaymentMethod, this hash contains details about the US bank account payment method.
@@ -1319,6 +1344,7 @@ type SetupIntentPaymentMethodOptionsCard struct {
 type SetupIntentPaymentMethodOptionsCardPresent struct{}
 type SetupIntentPaymentMethodOptionsLink struct {
 	// [Deprecated] This is a legacy parameter that no longer has any function.
+	// Deprecated:
 	PersistentToken string `json:"persistent_token"`
 }
 type SetupIntentPaymentMethodOptionsPaypal struct {
@@ -1366,13 +1392,13 @@ type SetupIntentPaymentMethodOptions struct {
 //
 // Create a SetupIntent when you're ready to collect your customer's payment credentials.
 // Don't maintain long-lived, unconfirmed SetupIntents because they might not be valid.
-// The SetupIntent transitions through multiple [statuses](https://stripe.com/docs/payments/intents#intent-statuses) as it guides
+// The SetupIntent transitions through multiple [statuses](https://docs.stripe.com/payments/intents#intent-statuses) as it guides
 // you through the setup process.
 //
 // Successful SetupIntents result in payment credentials that are optimized for future payments.
 // For example, cardholders in [certain regions](https://stripe.com/guides/strong-customer-authentication) might need to be run through
-// [Strong Customer Authentication](https://stripe.com/docs/strong-customer-authentication) during payment method collection
-// to streamline later [off-session payments](https://stripe.com/docs/payments/setup-intents).
+// [Strong Customer Authentication](https://docs.stripe.com/strong-customer-authentication) during payment method collection
+// to streamline later [off-session payments](https://docs.stripe.com/payments/setup-intents).
 // If you use the SetupIntent with a [Customer](https://stripe.com/docs/api#setup_intent_object-customer),
 // it automatically attaches the resulting payment method to that Customer after successful setup.
 // We recommend using SetupIntents or [setup_future_usage](https://stripe.com/docs/api#payment_intent_object-setup_future_usage) on
@@ -1380,7 +1406,7 @@ type SetupIntentPaymentMethodOptions struct {
 //
 // By using SetupIntents, you can reduce friction for your customers, even as regulations change over time.
 //
-// Related guide: [Setup Intents API](https://stripe.com/docs/payments/setup-intents)
+// Related guide: [Setup Intents API](https://docs.stripe.com/payments/setup-intents)
 type SetupIntent struct {
 	APIResource
 	// ID of the Connect application that created the SetupIntent.

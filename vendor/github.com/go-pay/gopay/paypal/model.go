@@ -1,5 +1,9 @@
 package paypal
 
+import (
+	"encoding/json"
+)
+
 type AccessToken struct {
 	Scope       string `json:"scope"`
 	AccessToken string `json:"access_token"`
@@ -227,6 +231,41 @@ type InvoiceTemplateUpdateRsp struct {
 	Response      *Template      `json:"response,omitempty"`
 }
 
+type PaymentTokenCreateRsp struct {
+	Code          int                  `json:"-"`
+	Error         string               `json:"-"`
+	ErrorResponse *ErrorResponse       `json:"-"`
+	Response      *PaymentMethodDetail `json:"response,omitempty"`
+}
+
+type PaymentTokenListRsp struct {
+	Code          int                `json:"-"`
+	Error         string             `json:"-"`
+	ErrorResponse *ErrorResponse     `json:"-"`
+	Response      *PaymentTokensList `json:"response,omitempty"`
+}
+
+type PaymentTokenDetailRsp struct {
+	Code          int                  `json:"-"`
+	Error         string               `json:"-"`
+	ErrorResponse *ErrorResponse       `json:"-"`
+	Response      *PaymentMethodDetail `json:"response,omitempty"`
+}
+
+type PaymentSetupTokenCreateRsp struct {
+	Code          int                      `json:"-"`
+	Error         string                   `json:"-"`
+	ErrorResponse *ErrorResponse           `json:"-"`
+	Response      *PaymentSetupTokenDetail `json:"response,omitempty"`
+}
+
+type PaymentSetupTokenDetailRsp struct {
+	Code          int                      `json:"-"`
+	Error         string                   `json:"-"`
+	ErrorResponse *ErrorResponse           `json:"-"`
+	Response      *PaymentSetupTokenDetail `json:"response,omitempty"`
+}
+
 // ==================================分割==================================
 
 type Patch struct {
@@ -260,6 +299,51 @@ type PaymentSource struct {
 	P24        *P24        `json:"p24,omitempty"`
 	Sofort     *Sofort     `json:"sofort,omitempty"`
 	Trustly    *Trustly    `json:"trustly,omitempty"`
+	Paypal     *Paypal     `json:"paypal,omitempty"`
+}
+type Paypal struct {
+	EmailAddress  string            `json:"email_address"`
+	AccountID     string            `json:"account_id"`
+	AccountStatus string            `json:"account_status"`
+	Name          *PayerName        `json:"name"`
+	Address       *PayerAddress     `json:"address"`
+	Attributes    *PaypalAttributes `json:"attributes"`
+}
+
+type PayerName struct {
+	GivenName string `json:"given_name"`
+	Surname   string `json:"surname"`
+}
+
+type PayerAddress struct {
+	CountryCode string `json:"country_code"`
+}
+
+type PaypalAttributes struct {
+	Vault *PaypalVault `json:"vault"`
+}
+
+type PaypalVault struct {
+	ID       string          `json:"id"`
+	Status   string          `json:"status"`
+	Customer *PaypalCustomer `json:"customer"`
+	Links    []PaypalLink    `json:"links"`
+}
+
+type PaypalCustomer struct {
+	ID         string         `json:"id"`
+	Phones     []*PhoneDetail `json:"phones"`
+	WebsiteUrl string         `json:"website_url"`
+	Company    string         `json:"company"`
+	Name       *Name          `json:"name"`
+	Email      string         `json:"email"`
+	Links      []*Link        `json:"links,omitempty"`
+}
+
+type PaypalLink struct {
+	Href   string `json:"href"`
+	Rel    string `json:"rel"`
+	Method string `json:"method"`
 }
 
 type Bancontact struct {
@@ -333,6 +417,15 @@ type Card struct {
 	AuthenticationResult *AuthenticationResult `json:"authentication_result,omitempty"`
 }
 
+type PurchaseUnitAddress struct {
+	AddressLine1 string `json:"address_line_1"`
+	AddressLine2 string `json:"address_line_2"`
+	AdminArea1   string `json:"admin_area_1"`
+	AdminArea2   string `json:"admin_area_2"`
+	PostalCode   string `json:"postal_code"`
+	CountryCode  string `json:"country_code"`
+}
+
 type Address struct {
 	AddressLine1   string          `json:"address_line_1"`
 	AddressLine2   string          `json:"address_line_2"`
@@ -396,8 +489,26 @@ type PurchaseUnit struct {
 }
 
 type Amount struct {
-	CurrencyCode string `json:"currency_code"`
-	Value        string `json:"value"`
+	CurrencyCode          string                `json:"currency_code"`
+	Value                 string                `json:"value"`
+	PurchaseUnitBreakdown PurchaseUnitBreakdown `json:"breakdown"`
+}
+
+type PurchaseUnitBreakdown struct {
+	//item_total
+	ItemTotal *FixedPrice `json:"item_total,omitempty"`
+	// shipping
+	Shipping *FixedPrice `json:"shipping,omitempty"`
+	// handling
+	Handling *FixedPrice `json:"handling,omitempty"`
+	// tax_total
+	TaxTotal *FixedPrice `json:"tax_total,omitempty"`
+	// insurance
+	Insurance *FixedPrice `json:"insurance,omitempty"`
+	// shipping_discount
+	ShippingDiscount *FixedPrice `json:"shipping_discount,omitempty"`
+	// discount
+	Discount *FixedPrice `json:"discount,omitempty"`
 }
 
 type Payee struct {
@@ -436,9 +547,9 @@ type Discount struct {
 }
 
 type Shipping struct {
-	Name    *Name    `json:"name,omitempty"`
-	Type    string   `json:"type,omitempty"` // SHIPPING、PICKUP_IN_PERSON
-	Address *Address `json:"address,omitempty"`
+	Name    *Name                `json:"name,omitempty"`
+	Type    string               `json:"type,omitempty"` // SHIPPING、PICKUP_IN_PERSON
+	Address *PurchaseUnitAddress `json:"address,omitempty"`
 }
 
 type Name struct {
@@ -467,7 +578,26 @@ type Payments struct {
 }
 
 type Authorization struct {
-	ProcessorResponse *Processor `json:"processor_response,omitempty"`
+	Id                          string                       `json:"id,omitempty"`
+	Status                      string                       `json:"status,omitempty"` // CREATED、CAPTURED、DENIED、PARTIALLY_CAPTURED、VOIDED、PENDING
+	StatusDetails               *StatusDetails               `json:"status_details,omitempty"`
+	InvoiceId                   string                       `json:"invoice_id,omitempty"`
+	CustomId                    string                       `json:"custom_id,omitempty"`
+	Links                       []*Link                      `json:"links,omitempty"`
+	Amount                      *Amount                      `json:"amount"`
+	NetworkTransactionReference *NetworkTransactionReference `json:"network_transaction_reference"`
+	SellerProtection            *SellerProtection            `json:"seller_protection,omitempty"`
+	ExpirationTime              string                       `json:"expiration_time,omitempty"`
+	CreateTime                  string                       `json:"create_time,omitempty"`
+	UpdateTime                  string                       `json:"update_time,omitempty"`
+	ProcessorResponse           *Processor                   `json:"processor_response,omitempty"`
+}
+
+type NetworkTransactionReference struct {
+	Id                      string `json:"id"`
+	Date                    string `json:"date"`
+	AcquirerReferenceNumber string `json:"acquirer_reference_number"`
+	Network                 string `json:"network"`
 }
 
 type Processor struct {
@@ -493,11 +623,24 @@ type Capture struct {
 	Links                     []*Link                    `json:"links,omitempty"`
 	CreateTime                string                     `json:"create_time,omitempty"`
 	UpdateTime                string                     `json:"update_time,omitempty"`
+	InvoiceId                 string                     `json:"invoice_id,omitempty"`
+	CustomId                  string                     `json:"custom_id,omitempty"`
 }
 
 type Refund struct {
-	Status        string         `json:"status,omitempty"`
-	StatusDetails *StatusDetails `json:"status_details,omitempty"`
+	Id                      string                  `json:"id,omitempty"`
+	Status                  string                  `json:"status,omitempty"`
+	StatusDetails           *StatusDetails          `json:"status_details,omitempty"`
+	InvoiceId               string                  `json:"invoice_id,omitempty"`
+	CustomId                string                  `json:"custom_id,omitempty"`
+	AcquirerReferenceNumber string                  `json:"acquirer_reference_number,omitempty"`
+	NoteToPayer             string                  `json:"note_to_payer,omitempty"`
+	SellerPayableBreakdown  *SellerPayableBreakdown `json:"seller_payable_breakdown,omitempty"`
+	Links                   []*Link                 `json:"links,omitempty"`
+	Amount                  *Amount                 `json:"amount,omitempty"`
+	Payer                   *Payee                  `json:"payer,omitempty"`
+	CreateTime              string                  `json:"create_time,omitempty"`
+	UpdateTime              string                  `json:"update_time,omitempty"`
 }
 
 type Link struct {
@@ -586,6 +729,30 @@ type NetAmountBreakdown struct {
 	PayableAmount   *Amount       `json:"payable_amount,omitempty"`
 	ConvertedAmount *Amount       `json:"converted_amount,omitempty"`
 	ExchangeRate    *ExchangeRate `json:"exchange_rate,omitempty"`
+}
+
+type PaymentMethodDetail struct {
+	Id            string          `json:"id,omitempty"`
+	PaymentSource *PaymentSource  `json:"payment_source,omitempty"`
+	Customer      *PaypalCustomer `json:"customer,omitempty"`
+	Links         []*Link         `json:"links,omitempty"`
+}
+
+type PaymentTokensList struct {
+	TotalItems    int                    `json:"total_items,omitempty"`
+	TotalPages    int                    `json:"total_pages,omitempty"`
+	PaymentTokens []*PaymentMethodDetail `json:"payment_tokens,omitempty"`
+	Links         []*Link                `json:"links,omitempty"`
+	Customer      *PaypalCustomer        `json:"customer,omitempty"`
+}
+
+type PaymentSetupTokenDetail struct {
+	PaymentSource *PaymentSource  `json:"payment_source,omitempty"`
+	Links         []*Link         `json:"links,omitempty"`
+	Id            string          `json:"id,omitempty"`
+	Ordinal       int             `json:"ordinal,omitempty"`
+	Customer      *PaypalCustomer `json:"customer,omitempty"`
+	Status        string          `json:"status,omitempty"`
 }
 
 // =============== V1 API Payout ==================================
@@ -713,6 +880,58 @@ type BillingDetail struct {
 	UsageType   string  `json:"usage_type"`
 	CreateTime  string  `json:"create_time"`
 	Links       []*Link `json:"links"`
+}
+
+type PlanListRsp struct {
+	Code          int            `json:"-"`
+	Error         string         `json:"-"`
+	ErrorResponse *ErrorResponse `json:"-"`
+	Response      *BillingPlan   `json:"response,omitempty"`
+}
+
+type BillingPlan struct {
+	Plans []*Plan `json:"plans"`
+	Links []*Link `json:"links,omitempty"`
+}
+
+type Plan struct {
+	ID          string  `json:"id"`
+	Name        string  `json:"name"`
+	Status      string  `json:"status"`
+	Description string  `json:"description"`
+	UsageType   string  `json:"usage_type"`
+	CreateTime  string  `json:"create_time"`
+	Links       []*Link `json:"links,omitempty"`
+}
+
+type PlanDetailRsp struct {
+	Code          int            `json:"-"`
+	Error         string         `json:"-"`
+	ErrorResponse *ErrorResponse `json:"-"`
+	Response      *PlanDetail    `json:"response,omitempty"`
+}
+
+type PlanDetail struct {
+	ID            string           `json:"id"`
+	ProductID     string           `json:"product_id"`
+	Name          string           `json:"name"`
+	Description   string           `json:"description"`
+	Status        string           `json:"status"`
+	BillingCycles []*BillingCycles `json:"billing_cycles"`
+	Taxes         *Taxes           `json:"taxes"`
+	CreateTime    string           `json:"create_time"`
+	UpdateTime    string           `json:"update_time"`
+	Links         []*Link          `json:"links,omitempty"`
+}
+
+type Taxes struct {
+	Percentage string `json:"percentage"`
+	Inclusive  bool   `json:"inclusive"`
+}
+
+type CommonAmount struct {
+	CurrencyCode string `json:"currency_code"`
+	Value        string `json:"value"`
 }
 
 type InvoiceNumber struct {
@@ -934,4 +1153,133 @@ type TemplateInfo struct {
 	Invoicer             *Invoicer              `json:"invoicer"`
 	Items                []*Item                `json:"items,omitempty"`
 	PrimaryRecipients    []*RecipientInfo       `json:"primary_recipients,omitempty"`
+}
+
+type AddTrackingNumberReq struct {
+	TrackingNumber   string      `json:"tracking_number"`
+	CarrierNameOther string      `json:"carrier_name_other"`
+	Carrier          string      `json:"carrier"`
+	CaptureId        string      `json:"capture_id"`
+	NotifyPayer      bool        `json:"notify_payer"`
+	ShipItem         []*ShipItem `json:"items"`
+}
+type ShipItem struct {
+	Name     string `json:"name"`
+	Quantity int    `json:"quantity"`
+	Sku      string `json:"sku"`
+	Url      string `json:"url"`
+	ImageUrl string `json:"image_url"`
+}
+type AddTrackingNumberRsp struct {
+	Code          int            `json:"-"`
+	Error         string         `json:"-"`
+	ErrorResponse *ErrorResponse `json:"-"`
+	Response      *OrderDetail   `json:"response,omitempty"`
+}
+
+type CreateWebhookRsp struct {
+	Code          int            `json:"-"`
+	Error         string         `json:"-"`
+	ErrorResponse *ErrorResponse `json:"-"`
+	Response      *Webhook       `json:"response,omitempty"`
+}
+
+type WebhookEventType struct {
+	Name             string   `json:"name"`
+	Description      string   `json:"description,omitempty"`
+	Status           string   `json:"status,omitempty"`
+	ResourceVersions []string `json:"resource_versions,omitempty"`
+}
+
+type Webhook struct {
+	Id         string              `json:"id"`
+	Url        string              `json:"url"`
+	EventTypes []*WebhookEventType `json:"event_types"`
+	Links      []*Link             `json:"links,omitempty"`
+}
+
+type ListWebhook struct {
+	Webhooks []*Webhook `json:"webhooks"`
+}
+
+type ListWebhookRsp struct {
+	Code          int            `json:"-"`
+	Error         string         `json:"-"`
+	ErrorResponse *ErrorResponse `json:"-"`
+	Response      *ListWebhook   `json:"response,omitempty"`
+}
+
+type WebhookDetailRsp struct {
+	Code          int            `json:"-"`
+	Error         string         `json:"-"`
+	ErrorResponse *ErrorResponse `json:"-"`
+	Response      *Webhook       `json:"response,omitempty"`
+}
+
+type WebhookEventDetailRsp struct {
+	Code          int                 `json:"-"`
+	Error         string              `json:"-"`
+	ErrorResponse *ErrorResponse      `json:"-"`
+	Response      *WebhookEventDetail `json:"response,omitempty"`
+}
+
+type WebhookEventDetail struct {
+	Id              string `json:"id"`
+	CreateTime      string `json:"create_time"`
+	ResourceType    string `json:"resource_type"`
+	EventVersion    string `json:"event_version"`
+	EventType       string `json:"event_type"`
+	Summary         string `json:"summary"`
+	ResourceVersion string `json:"resource_version"`
+	Resource        struct {
+		Id         string `json:"id"`
+		CreateTime string `json:"create_time"`
+		UpdateTime string `json:"update_time"`
+		State      string `json:"state"`
+		Amount     struct {
+			Total    string `json:"total"`
+			Currency string `json:"currency"`
+			Details  struct {
+				Subtotal string `json:"subtotal"`
+			} `json:"details"`
+		} `json:"amount"`
+		ParentPayment string `json:"parent_payment"`
+		ValidUntil    string `json:"valid_until"`
+		Links         []struct {
+			Href   string `json:"href"`
+			Rel    string `json:"rel"`
+			Method string `json:"method"`
+		} `json:"links"`
+	} `json:"resource"`
+	Links []struct {
+		Href   string `json:"href"`
+		Rel    string `json:"rel"`
+		Method string `json:"method"`
+	} `json:"links"`
+}
+
+type VerifyWebhookSignatureRequest struct {
+	AuthAlgo         string          `json:"auth_algo,omitempty"`
+	CertURL          string          `json:"cert_url,omitempty"`
+	TransmissionID   string          `json:"transmission_id,omitempty"`
+	TransmissionSig  string          `json:"transmission_sig,omitempty"`
+	TransmissionTime string          `json:"transmission_time,omitempty"`
+	WebhookID        string          `json:"webhook_id,omitempty"`
+	Event            json.RawMessage `json:"webhook_event,omitempty"`
+}
+
+type VerifyWebhookResponse struct {
+	VerificationStatus string `json:"verification_status,omitempty"`
+}
+
+type WebhookEvent struct {
+	Id              string          `json:"id"`
+	CreateTime      string          `json:"create_time"`
+	ResourceType    string          `json:"resource_type"`
+	EventType       string          `json:"event_type"`
+	Summary         string          `json:"summary"`
+	Resource        json.RawMessage `json:"resource,omitempty"`
+	Links           []*Link         `json:"links,omitempty"`
+	EventVersion    string          `json:"event_version"`
+	ResourceVersion string          `json:"resource_version"`
 }

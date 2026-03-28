@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/disgoorg/json"
+	"github.com/disgoorg/json/v2"
 	"github.com/disgoorg/snowflake/v2"
 )
 
@@ -20,22 +20,32 @@ const (
 	InteractionTypeModalSubmit
 )
 
+type InteractionContextType int
+
+const (
+	InteractionContextTypeGuild InteractionContextType = iota
+	InteractionContextTypeBotDM
+	InteractionContextTypePrivateChannel
+)
+
 type rawInteraction struct {
-	ID            snowflake.ID    `json:"id"`
-	Type          InteractionType `json:"type"`
-	ApplicationID snowflake.ID    `json:"application_id"`
-	Token         string          `json:"token"`
-	Version       int             `json:"version"`
-	GuildID       *snowflake.ID   `json:"guild_id,omitempty"`
-	// Deprecated: Use Channel instead
-	ChannelID      snowflake.ID       `json:"channel_id,omitempty"`
-	Channel        InteractionChannel `json:"channel,omitempty"`
-	Locale         Locale             `json:"locale,omitempty"`
-	GuildLocale    *Locale            `json:"guild_locale,omitempty"`
-	Member         *ResolvedMember    `json:"member,omitempty"`
-	User           *User              `json:"user,omitempty"`
-	AppPermissions *Permissions       `json:"app_permissions,omitempty"`
-	Entitlements   []Entitlement      `json:"entitlements"`
+	ID                           snowflake.ID                                `json:"id"`
+	Type                         InteractionType                             `json:"type"`
+	ApplicationID                snowflake.ID                                `json:"application_id"`
+	Token                        string                                      `json:"token"`
+	Version                      int                                         `json:"version"`
+	Guild                        *InteractionGuild                           `json:"guild,omitempty"`
+	GuildID                      *snowflake.ID                               `json:"guild_id,omitempty"`
+	Channel                      InteractionChannel                          `json:"channel,omitempty"`
+	Locale                       Locale                                      `json:"locale,omitempty"`
+	GuildLocale                  *Locale                                     `json:"guild_locale,omitempty"`
+	Member                       *ResolvedMember                             `json:"member,omitempty"`
+	User                         *User                                       `json:"user,omitempty"`
+	AppPermissions               *Permissions                                `json:"app_permissions,omitempty"`
+	Entitlements                 []Entitlement                               `json:"entitlements"`
+	AuthorizingIntegrationOwners map[ApplicationIntegrationType]snowflake.ID `json:"authorizing_integration_owners"`
+	Context                      InteractionContextType                      `json:"context"`
+	AttachmentSizeLimit          int                                         `json:"attachment_size_limit"`
 }
 
 // Interaction is used for easier unmarshalling of different Interaction(s)
@@ -45,9 +55,8 @@ type Interaction interface {
 	ApplicationID() snowflake.ID
 	Token() string
 	Version() int
+	PartialGuild() *InteractionGuild
 	GuildID() *snowflake.ID
-	// Deprecated: Use Interaction.Channel instead
-	ChannelID() snowflake.ID
 	Channel() InteractionChannel
 	Locale() Locale
 	GuildLocale() *Locale
@@ -55,6 +64,9 @@ type Interaction interface {
 	User() User
 	AppPermissions() *Permissions
 	Entitlements() []Entitlement
+	AuthorizingIntegrationOwners() map[ApplicationIntegrationType]snowflake.ID
+	Context() InteractionContextType
+	AttachmentSizeLimit() int
 	CreatedAt() time.Time
 
 	interaction()
@@ -139,6 +151,8 @@ type ResolvedMember struct {
 	Permissions Permissions `json:"permissions,omitempty"`
 }
 
+func (ResolvedMember) isMentionableValue() {}
+
 type ResolvedChannel struct {
 	ID             snowflake.ID   `json:"id"`
 	Name           string         `json:"name"`
@@ -147,6 +161,8 @@ type ResolvedChannel struct {
 	ThreadMetadata ThreadMetadata `json:"thread_metadata"`
 	ParentID       snowflake.ID   `json:"parent_id"`
 }
+
+func (ResolvedChannel) isMentionableValue() {}
 
 type InteractionChannel struct {
 	MessageChannel
@@ -190,4 +206,10 @@ func (c InteractionChannel) MarshalJSON() ([]byte, error) {
 	}
 
 	return json.Merge(mData, pData)
+}
+
+type InteractionGuild struct {
+	ID       snowflake.ID   `json:"id"`
+	Locale   Locale         `json:"locale"`
+	Features []GuildFeature `json:"features"`
 }

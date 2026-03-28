@@ -120,7 +120,7 @@ const (
 	CheckoutSessionCustomerDetailsTaxExemptReverse CheckoutSessionCustomerDetailsTaxExempt = "reverse"
 )
 
-// The type of the tax ID, one of `ad_nrt`, `ar_cuit`, `eu_vat`, `bo_tin`, `br_cnpj`, `br_cpf`, `cn_tin`, `co_nit`, `cr_tin`, `do_rcn`, `ec_ruc`, `eu_oss_vat`, `pe_ruc`, `ro_tin`, `rs_pib`, `sv_nit`, `uy_ruc`, `ve_rif`, `vn_tin`, `gb_vat`, `nz_gst`, `au_abn`, `au_arn`, `in_gst`, `no_vat`, `no_voec`, `za_vat`, `ch_vat`, `mx_rfc`, `sg_uen`, `ru_inn`, `ru_kpp`, `ca_bn`, `hk_br`, `es_cif`, `tw_vat`, `th_vat`, `jp_cn`, `jp_rn`, `jp_trn`, `li_uid`, `my_itn`, `us_ein`, `kr_brn`, `ca_qst`, `ca_gst_hst`, `ca_pst_bc`, `ca_pst_mb`, `ca_pst_sk`, `my_sst`, `sg_gst`, `ae_trn`, `cl_tin`, `sa_vat`, `id_npwp`, `my_frp`, `il_vat`, `ge_vat`, `ua_vat`, `is_vat`, `bg_uic`, `hu_tin`, `si_tin`, `ke_pin`, `tr_tin`, `eg_tin`, `ph_tin`, `bh_vat`, `kz_bin`, `ng_tin`, `om_vat`, or `unknown`
+// The type of the tax ID, one of `ad_nrt`, `ar_cuit`, `eu_vat`, `bo_tin`, `br_cnpj`, `br_cpf`, `cn_tin`, `co_nit`, `cr_tin`, `do_rcn`, `ec_ruc`, `eu_oss_vat`, `pe_ruc`, `ro_tin`, `rs_pib`, `sv_nit`, `uy_ruc`, `ve_rif`, `vn_tin`, `gb_vat`, `nz_gst`, `au_abn`, `au_arn`, `in_gst`, `no_vat`, `no_voec`, `za_vat`, `ch_vat`, `mx_rfc`, `sg_uen`, `ru_inn`, `ru_kpp`, `ca_bn`, `hk_br`, `es_cif`, `tw_vat`, `th_vat`, `jp_cn`, `jp_rn`, `jp_trn`, `li_uid`, `my_itn`, `us_ein`, `kr_brn`, `ca_qst`, `ca_gst_hst`, `ca_pst_bc`, `ca_pst_mb`, `ca_pst_sk`, `my_sst`, `sg_gst`, `ae_trn`, `cl_tin`, `sa_vat`, `id_npwp`, `my_frp`, `il_vat`, `ge_vat`, `ua_vat`, `is_vat`, `bg_uic`, `hu_tin`, `si_tin`, `ke_pin`, `tr_tin`, `eg_tin`, `ph_tin`, `bh_vat`, `kz_bin`, `ng_tin`, `om_vat`, `de_stn`, or `unknown`
 type CheckoutSessionCustomerDetailsTaxIDType string
 
 // List of values that CheckoutSessionCustomerDetailsTaxIDType can take
@@ -146,6 +146,7 @@ const (
 	CheckoutSessionCustomerDetailsTaxIDTypeCNTIN    CheckoutSessionCustomerDetailsTaxIDType = "cn_tin"
 	CheckoutSessionCustomerDetailsTaxIDTypeCONIT    CheckoutSessionCustomerDetailsTaxIDType = "co_nit"
 	CheckoutSessionCustomerDetailsTaxIDTypeCRTIN    CheckoutSessionCustomerDetailsTaxIDType = "cr_tin"
+	CheckoutSessionCustomerDetailsTaxIDTypeDEStn    CheckoutSessionCustomerDetailsTaxIDType = "de_stn"
 	CheckoutSessionCustomerDetailsTaxIDTypeDORCN    CheckoutSessionCustomerDetailsTaxIDType = "do_rcn"
 	CheckoutSessionCustomerDetailsTaxIDTypeECRUC    CheckoutSessionCustomerDetailsTaxIDType = "ec_ruc"
 	CheckoutSessionCustomerDetailsTaxIDTypeEGTIN    CheckoutSessionCustomerDetailsTaxIDType = "eg_tin"
@@ -313,6 +314,19 @@ type CheckoutSessionPaymentMethodOptionsAlipaySetupFutureUsage string
 // List of values that CheckoutSessionPaymentMethodOptionsAlipaySetupFutureUsage can take
 const (
 	CheckoutSessionPaymentMethodOptionsAlipaySetupFutureUsageNone CheckoutSessionPaymentMethodOptionsAlipaySetupFutureUsage = "none"
+)
+
+// Indicates that you intend to make future payments with this PaymentIntent's payment method.
+//
+// Providing this parameter will [attach the payment method](https://stripe.com/docs/payments/save-during-payment) to the PaymentIntent's Customer, if present, after the PaymentIntent is confirmed and any required actions from the user are complete. If no Customer was provided, the payment method can still be [attached](https://stripe.com/docs/api/payment_methods/attach) to a Customer after the transaction completes.
+//
+// When processing card payments, Stripe also uses `setup_future_usage` to dynamically optimize your payment flow and comply with regional legislation and network rules, such as [SCA](https://stripe.com/docs/strong-customer-authentication).
+type CheckoutSessionPaymentMethodOptionsAmazonPaySetupFutureUsage string
+
+// List of values that CheckoutSessionPaymentMethodOptionsAmazonPaySetupFutureUsage can take
+const (
+	CheckoutSessionPaymentMethodOptionsAmazonPaySetupFutureUsageNone       CheckoutSessionPaymentMethodOptionsAmazonPaySetupFutureUsage = "none"
+	CheckoutSessionPaymentMethodOptionsAmazonPaySetupFutureUsageOffSession CheckoutSessionPaymentMethodOptionsAmazonPaySetupFutureUsage = "off_session"
 )
 
 // Indicates that you intend to make future payments with this PaymentIntent's payment method.
@@ -555,6 +569,30 @@ const (
 // Providing this parameter will [attach the payment method](https://stripe.com/docs/payments/save-during-payment) to the PaymentIntent's Customer, if present, after the PaymentIntent is confirmed and any required actions from the user are complete. If no Customer was provided, the payment method can still be [attached](https://stripe.com/docs/api/payment_methods/attach) to a Customer after the transaction completes.
 //
 // When processing card payments, Stripe also uses `setup_future_usage` to dynamically optimize your payment flow and comply with regional legislation and network rules, such as [SCA](https://stripe.com/docs/strong-customer-authentication).
+type CheckoutSessionPaymentMethodOptionsMobilepaySetupFutureUsage string
+
+// List of values that CheckoutSessionPaymentMethodOptionsMobilepaySetupFutureUsage can take
+const (
+	CheckoutSessionPaymentMethodOptionsMobilepaySetupFutureUsageNone CheckoutSessionPaymentMethodOptionsMobilepaySetupFutureUsage = "none"
+)
+
+// Indicates that you intend to make future payments with this PaymentIntent's payment method.
+//
+// Providing this parameter will [attach the payment method](https://stripe.com/docs/payments/save-during-payment) to the PaymentIntent's Customer, if present, after the PaymentIntent is confirmed and any required actions from the user are complete. If no Customer was provided, the payment method can still be [attached](https://stripe.com/docs/api/payment_methods/attach) to a Customer after the transaction completes.
+//
+// When processing card payments, Stripe also uses `setup_future_usage` to dynamically optimize your payment flow and comply with regional legislation and network rules, such as [SCA](https://stripe.com/docs/strong-customer-authentication).
+type CheckoutSessionPaymentMethodOptionsMultibancoSetupFutureUsage string
+
+// List of values that CheckoutSessionPaymentMethodOptionsMultibancoSetupFutureUsage can take
+const (
+	CheckoutSessionPaymentMethodOptionsMultibancoSetupFutureUsageNone CheckoutSessionPaymentMethodOptionsMultibancoSetupFutureUsage = "none"
+)
+
+// Indicates that you intend to make future payments with this PaymentIntent's payment method.
+//
+// Providing this parameter will [attach the payment method](https://stripe.com/docs/payments/save-during-payment) to the PaymentIntent's Customer, if present, after the PaymentIntent is confirmed and any required actions from the user are complete. If no Customer was provided, the payment method can still be [attached](https://stripe.com/docs/api/payment_methods/attach) to a Customer after the transaction completes.
+//
+// When processing card payments, Stripe also uses `setup_future_usage` to dynamically optimize your payment flow and comply with regional legislation and network rules, such as [SCA](https://stripe.com/docs/strong-customer-authentication).
 type CheckoutSessionPaymentMethodOptionsOXXOSetupFutureUsage string
 
 // List of values that CheckoutSessionPaymentMethodOptionsOXXOSetupFutureUsage can take
@@ -605,6 +643,19 @@ type CheckoutSessionPaymentMethodOptionsPaypalSetupFutureUsage string
 const (
 	CheckoutSessionPaymentMethodOptionsPaypalSetupFutureUsageNone       CheckoutSessionPaymentMethodOptionsPaypalSetupFutureUsage = "none"
 	CheckoutSessionPaymentMethodOptionsPaypalSetupFutureUsageOffSession CheckoutSessionPaymentMethodOptionsPaypalSetupFutureUsage = "off_session"
+)
+
+// Indicates that you intend to make future payments with this PaymentIntent's payment method.
+//
+// Providing this parameter will [attach the payment method](https://stripe.com/docs/payments/save-during-payment) to the PaymentIntent's Customer, if present, after the PaymentIntent is confirmed and any required actions from the user are complete. If no Customer was provided, the payment method can still be [attached](https://stripe.com/docs/api/payment_methods/attach) to a Customer after the transaction completes.
+//
+// When processing card payments, Stripe also uses `setup_future_usage` to dynamically optimize your payment flow and comply with regional legislation and network rules, such as [SCA](https://stripe.com/docs/strong-customer-authentication).
+type CheckoutSessionPaymentMethodOptionsRevolutPaySetupFutureUsage string
+
+// List of values that CheckoutSessionPaymentMethodOptionsRevolutPaySetupFutureUsage can take
+const (
+	CheckoutSessionPaymentMethodOptionsRevolutPaySetupFutureUsageNone       CheckoutSessionPaymentMethodOptionsRevolutPaySetupFutureUsage = "none"
+	CheckoutSessionPaymentMethodOptionsRevolutPaySetupFutureUsageOffSession CheckoutSessionPaymentMethodOptionsRevolutPaySetupFutureUsage = "off_session"
 )
 
 // Indicates that you intend to make future payments with this PaymentIntent's payment method.
@@ -696,6 +747,34 @@ const (
 	CheckoutSessionRedirectOnCompletionAlways     CheckoutSessionRedirectOnCompletion = "always"
 	CheckoutSessionRedirectOnCompletionIfRequired CheckoutSessionRedirectOnCompletion = "if_required"
 	CheckoutSessionRedirectOnCompletionNever      CheckoutSessionRedirectOnCompletion = "never"
+)
+
+// Uses the `allow_redisplay` value of each saved payment method to filter the set presented to a returning customer. By default, only saved payment methods with 'allow_redisplay: ‘always' are shown in Checkout.
+type CheckoutSessionSavedPaymentMethodOptionsAllowRedisplayFilter string
+
+// List of values that CheckoutSessionSavedPaymentMethodOptionsAllowRedisplayFilter can take
+const (
+	CheckoutSessionSavedPaymentMethodOptionsAllowRedisplayFilterAlways      CheckoutSessionSavedPaymentMethodOptionsAllowRedisplayFilter = "always"
+	CheckoutSessionSavedPaymentMethodOptionsAllowRedisplayFilterLimited     CheckoutSessionSavedPaymentMethodOptionsAllowRedisplayFilter = "limited"
+	CheckoutSessionSavedPaymentMethodOptionsAllowRedisplayFilterUnspecified CheckoutSessionSavedPaymentMethodOptionsAllowRedisplayFilter = "unspecified"
+)
+
+// Enable customers to choose if they wish to remove their saved payment methods. Disabled by default.
+type CheckoutSessionSavedPaymentMethodOptionsPaymentMethodRemove string
+
+// List of values that CheckoutSessionSavedPaymentMethodOptionsPaymentMethodRemove can take
+const (
+	CheckoutSessionSavedPaymentMethodOptionsPaymentMethodRemoveDisabled CheckoutSessionSavedPaymentMethodOptionsPaymentMethodRemove = "disabled"
+	CheckoutSessionSavedPaymentMethodOptionsPaymentMethodRemoveEnabled  CheckoutSessionSavedPaymentMethodOptionsPaymentMethodRemove = "enabled"
+)
+
+// Enable customers to choose if they wish to save their payment method for future use. Disabled by default.
+type CheckoutSessionSavedPaymentMethodOptionsPaymentMethodSave string
+
+// List of values that CheckoutSessionSavedPaymentMethodOptionsPaymentMethodSave can take
+const (
+	CheckoutSessionSavedPaymentMethodOptionsPaymentMethodSaveDisabled CheckoutSessionSavedPaymentMethodOptionsPaymentMethodSave = "disabled"
+	CheckoutSessionSavedPaymentMethodOptionsPaymentMethodSaveEnabled  CheckoutSessionSavedPaymentMethodOptionsPaymentMethodSave = "enabled"
 )
 
 // The reasoning behind this tax, for example, if the product is tax exempt. The possible values for this field may be extended as new tax rules are supported.
@@ -870,6 +949,8 @@ type CheckoutSessionCustomFieldDropdownOptionParams struct {
 
 // Configuration for `type=dropdown` fields.
 type CheckoutSessionCustomFieldDropdownParams struct {
+	// The value that will pre-fill the field on the payment page.Must match a `value` in the `options` array.
+	DefaultValue *string `form:"default_value"`
 	// The options available for the customer to select. Up to 200 options allowed.
 	Options []*CheckoutSessionCustomFieldDropdownOptionParams `form:"options"`
 }
@@ -884,6 +965,8 @@ type CheckoutSessionCustomFieldLabelParams struct {
 
 // Configuration for `type=numeric` fields.
 type CheckoutSessionCustomFieldNumericParams struct {
+	// The value that will pre-fill the field on the payment page.
+	DefaultValue *string `form:"default_value"`
 	// The maximum character length constraint for the customer's input.
 	MaximumLength *int64 `form:"maximum_length"`
 	// The minimum character length requirement for the customer's input.
@@ -892,6 +975,8 @@ type CheckoutSessionCustomFieldNumericParams struct {
 
 // Configuration for `type=text` fields.
 type CheckoutSessionCustomFieldTextParams struct {
+	// The value that will pre-fill the field on the payment page.
+	DefaultValue *string `form:"default_value"`
 	// The maximum character length constraint for the customer's input.
 	MaximumLength *int64 `form:"maximum_length"`
 	// The minimum character length requirement for the customer's input.
@@ -1182,6 +1267,12 @@ func (p *CheckoutSessionPaymentIntentDataParams) AddMetadata(key string, value s
 	p.Metadata[key] = value
 }
 
+// This parameter allows you to set some attributes on the payment method created during a Checkout session.
+type CheckoutSessionPaymentMethodDataParams struct {
+	// Allow redisplay will be set on the payment method on confirmation and indicates whether this payment method can be shown again to the customer in a checkout flow. Only set this field if you wish to override the allow_redisplay value determined by Checkout.
+	AllowRedisplay *string `form:"allow_redisplay"`
+}
+
 // Additional fields for Mandate creation
 type CheckoutSessionPaymentMethodOptionsACSSDebitMandateOptionsParams struct {
 	// A URL for custom mandate text to render during confirmation step.
@@ -1445,6 +1536,26 @@ type CheckoutSessionPaymentMethodOptionsLinkParams struct {
 	SetupFutureUsage *string `form:"setup_future_usage"`
 }
 
+// contains details about the Mobilepay payment method options.
+type CheckoutSessionPaymentMethodOptionsMobilepayParams struct {
+	// Indicates that you intend to make future payments with this PaymentIntent's payment method.
+	//
+	// Providing this parameter will [attach the payment method](https://stripe.com/docs/payments/save-during-payment) to the PaymentIntent's Customer, if present, after the PaymentIntent is confirmed and any required actions from the user are complete. If no Customer was provided, the payment method can still be [attached](https://stripe.com/docs/api/payment_methods/attach) to a Customer after the transaction completes.
+	//
+	// When processing card payments, Stripe also uses `setup_future_usage` to dynamically optimize your payment flow and comply with regional legislation and network rules, such as [SCA](https://stripe.com/docs/strong-customer-authentication).
+	SetupFutureUsage *string `form:"setup_future_usage"`
+}
+
+// contains details about the Multibanco payment method options.
+type CheckoutSessionPaymentMethodOptionsMultibancoParams struct {
+	// Indicates that you intend to make future payments with this PaymentIntent's payment method.
+	//
+	// Providing this parameter will [attach the payment method](https://stripe.com/docs/payments/save-during-payment) to the PaymentIntent's Customer, if present, after the PaymentIntent is confirmed and any required actions from the user are complete. If no Customer was provided, the payment method can still be [attached](https://stripe.com/docs/api/payment_methods/attach) to a Customer after the transaction completes.
+	//
+	// When processing card payments, Stripe also uses `setup_future_usage` to dynamically optimize your payment flow and comply with regional legislation and network rules, such as [SCA](https://stripe.com/docs/strong-customer-authentication).
+	SetupFutureUsage *string `form:"setup_future_usage"`
+}
+
 // contains details about the OXXO payment method options.
 type CheckoutSessionPaymentMethodOptionsOXXOParams struct {
 	// The number of calendar days before an OXXO voucher expires. For example, if you create an OXXO voucher on Monday and you set expires_after_days to 2, the OXXO invoice will expire on Wednesday at 23:59 America/Mexico_City time.
@@ -1619,6 +1730,10 @@ type CheckoutSessionPaymentMethodOptionsParams struct {
 	Konbini *CheckoutSessionPaymentMethodOptionsKonbiniParams `form:"konbini"`
 	// contains details about the Link payment method options.
 	Link *CheckoutSessionPaymentMethodOptionsLinkParams `form:"link"`
+	// contains details about the Mobilepay payment method options.
+	Mobilepay *CheckoutSessionPaymentMethodOptionsMobilepayParams `form:"mobilepay"`
+	// contains details about the Multibanco payment method options.
+	Multibanco *CheckoutSessionPaymentMethodOptionsMultibancoParams `form:"multibanco"`
 	// contains details about the OXXO payment method options.
 	OXXO *CheckoutSessionPaymentMethodOptionsOXXOParams `form:"oxxo"`
 	// contains details about the P24 payment method options.
@@ -1650,6 +1765,14 @@ type CheckoutSessionPaymentMethodOptionsParams struct {
 type CheckoutSessionPhoneNumberCollectionParams struct {
 	// Set to `true` to enable phone number collection.
 	Enabled *bool `form:"enabled"`
+}
+
+// Controls saved payment method settings for the session. Only available in `payment` and `subscription` mode.
+type CheckoutSessionSavedPaymentMethodOptionsParams struct {
+	// Uses the `allow_redisplay` value of each saved payment method to filter the set presented to a returning customer. By default, only saved payment methods with 'allow_redisplay: ‘always' are shown in Checkout.
+	AllowRedisplayFilters []*string `form:"allow_redisplay_filters"`
+	// Enable customers to choose if they wish to save their payment method for future use. Disabled by default.
+	PaymentMethodSave *string `form:"payment_method_save"`
 }
 
 // A subset of parameters to be passed to SetupIntent creation for Checkout Sessions in `setup` mode.
@@ -1720,7 +1843,7 @@ type CheckoutSessionShippingOptionShippingRateDataFixedAmountParams struct {
 	CurrencyOptions map[string]*CheckoutSessionShippingOptionShippingRateDataFixedAmountCurrencyOptionsParams `form:"currency_options"`
 }
 
-// Parameters to be passed to Shipping Rate creation for this shipping option
+// Parameters to be passed to Shipping Rate creation for this shipping option.
 type CheckoutSessionShippingOptionShippingRateDataParams struct {
 	// The estimated range for how long shipping will take, meant to be displayable to the customer. This will appear on CheckoutSessions.
 	DeliveryEstimate *CheckoutSessionShippingOptionShippingRateDataDeliveryEstimateParams `form:"delivery_estimate"`
@@ -1734,7 +1857,7 @@ type CheckoutSessionShippingOptionShippingRateDataParams struct {
 	TaxBehavior *string `form:"tax_behavior"`
 	// A [tax code](https://stripe.com/docs/tax/tax-categories) ID. The Shipping tax code is `txcd_92010001`.
 	TaxCode *string `form:"tax_code"`
-	// The type of calculation to use on the shipping rate. Can only be `fixed_amount` for now.
+	// The type of calculation to use on the shipping rate.
 	Type *string `form:"type"`
 }
 
@@ -1751,7 +1874,7 @@ func (p *CheckoutSessionShippingOptionShippingRateDataParams) AddMetadata(key st
 type CheckoutSessionShippingOptionParams struct {
 	// The ID of the Shipping Rate to use for this shipping option.
 	ShippingRate *string `form:"shipping_rate"`
-	// Parameters to be passed to Shipping Rate creation for this shipping option
+	// Parameters to be passed to Shipping Rate creation for this shipping option.
 	ShippingRateData *CheckoutSessionShippingOptionShippingRateDataParams `form:"shipping_rate_data"`
 }
 
@@ -1925,6 +2048,8 @@ type CheckoutSessionParams struct {
 	PaymentMethodCollection *string `form:"payment_method_collection"`
 	// The ID of the payment method configuration to use with this Checkout session.
 	PaymentMethodConfiguration *string `form:"payment_method_configuration"`
+	// This parameter allows you to set some attributes on the payment method created during a Checkout session.
+	PaymentMethodData *CheckoutSessionPaymentMethodDataParams `form:"payment_method_data"`
 	// Payment-method-specific configuration.
 	PaymentMethodOptions *CheckoutSessionPaymentMethodOptionsParams `form:"payment_method_options"`
 	// A list of the types of payment methods (e.g., `card`) this Checkout Session can accept.
@@ -1950,6 +2075,8 @@ type CheckoutSessionParams struct {
 	// payment method's app or site. This parameter is required if ui_mode is `embedded`
 	// and redirect-based payment methods are enabled on the session.
 	ReturnURL *string `form:"return_url"`
+	// Controls saved payment method settings for the session. Only available in `payment` and `subscription` mode.
+	SavedPaymentMethodOptions *CheckoutSessionSavedPaymentMethodOptionsParams `form:"saved_payment_method_options"`
 	// A subset of parameters to be passed to SetupIntent creation for Checkout Sessions in `setup` mode.
 	SetupIntentData *CheckoutSessionSetupIntentDataParams `form:"setup_intent_data"`
 	// When set, provides configuration for Checkout to collect a shipping address from a customer.
@@ -2100,6 +2227,8 @@ type CheckoutSessionCustomFieldDropdownOption struct {
 	Value string `json:"value"`
 }
 type CheckoutSessionCustomFieldDropdown struct {
+	// The value that will pre-fill on the payment page.
+	DefaultValue string `json:"default_value"`
 	// The options available for the customer to select. Up to 200 options allowed.
 	Options []*CheckoutSessionCustomFieldDropdownOption `json:"options"`
 	// The option selected by the customer. This will be the `value` for the option.
@@ -2112,6 +2241,8 @@ type CheckoutSessionCustomFieldLabel struct {
 	Type CheckoutSessionCustomFieldLabelType `json:"type"`
 }
 type CheckoutSessionCustomFieldNumeric struct {
+	// The value that will pre-fill the field on the payment page.
+	DefaultValue string `json:"default_value"`
 	// The maximum character length constraint for the customer's input.
 	MaximumLength int64 `json:"maximum_length"`
 	// The minimum character length requirement for the customer's input.
@@ -2120,6 +2251,8 @@ type CheckoutSessionCustomFieldNumeric struct {
 	Value string `json:"value"`
 }
 type CheckoutSessionCustomFieldText struct {
+	// The value that will pre-fill the field on the payment page.
+	DefaultValue string `json:"default_value"`
 	// The maximum character length constraint for the customer's input.
 	MaximumLength int64 `json:"maximum_length"`
 	// The minimum character length requirement for the customer's input.
@@ -2178,7 +2311,7 @@ type CheckoutSessionCustomText struct {
 
 // The customer's tax IDs after a completed Checkout Session.
 type CheckoutSessionCustomerDetailsTaxID struct {
-	// The type of the tax ID, one of `ad_nrt`, `ar_cuit`, `eu_vat`, `bo_tin`, `br_cnpj`, `br_cpf`, `cn_tin`, `co_nit`, `cr_tin`, `do_rcn`, `ec_ruc`, `eu_oss_vat`, `pe_ruc`, `ro_tin`, `rs_pib`, `sv_nit`, `uy_ruc`, `ve_rif`, `vn_tin`, `gb_vat`, `nz_gst`, `au_abn`, `au_arn`, `in_gst`, `no_vat`, `no_voec`, `za_vat`, `ch_vat`, `mx_rfc`, `sg_uen`, `ru_inn`, `ru_kpp`, `ca_bn`, `hk_br`, `es_cif`, `tw_vat`, `th_vat`, `jp_cn`, `jp_rn`, `jp_trn`, `li_uid`, `my_itn`, `us_ein`, `kr_brn`, `ca_qst`, `ca_gst_hst`, `ca_pst_bc`, `ca_pst_mb`, `ca_pst_sk`, `my_sst`, `sg_gst`, `ae_trn`, `cl_tin`, `sa_vat`, `id_npwp`, `my_frp`, `il_vat`, `ge_vat`, `ua_vat`, `is_vat`, `bg_uic`, `hu_tin`, `si_tin`, `ke_pin`, `tr_tin`, `eg_tin`, `ph_tin`, `bh_vat`, `kz_bin`, `ng_tin`, `om_vat`, or `unknown`
+	// The type of the tax ID, one of `ad_nrt`, `ar_cuit`, `eu_vat`, `bo_tin`, `br_cnpj`, `br_cpf`, `cn_tin`, `co_nit`, `cr_tin`, `do_rcn`, `ec_ruc`, `eu_oss_vat`, `pe_ruc`, `ro_tin`, `rs_pib`, `sv_nit`, `uy_ruc`, `ve_rif`, `vn_tin`, `gb_vat`, `nz_gst`, `au_abn`, `au_arn`, `in_gst`, `no_vat`, `no_voec`, `za_vat`, `ch_vat`, `mx_rfc`, `sg_uen`, `ru_inn`, `ru_kpp`, `ca_bn`, `hk_br`, `es_cif`, `tw_vat`, `th_vat`, `jp_cn`, `jp_rn`, `jp_trn`, `li_uid`, `my_itn`, `us_ein`, `kr_brn`, `ca_qst`, `ca_gst_hst`, `ca_pst_bc`, `ca_pst_mb`, `ca_pst_sk`, `my_sst`, `sg_gst`, `ae_trn`, `cl_tin`, `sa_vat`, `id_npwp`, `my_frp`, `il_vat`, `ge_vat`, `ua_vat`, `is_vat`, `bg_uic`, `hu_tin`, `si_tin`, `ke_pin`, `tr_tin`, `eg_tin`, `ph_tin`, `bh_vat`, `kz_bin`, `ng_tin`, `om_vat`, `de_stn`, or `unknown`
 	Type CheckoutSessionCustomerDetailsTaxIDType `json:"type"`
 	// The value of the tax ID.
 	Value string `json:"value"`
@@ -2301,7 +2434,14 @@ type CheckoutSessionPaymentMethodOptionsAlipay struct {
 	// When processing card payments, Stripe also uses `setup_future_usage` to dynamically optimize your payment flow and comply with regional legislation and network rules, such as [SCA](https://stripe.com/docs/strong-customer-authentication).
 	SetupFutureUsage CheckoutSessionPaymentMethodOptionsAlipaySetupFutureUsage `json:"setup_future_usage"`
 }
-type CheckoutSessionPaymentMethodOptionsAmazonPay struct{}
+type CheckoutSessionPaymentMethodOptionsAmazonPay struct {
+	// Indicates that you intend to make future payments with this PaymentIntent's payment method.
+	//
+	// Providing this parameter will [attach the payment method](https://stripe.com/docs/payments/save-during-payment) to the PaymentIntent's Customer, if present, after the PaymentIntent is confirmed and any required actions from the user are complete. If no Customer was provided, the payment method can still be [attached](https://stripe.com/docs/api/payment_methods/attach) to a Customer after the transaction completes.
+	//
+	// When processing card payments, Stripe also uses `setup_future_usage` to dynamically optimize your payment flow and comply with regional legislation and network rules, such as [SCA](https://stripe.com/docs/strong-customer-authentication).
+	SetupFutureUsage CheckoutSessionPaymentMethodOptionsAmazonPaySetupFutureUsage `json:"setup_future_usage"`
+}
 type CheckoutSessionPaymentMethodOptionsAUBECSDebit struct {
 	// Indicates that you intend to make future payments with this PaymentIntent's payment method.
 	//
@@ -2453,6 +2593,22 @@ type CheckoutSessionPaymentMethodOptionsLink struct {
 	// When processing card payments, Stripe also uses `setup_future_usage` to dynamically optimize your payment flow and comply with regional legislation and network rules, such as [SCA](https://stripe.com/docs/strong-customer-authentication).
 	SetupFutureUsage CheckoutSessionPaymentMethodOptionsLinkSetupFutureUsage `json:"setup_future_usage"`
 }
+type CheckoutSessionPaymentMethodOptionsMobilepay struct {
+	// Indicates that you intend to make future payments with this PaymentIntent's payment method.
+	//
+	// Providing this parameter will [attach the payment method](https://stripe.com/docs/payments/save-during-payment) to the PaymentIntent's Customer, if present, after the PaymentIntent is confirmed and any required actions from the user are complete. If no Customer was provided, the payment method can still be [attached](https://stripe.com/docs/api/payment_methods/attach) to a Customer after the transaction completes.
+	//
+	// When processing card payments, Stripe also uses `setup_future_usage` to dynamically optimize your payment flow and comply with regional legislation and network rules, such as [SCA](https://stripe.com/docs/strong-customer-authentication).
+	SetupFutureUsage CheckoutSessionPaymentMethodOptionsMobilepaySetupFutureUsage `json:"setup_future_usage"`
+}
+type CheckoutSessionPaymentMethodOptionsMultibanco struct {
+	// Indicates that you intend to make future payments with this PaymentIntent's payment method.
+	//
+	// Providing this parameter will [attach the payment method](https://stripe.com/docs/payments/save-during-payment) to the PaymentIntent's Customer, if present, after the PaymentIntent is confirmed and any required actions from the user are complete. If no Customer was provided, the payment method can still be [attached](https://stripe.com/docs/api/payment_methods/attach) to a Customer after the transaction completes.
+	//
+	// When processing card payments, Stripe also uses `setup_future_usage` to dynamically optimize your payment flow and comply with regional legislation and network rules, such as [SCA](https://stripe.com/docs/strong-customer-authentication).
+	SetupFutureUsage CheckoutSessionPaymentMethodOptionsMultibancoSetupFutureUsage `json:"setup_future_usage"`
+}
 type CheckoutSessionPaymentMethodOptionsOXXO struct {
 	// The number of calendar days before an OXXO invoice expires. For example, if you create an OXXO invoice on Monday and you set expires_after_days to 2, the OXXO invoice will expire on Wednesday at 23:59 America/Mexico_City time.
 	ExpiresAfterDays int64 `json:"expires_after_days"`
@@ -2497,7 +2653,14 @@ type CheckoutSessionPaymentMethodOptionsPix struct {
 	// The number of seconds after which Pix payment will expire.
 	ExpiresAfterSeconds int64 `json:"expires_after_seconds"`
 }
-type CheckoutSessionPaymentMethodOptionsRevolutPay struct{}
+type CheckoutSessionPaymentMethodOptionsRevolutPay struct {
+	// Indicates that you intend to make future payments with this PaymentIntent's payment method.
+	//
+	// Providing this parameter will [attach the payment method](https://stripe.com/docs/payments/save-during-payment) to the PaymentIntent's Customer, if present, after the PaymentIntent is confirmed and any required actions from the user are complete. If no Customer was provided, the payment method can still be [attached](https://stripe.com/docs/api/payment_methods/attach) to a Customer after the transaction completes.
+	//
+	// When processing card payments, Stripe also uses `setup_future_usage` to dynamically optimize your payment flow and comply with regional legislation and network rules, such as [SCA](https://stripe.com/docs/strong-customer-authentication).
+	SetupFutureUsage CheckoutSessionPaymentMethodOptionsRevolutPaySetupFutureUsage `json:"setup_future_usage"`
+}
 type CheckoutSessionPaymentMethodOptionsSEPADebit struct {
 	// Indicates that you intend to make future payments with this PaymentIntent's payment method.
 	//
@@ -2560,6 +2723,8 @@ type CheckoutSessionPaymentMethodOptions struct {
 	Klarna           *CheckoutSessionPaymentMethodOptionsKlarna           `json:"klarna"`
 	Konbini          *CheckoutSessionPaymentMethodOptionsKonbini          `json:"konbini"`
 	Link             *CheckoutSessionPaymentMethodOptionsLink             `json:"link"`
+	Mobilepay        *CheckoutSessionPaymentMethodOptionsMobilepay        `json:"mobilepay"`
+	Multibanco       *CheckoutSessionPaymentMethodOptionsMultibanco       `json:"multibanco"`
 	OXXO             *CheckoutSessionPaymentMethodOptionsOXXO             `json:"oxxo"`
 	P24              *CheckoutSessionPaymentMethodOptionsP24              `json:"p24"`
 	PayNow           *CheckoutSessionPaymentMethodOptionsPayNow           `json:"paynow"`
@@ -2574,6 +2739,16 @@ type CheckoutSessionPaymentMethodOptions struct {
 type CheckoutSessionPhoneNumberCollection struct {
 	// Indicates whether phone number collection is enabled for the session
 	Enabled bool `json:"enabled"`
+}
+
+// Controls saved payment method settings for the session. Only available in `payment` and `subscription` mode.
+type CheckoutSessionSavedPaymentMethodOptions struct {
+	// Uses the `allow_redisplay` value of each saved payment method to filter the set presented to a returning customer. By default, only saved payment methods with 'allow_redisplay: ‘always' are shown in Checkout.
+	AllowRedisplayFilters []CheckoutSessionSavedPaymentMethodOptionsAllowRedisplayFilter `json:"allow_redisplay_filters"`
+	// Enable customers to choose if they wish to remove their saved payment methods. Disabled by default.
+	PaymentMethodRemove CheckoutSessionSavedPaymentMethodOptionsPaymentMethodRemove `json:"payment_method_remove"`
+	// Enable customers to choose if they wish to save their payment method for future use. Disabled by default.
+	PaymentMethodSave CheckoutSessionSavedPaymentMethodOptionsPaymentMethodSave `json:"payment_method_save"`
 }
 
 // When set, provides configuration for Checkout to collect a shipping address from a customer.
@@ -2749,7 +2924,7 @@ type CheckoutSession struct {
 	Mode CheckoutSessionMode `json:"mode"`
 	// String representing the object's type. Objects of the same type share the same value.
 	Object string `json:"object"`
-	// The ID of the PaymentIntent for Checkout Sessions in `payment` mode.
+	// The ID of the PaymentIntent for Checkout Sessions in `payment` mode. You can't confirm or cancel the PaymentIntent for a Checkout Session. To cancel, [expire the Checkout Session](https://stripe.com/docs/api/checkout/sessions/expire) instead.
 	PaymentIntent *PaymentIntent `json:"payment_intent"`
 	// The ID of the Payment Link that created this Session.
 	PaymentLink *PaymentLink `json:"payment_link"`
@@ -2772,7 +2947,9 @@ type CheckoutSession struct {
 	RedirectOnCompletion CheckoutSessionRedirectOnCompletion `json:"redirect_on_completion"`
 	// Applies to Checkout Sessions with `ui_mode: embedded`. The URL to redirect your customer back to after they authenticate or cancel their payment on the payment method's app or site.
 	ReturnURL string `json:"return_url"`
-	// The ID of the SetupIntent for Checkout Sessions in `setup` mode.
+	// Controls saved payment method settings for the session. Only available in `payment` and `subscription` mode.
+	SavedPaymentMethodOptions *CheckoutSessionSavedPaymentMethodOptions `json:"saved_payment_method_options"`
+	// The ID of the SetupIntent for Checkout Sessions in `setup` mode. You can't confirm or cancel the SetupIntent for a Checkout Session. To cancel, [expire the Checkout Session](https://stripe.com/docs/api/checkout/sessions/expire) instead.
 	SetupIntent *SetupIntent `json:"setup_intent"`
 	// When set, provides configuration for Checkout to collect a shipping address from a customer.
 	ShippingAddressCollection *CheckoutSessionShippingAddressCollection `json:"shipping_address_collection"`

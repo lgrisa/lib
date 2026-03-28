@@ -4,12 +4,13 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"fmt"
-	consts "github.com/lgrisa/lib/utils/const"
-	"github.com/pkg/errors"
 	"io"
 	"net/url"
 	"sort"
 	"strings"
+
+	consts "github.com/lgrisa/lib/utils/const"
+	"github.com/pkg/errors"
 )
 
 type BodyMap map[string]any
@@ -31,7 +32,7 @@ type File struct {
 
 var MissParamErr = errors.New("missing required parameter")
 
-// 设置参数
+// Set 设置参数
 func (bm BodyMap) Set(key string, value any) BodyMap {
 	bm[key] = value
 	return bm
@@ -44,18 +45,18 @@ func (bm BodyMap) SetBodyMap(key string, value func(b BodyMap)) BodyMap {
 	return bm
 }
 
-// 设置 FormFile
+// SetFormFile 设置 FormFile
 func (bm BodyMap) SetFormFile(key string, file *File) BodyMap {
 	bm[key] = file
 	return bm
 }
 
-// 获取参数，同 GetString()
+// Get 获取参数，同 GetString()
 func (bm BodyMap) Get(key string) string {
 	return bm.GetString(key)
 }
 
-// 获取参数转换string
+// GetString 获取参数转换string
 func (bm BodyMap) GetString(key string) string {
 	if bm == nil {
 		return consts.NULL
@@ -71,7 +72,7 @@ func (bm BodyMap) GetString(key string) string {
 	return v
 }
 
-// 获取参数转换int
+// GetInt 获取参数转换int
 func (bm BodyMap) GetInt(key string) int {
 	if bm == nil {
 		return 0
@@ -87,7 +88,7 @@ func (bm BodyMap) GetInt(key string) int {
 	return v
 }
 
-// 获取参数转换Float64
+// GetFloat64 获取参数转换Float64
 func (bm BodyMap) GetFloat64(key string) float64 {
 	if bm == nil {
 		return 0
@@ -103,7 +104,7 @@ func (bm BodyMap) GetFloat64(key string) float64 {
 	return v
 }
 
-// 获取原始参数
+// GetInterface 获取原始参数
 func (bm BodyMap) GetInterface(key string) any {
 	if bm == nil {
 		return nil
@@ -111,12 +112,12 @@ func (bm BodyMap) GetInterface(key string) any {
 	return bm[key]
 }
 
-// 删除参数
+// Remove 删除参数
 func (bm BodyMap) Remove(key string) {
 	delete(bm, key)
 }
 
-// 置空BodyMap
+// Reset 置空BodyMap
 func (bm BodyMap) Reset() {
 	for k := range bm {
 		delete(bm, k)
@@ -157,7 +158,7 @@ func (bm BodyMap) MarshalXML(e *xml.Encoder, start xml.StartElement) (err error)
 	return e.EncodeToken(start.End())
 }
 
-func (bm *BodyMap) UnmarshalXML(d *xml.Decoder, start xml.StartElement) (err error) {
+func (bm BodyMap) UnmarshalXML(d *xml.Decoder, start xml.StartElement) (err error) {
 	for {
 		var e xmlMapUnmarshal
 		err = d.Decode(&e)
@@ -171,7 +172,7 @@ func (bm *BodyMap) UnmarshalXML(d *xml.Decoder, start xml.StartElement) (err err
 	}
 }
 
-// ("bar=baz&foo=quux") sorted by key.
+// EncodeWeChatSignParams ("bar=baz&foo=quux") sorted by key.
 func (bm BodyMap) EncodeWeChatSignParams(apiKey string) string {
 	if bm == nil {
 		return consts.NULL
@@ -198,7 +199,7 @@ func (bm BodyMap) EncodeWeChatSignParams(apiKey string) string {
 	return buf.String()
 }
 
-// ("bar=baz&foo=quux") sorted by key.
+// EncodeAliPaySignParams ("bar=baz&foo=quux") sorted by key.
 func (bm BodyMap) EncodeAliPaySignParams() string {
 	if bm == nil {
 		return consts.NULL
@@ -225,7 +226,7 @@ func (bm BodyMap) EncodeAliPaySignParams() string {
 	return buf.String()[:buf.Len()-1]
 }
 
-// ("bar=baz&foo=quux") sorted by key.
+// EncodeURLParams ("bar=baz&foo=quux") sorted by key.
 func (bm BodyMap) EncodeURLParams() string {
 	if bm == nil {
 		return consts.NULL

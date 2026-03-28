@@ -54,6 +54,15 @@ const (
 	SubscriptionCollectionMethodSendInvoice         SubscriptionCollectionMethod = "send_invoice"
 )
 
+// Type of the account referenced.
+type SubscriptionInvoiceSettingsIssuerType string
+
+// List of values that SubscriptionInvoiceSettingsIssuerType can take
+const (
+	SubscriptionInvoiceSettingsIssuerTypeAccount SubscriptionInvoiceSettingsIssuerType = "account"
+	SubscriptionInvoiceSettingsIssuerTypeSelf    SubscriptionInvoiceSettingsIssuerType = "self"
+)
+
 // The payment collection behavior for this subscription while paused. One of `keep_as_draft`, `mark_uncollectible`, or `void`.
 type SubscriptionPauseCollectionBehavior string
 
@@ -167,6 +176,7 @@ const (
 	SubscriptionPaymentSettingsPaymentMethodTypeACHCreditTransfer  SubscriptionPaymentSettingsPaymentMethodType = "ach_credit_transfer"
 	SubscriptionPaymentSettingsPaymentMethodTypeACHDebit           SubscriptionPaymentSettingsPaymentMethodType = "ach_debit"
 	SubscriptionPaymentSettingsPaymentMethodTypeACSSDebit          SubscriptionPaymentSettingsPaymentMethodType = "acss_debit"
+	SubscriptionPaymentSettingsPaymentMethodTypeAmazonPay          SubscriptionPaymentSettingsPaymentMethodType = "amazon_pay"
 	SubscriptionPaymentSettingsPaymentMethodTypeAUBECSDebit        SubscriptionPaymentSettingsPaymentMethodType = "au_becs_debit"
 	SubscriptionPaymentSettingsPaymentMethodTypeBACSDebit          SubscriptionPaymentSettingsPaymentMethodType = "bacs_debit"
 	SubscriptionPaymentSettingsPaymentMethodTypeBancontact         SubscriptionPaymentSettingsPaymentMethodType = "bancontact"
@@ -185,9 +195,11 @@ const (
 	SubscriptionPaymentSettingsPaymentMethodTypePayNow             SubscriptionPaymentSettingsPaymentMethodType = "paynow"
 	SubscriptionPaymentSettingsPaymentMethodTypePaypal             SubscriptionPaymentSettingsPaymentMethodType = "paypal"
 	SubscriptionPaymentSettingsPaymentMethodTypePromptPay          SubscriptionPaymentSettingsPaymentMethodType = "promptpay"
+	SubscriptionPaymentSettingsPaymentMethodTypeRevolutPay         SubscriptionPaymentSettingsPaymentMethodType = "revolut_pay"
 	SubscriptionPaymentSettingsPaymentMethodTypeSEPACreditTransfer SubscriptionPaymentSettingsPaymentMethodType = "sepa_credit_transfer"
 	SubscriptionPaymentSettingsPaymentMethodTypeSEPADebit          SubscriptionPaymentSettingsPaymentMethodType = "sepa_debit"
 	SubscriptionPaymentSettingsPaymentMethodTypeSofort             SubscriptionPaymentSettingsPaymentMethodType = "sofort"
+	SubscriptionPaymentSettingsPaymentMethodTypeSwish              SubscriptionPaymentSettingsPaymentMethodType = "swish"
 	SubscriptionPaymentSettingsPaymentMethodTypeUSBankAccount      SubscriptionPaymentSettingsPaymentMethodType = "us_bank_account"
 	SubscriptionPaymentSettingsPaymentMethodTypeWeChatPay          SubscriptionPaymentSettingsPaymentMethodType = "wechat_pay"
 )
@@ -266,9 +278,9 @@ type SubscriptionCancelParams struct {
 	CancellationDetails *SubscriptionCancelCancellationDetailsParams `form:"cancellation_details"`
 	// Specifies which fields in the response should be expanded.
 	Expand []*string `form:"expand"`
-	// Will generate a final invoice that invoices for any un-invoiced metered usage and new/pending proration invoice items.
+	// Will generate a final invoice that invoices for any un-invoiced metered usage and new/pending proration invoice items. Defaults to `true`.
 	InvoiceNow *bool `form:"invoice_now"`
-	// Will generate a proration invoice item that credits remaining unused time until the subscription period end.
+	// Will generate a proration invoice item that credits remaining unused time until the subscription period end. Defaults to `false`.
 	Prorate *bool `form:"prorate"`
 }
 
@@ -412,9 +424,9 @@ type SubscriptionAddInvoiceItemDiscountParams struct {
 type SubscriptionAddInvoiceItemParams struct {
 	// The coupons to redeem into discounts for the item.
 	Discounts []*SubscriptionAddInvoiceItemDiscountParams `form:"discounts"`
-	// The ID of the price object.
+	// The ID of the price object. One of `price` or `price_data` is required.
 	Price *string `form:"price"`
-	// Data used to generate a new [Price](https://stripe.com/docs/api/prices) object inline.
+	// Data used to generate a new [Price](https://stripe.com/docs/api/prices) object inline. One of `price` or `price_data` is required.
 	PriceData *InvoiceItemPriceDataParams `form:"price_data"`
 	// Quantity for this item. Defaults to 1.
 	Quantity *int64 `form:"quantity"`
@@ -497,9 +509,9 @@ type SubscriptionItemsParams struct {
 	Metadata map[string]string `form:"metadata"`
 	// Plan ID for this item, as a string.
 	Plan *string `form:"plan"`
-	// The ID of the price object. When changing a subscription item's price, `quantity` is set to 1 unless a `quantity` parameter is provided.
+	// The ID of the price object. One of `price` or `price_data` is required. When changing a subscription item's price, `quantity` is set to 1 unless a `quantity` parameter is provided.
 	Price *string `form:"price"`
-	// Data used to generate a new [Price](https://stripe.com/docs/api/prices) object inline.
+	// Data used to generate a new [Price](https://stripe.com/docs/api/prices) object inline. One of `price` or `price_data` is required.
 	PriceData *SubscriptionItemPriceDataParams `form:"price_data"`
 	// Quantity for this item.
 	Quantity *int64 `form:"quantity"`
@@ -803,6 +815,17 @@ type SubscriptionCancellationDetails struct {
 	// Why this subscription was canceled.
 	Reason SubscriptionCancellationDetailsReason `json:"reason"`
 }
+type SubscriptionInvoiceSettingsIssuer struct {
+	// The connected account being referenced when `type` is `account`.
+	Account *Account `json:"account"`
+	// Type of the account referenced.
+	Type SubscriptionInvoiceSettingsIssuerType `json:"type"`
+}
+type SubscriptionInvoiceSettings struct {
+	// The account tax IDs associated with the subscription. Will be set on invoices generated by the subscription.
+	AccountTaxIDs []*TaxID                           `json:"account_tax_ids"`
+	Issuer        *SubscriptionInvoiceSettingsIssuer `json:"issuer"`
+}
 
 // If specified, payment collection for this subscription will be paused. Note that the subscription status will be unchanged and will not be updated to `paused`. Learn more about [pausing collection](https://stripe.com/billing/subscriptions/pause-payment).
 type SubscriptionPauseCollection struct {
@@ -1004,7 +1027,8 @@ type Subscription struct {
 	// If the subscription has ended, the date the subscription ended.
 	EndedAt int64 `json:"ended_at"`
 	// Unique identifier for the object.
-	ID string `json:"id"`
+	ID              string                       `json:"id"`
+	InvoiceSettings *SubscriptionInvoiceSettings `json:"invoice_settings"`
 	// List of subscription items, each with an attached price.
 	Items *SubscriptionItemList `json:"items"`
 	// The most recent invoice this subscription has generated.

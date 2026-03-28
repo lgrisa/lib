@@ -8,7 +8,6 @@ import (
 	"github.com/lgrisa/lib/dynamo/db/dbdef"
 	"github.com/lgrisa/lib/utils/logutil"
 	"github.com/pkg/errors"
-	"strings"
 )
 
 func NewDynamoTable(ddb *dynamo.DB, prefix string, definition *dbdef.TableDefinition) *DynamoTable {
@@ -116,53 +115,8 @@ ttl:
 	}
 
 	if tableExist {
-		createTableInput := ddb.CreateTable(tableName, from).OnDemand(true).NewInput()
-
-		if len(createTableInput.GlobalSecondaryIndexes) > 0 {
-
-			existIndexMap := map[string]struct{}{}
-			if desc, err := t.Describe().Run(); err != nil {
-				return errors.Wrapf(err, "创建索引[%v].[%v]失败", tableName, *createTableInput)
-			} else {
-				for _, gsi := range desc.GSI {
-					existIndexMap[gsi.Name] = struct{}{}
-				}
-			}
-
-			for _, gsi := range createTableInput.GlobalSecondaryIndexes {
-
-				if _, ok := existIndexMap[*gsi.IndexName]; ok {
-					logutil.LogInfoF("创建表[%v]的索引[%v]，索引已经存在，跳过", tableName, *gsi.IndexName)
-					continue
-				}
-
-				if resp, err := ddb.Client().UpdateTable(&dynamodb.UpdateTableInput{
-					TableName:            aws.String(tableName),
-					AttributeDefinitions: createTableInput.AttributeDefinitions,
-					BillingMode:          createTableInput.BillingMode,
-					GlobalSecondaryIndexUpdates: []*dynamodb.GlobalSecondaryIndexUpdate{
-						{
-							Create: &dynamodb.CreateGlobalSecondaryIndexAction{
-								IndexName:             gsi.IndexName,
-								KeySchema:             gsi.KeySchema,
-								Projection:            gsi.Projection,
-								ProvisionedThroughput: gsi.ProvisionedThroughput,
-							},
-						},
-					},
-				}); err != nil {
-					if aErr, ok := err.(awserr.Error); ok {
-						if strings.Contains(strings.ToLower(aErr.Message()), "exists") {
-							logutil.LogInfoF("创建表[%v]的索引[%v]，索引已经存在，跳过, err: %v", tableName, *gsi.IndexName, err)
-							continue
-						}
-					}
-					return errors.Wrapf(err, "创建索引[%v].[%v]失败", tableName, *gsi.IndexName)
-				} else {
-					logutil.LogInfoF("创建表[%v]的索引[%v]成功, resp: %+v", tableName, *gsi.IndexName, resp)
-				}
-			}
-		}
+		// Table already exists, skip GSI creation for now
+		logutil.LogInfoF("表 %v 已存在，跳过GSI检查", tableName)
 	}
 
 	return nil

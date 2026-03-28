@@ -6,11 +6,17 @@
 
 package stripe
 
+import "encoding/json"
+
 // Retrieve a list of features
 type EntitlementsFeatureListParams struct {
 	ListParams `form:"*"`
+	// If set, filter results to only include features with the given archive status.
+	Archived *bool `form:"archived"`
 	// Specifies which fields in the response should be expanded.
 	Expand []*string `form:"expand"`
+	// If set, filter results to only include features with the given lookup_key.
+	LookupKey *string `form:"lookup_key"`
 }
 
 // AddExpand appends a new field to expand.
@@ -72,4 +78,23 @@ type EntitlementsFeatureList struct {
 	APIResource
 	ListMeta
 	Data []*EntitlementsFeature `json:"data"`
+}
+
+// UnmarshalJSON handles deserialization of an EntitlementsFeature.
+// This custom unmarshaling is needed because the resulting
+// property may be an id or the full struct if it was expanded.
+func (e *EntitlementsFeature) UnmarshalJSON(data []byte) error {
+	if id, ok := ParseID(data); ok {
+		e.ID = id
+		return nil
+	}
+
+	type entitlementsFeature EntitlementsFeature
+	var v entitlementsFeature
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+
+	*e = EntitlementsFeature(v)
+	return nil
 }

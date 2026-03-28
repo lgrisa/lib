@@ -8,6 +8,16 @@ package stripe
 
 import "encoding/json"
 
+// This field indicates whether this payment method can be shown again to its customer in a checkout flow. Stripe products such as Checkout and Elements use this field to determine whether a payment method can be shown as a saved payment method in a checkout flow. The field defaults to “unspecified”.
+type PaymentMethodAllowRedisplay string
+
+// List of values that PaymentMethodAllowRedisplay can take
+const (
+	PaymentMethodAllowRedisplayAlways      PaymentMethodAllowRedisplay = "always"
+	PaymentMethodAllowRedisplayLimited     PaymentMethodAllowRedisplay = "limited"
+	PaymentMethodAllowRedisplayUnspecified PaymentMethodAllowRedisplay = "unspecified"
+)
+
 // Card brand. Can be `amex`, `diners`, `discover`, `eftpos_au`, `jcb`, `mastercard`, `unionpay`, `visa`, or `unknown`.
 type PaymentMethodCardBrand string
 
@@ -54,6 +64,29 @@ const (
 	PaymentMethodCardChecksCVCCheckPass        PaymentMethodCardChecksCVCCheck = "pass"
 	PaymentMethodCardChecksCVCCheckUnavailable PaymentMethodCardChecksCVCCheck = "unavailable"
 	PaymentMethodCardChecksCVCCheckUnchecked   PaymentMethodCardChecksCVCCheck = "unchecked"
+)
+
+// How card details were read in this transaction.
+type PaymentMethodCardGeneratedFromPaymentMethodDetailsCardPresentReadMethod string
+
+// List of values that PaymentMethodCardGeneratedFromPaymentMethodDetailsCardPresentReadMethod can take
+const (
+	PaymentMethodCardGeneratedFromPaymentMethodDetailsCardPresentReadMethodContactEmv               PaymentMethodCardGeneratedFromPaymentMethodDetailsCardPresentReadMethod = "contact_emv"
+	PaymentMethodCardGeneratedFromPaymentMethodDetailsCardPresentReadMethodContactlessEmv           PaymentMethodCardGeneratedFromPaymentMethodDetailsCardPresentReadMethod = "contactless_emv"
+	PaymentMethodCardGeneratedFromPaymentMethodDetailsCardPresentReadMethodContactlessMagstripeMode PaymentMethodCardGeneratedFromPaymentMethodDetailsCardPresentReadMethod = "contactless_magstripe_mode"
+	PaymentMethodCardGeneratedFromPaymentMethodDetailsCardPresentReadMethodMagneticStripeFallback   PaymentMethodCardGeneratedFromPaymentMethodDetailsCardPresentReadMethod = "magnetic_stripe_fallback"
+	PaymentMethodCardGeneratedFromPaymentMethodDetailsCardPresentReadMethodMagneticStripeTrack2     PaymentMethodCardGeneratedFromPaymentMethodDetailsCardPresentReadMethod = "magnetic_stripe_track2"
+)
+
+// The type of account being debited or credited
+type PaymentMethodCardGeneratedFromPaymentMethodDetailsCardPresentReceiptAccountType string
+
+// List of values that PaymentMethodCardGeneratedFromPaymentMethodDetailsCardPresentReceiptAccountType can take
+const (
+	PaymentMethodCardGeneratedFromPaymentMethodDetailsCardPresentReceiptAccountTypeChecking PaymentMethodCardGeneratedFromPaymentMethodDetailsCardPresentReceiptAccountType = "checking"
+	PaymentMethodCardGeneratedFromPaymentMethodDetailsCardPresentReceiptAccountTypeCredit   PaymentMethodCardGeneratedFromPaymentMethodDetailsCardPresentReceiptAccountType = "credit"
+	PaymentMethodCardGeneratedFromPaymentMethodDetailsCardPresentReceiptAccountTypePrepaid  PaymentMethodCardGeneratedFromPaymentMethodDetailsCardPresentReceiptAccountType = "prepaid"
+	PaymentMethodCardGeneratedFromPaymentMethodDetailsCardPresentReceiptAccountTypeUnknown  PaymentMethodCardGeneratedFromPaymentMethodDetailsCardPresentReceiptAccountType = "unknown"
 )
 
 // All available networks for the card.
@@ -166,6 +199,7 @@ const (
 	PaymentMethodTypeKonbini          PaymentMethodType = "konbini"
 	PaymentMethodTypeLink             PaymentMethodType = "link"
 	PaymentMethodTypeMobilepay        PaymentMethodType = "mobilepay"
+	PaymentMethodTypeMultibanco       PaymentMethodType = "multibanco"
 	PaymentMethodTypeOXXO             PaymentMethodType = "oxxo"
 	PaymentMethodTypeP24              PaymentMethodType = "p24"
 	PaymentMethodTypePayNow           PaymentMethodType = "paynow"
@@ -176,6 +210,7 @@ const (
 	PaymentMethodTypeSEPADebit        PaymentMethodType = "sepa_debit"
 	PaymentMethodTypeSofort           PaymentMethodType = "sofort"
 	PaymentMethodTypeSwish            PaymentMethodType = "swish"
+	PaymentMethodTypeTWINT            PaymentMethodType = "twint"
 	PaymentMethodTypeUSBankAccount    PaymentMethodType = "us_bank_account"
 	PaymentMethodTypeWeChatPay        PaymentMethodType = "wechat_pay"
 	PaymentMethodTypeZip              PaymentMethodType = "zip"
@@ -400,6 +435,9 @@ type PaymentMethodLinkParams struct{}
 // If this is a `mobilepay` PaymentMethod, this hash contains details about the MobilePay payment method.
 type PaymentMethodMobilepayParams struct{}
 
+// If this is a `multibanco` PaymentMethod, this hash contains details about the Multibanco payment method.
+type PaymentMethodMultibancoParams struct{}
+
 // If this is an `oxxo` PaymentMethod, this hash contains details about the OXXO payment method.
 type PaymentMethodOXXOParams struct{}
 
@@ -445,6 +483,9 @@ type PaymentMethodSofortParams struct {
 // If this is a `swish` PaymentMethod, this hash contains details about the Swish payment method.
 type PaymentMethodSwishParams struct{}
 
+// If this is a TWINT PaymentMethod, this hash contains details about the TWINT payment method.
+type PaymentMethodTWINTParams struct{}
+
 // If this is an `us_bank_account` PaymentMethod, this hash contains details about the US bank account payment method.
 type PaymentMethodUSBankAccountParams struct {
 	// Account holder type: individual or company.
@@ -478,6 +519,8 @@ type PaymentMethodParams struct {
 	AfterpayClearpay *PaymentMethodAfterpayClearpayParams `form:"afterpay_clearpay"`
 	// If this is an `Alipay` PaymentMethod, this hash contains details about the Alipay payment method.
 	Alipay *PaymentMethodAlipayParams `form:"alipay"`
+	// This field indicates whether this payment method can be shown again to its customer in a checkout flow. Stripe products such as Checkout and Elements use this field to determine whether a payment method can be shown as a saved payment method in a checkout flow. The field defaults to `unspecified`.
+	AllowRedisplay *string `form:"allow_redisplay"`
 	// If this is a AmazonPay PaymentMethod, this hash contains details about the AmazonPay payment method.
 	AmazonPay *PaymentMethodAmazonPayParams `form:"amazon_pay"`
 	// If this is an `au_becs_debit` PaymentMethod, this hash contains details about the bank account.
@@ -522,6 +565,8 @@ type PaymentMethodParams struct {
 	Metadata map[string]string `form:"metadata"`
 	// If this is a `mobilepay` PaymentMethod, this hash contains details about the MobilePay payment method.
 	Mobilepay *PaymentMethodMobilepayParams `form:"mobilepay"`
+	// If this is a `multibanco` PaymentMethod, this hash contains details about the Multibanco payment method.
+	Multibanco *PaymentMethodMultibancoParams `form:"multibanco"`
 	// If this is an `oxxo` PaymentMethod, this hash contains details about the OXXO payment method.
 	OXXO *PaymentMethodOXXOParams `form:"oxxo"`
 	// If this is a `p24` PaymentMethod, this hash contains details about the P24 payment method.
@@ -544,6 +589,8 @@ type PaymentMethodParams struct {
 	Sofort *PaymentMethodSofortParams `form:"sofort"`
 	// If this is a `swish` PaymentMethod, this hash contains details about the Swish payment method.
 	Swish *PaymentMethodSwishParams `form:"swish"`
+	// If this is a TWINT PaymentMethod, this hash contains details about the TWINT payment method.
+	TWINT *PaymentMethodTWINTParams `form:"twint"`
 	// The type of the PaymentMethod. An additional hash is included on the PaymentMethod with a name matching this value. It contains additional information specific to the PaymentMethod type.
 	Type *string `form:"type"`
 	// If this is an `us_bank_account` PaymentMethod, this hash contains details about the US bank account payment method.
@@ -670,6 +717,99 @@ type PaymentMethodCardChecks struct {
 	CVCCheck PaymentMethodCardChecksCVCCheck `json:"cvc_check"`
 }
 
+// Details about payments collected offline.
+type PaymentMethodCardGeneratedFromPaymentMethodDetailsCardPresentOffline struct {
+	// Time at which the payment was collected while offline
+	StoredAt int64 `json:"stored_at"`
+}
+
+// A collection of fields required to be displayed on receipts. Only required for EMV transactions.
+type PaymentMethodCardGeneratedFromPaymentMethodDetailsCardPresentReceipt struct {
+	// The type of account being debited or credited
+	AccountType PaymentMethodCardGeneratedFromPaymentMethodDetailsCardPresentReceiptAccountType `json:"account_type"`
+	// EMV tag 9F26, cryptogram generated by the integrated circuit chip.
+	ApplicationCryptogram string `json:"application_cryptogram"`
+	// Mnenomic of the Application Identifier.
+	ApplicationPreferredName string `json:"application_preferred_name"`
+	// Identifier for this transaction.
+	AuthorizationCode string `json:"authorization_code"`
+	// EMV tag 8A. A code returned by the card issuer.
+	AuthorizationResponseCode string `json:"authorization_response_code"`
+	// Describes the method used by the cardholder to verify ownership of the card. One of the following: `approval`, `failure`, `none`, `offline_pin`, `offline_pin_and_signature`, `online_pin`, or `signature`.
+	CardholderVerificationMethod string `json:"cardholder_verification_method"`
+	// EMV tag 84. Similar to the application identifier stored on the integrated circuit chip.
+	DedicatedFileName string `json:"dedicated_file_name"`
+	// The outcome of a series of EMV functions performed by the card reader.
+	TerminalVerificationResults string `json:"terminal_verification_results"`
+	// An indication of various EMV functions performed during the transaction.
+	TransactionStatusInformation string `json:"transaction_status_information"`
+}
+type PaymentMethodCardGeneratedFromPaymentMethodDetailsCardPresent struct {
+	// The authorized amount
+	AmountAuthorized int64 `json:"amount_authorized"`
+	// Card brand. Can be `amex`, `diners`, `discover`, `eftpos_au`, `jcb`, `mastercard`, `unionpay`, `visa`, or `unknown`.
+	Brand string `json:"brand"`
+	// When using manual capture, a future timestamp after which the charge will be automatically refunded if uncaptured.
+	CaptureBefore int64 `json:"capture_before"`
+	// The cardholder name as read from the card, in [ISO 7813](https://en.wikipedia.org/wiki/ISO/IEC_7813) format. May include alphanumeric characters, special characters and first/last name separator (`/`). In some cases, the cardholder name may not be available depending on how the issuer has configured the card. Cardholder name is typically not available on swipe or contactless payments, such as those made with Apple Pay and Google Pay.
+	CardholderName string `json:"cardholder_name"`
+	// Two-letter ISO code representing the country of the card. You could use this attribute to get a sense of the international breakdown of cards you've collected.
+	Country string `json:"country"`
+	// A high-level description of the type of cards issued in this range. (For internal use only and not typically available in standard API requests.)
+	Description string `json:"description"`
+	// Authorization response cryptogram.
+	EmvAuthData string `json:"emv_auth_data"`
+	// Two-digit number representing the card's expiration month.
+	ExpMonth int64 `json:"exp_month"`
+	// Four-digit number representing the card's expiration year.
+	ExpYear int64 `json:"exp_year"`
+	// Uniquely identifies this particular card number. You can use this attribute to check whether two customers who've signed up with you are using the same card number, for example. For payment methods that tokenize card information (Apple Pay, Google Pay), the tokenized number might be provided instead of the underlying card number.
+	//
+	// *As of May 1, 2021, card fingerprint in India for Connect changed to allow two fingerprints for the same card---one for India and one for the rest of the world.*
+	Fingerprint string `json:"fingerprint"`
+	// Card funding type. Can be `credit`, `debit`, `prepaid`, or `unknown`.
+	Funding string `json:"funding"`
+	// ID of a card PaymentMethod generated from the card_present PaymentMethod that may be attached to a Customer for future transactions. Only present if it was possible to generate a card PaymentMethod.
+	GeneratedCard string `json:"generated_card"`
+	// Issuer identification number of the card. (For internal use only and not typically available in standard API requests.)
+	IIN string `json:"iin"`
+	// Whether this [PaymentIntent](https://stripe.com/docs/api/payment_intents) is eligible for incremental authorizations. Request support using [request_incremental_authorization_support](https://stripe.com/docs/api/payment_intents/create#create_payment_intent-payment_method_options-card_present-request_incremental_authorization_support).
+	IncrementalAuthorizationSupported bool `json:"incremental_authorization_supported"`
+	// The name of the card's issuing bank. (For internal use only and not typically available in standard API requests.)
+	Issuer string `json:"issuer"`
+	// The last four digits of the card.
+	Last4 string `json:"last4"`
+	// Identifies which network this charge was processed on. Can be `amex`, `cartes_bancaires`, `diners`, `discover`, `eftpos_au`, `interac`, `jcb`, `mastercard`, `unionpay`, `visa`, or `unknown`.
+	Network string `json:"network"`
+	// Details about payments collected offline.
+	Offline *PaymentMethodCardGeneratedFromPaymentMethodDetailsCardPresentOffline `json:"offline"`
+	// Defines whether the authorized amount can be over-captured or not
+	OvercaptureSupported bool `json:"overcapture_supported"`
+	// EMV tag 5F2D. Preferred languages specified by the integrated circuit chip.
+	PreferredLocales []string `json:"preferred_locales"`
+	// How card details were read in this transaction.
+	ReadMethod PaymentMethodCardGeneratedFromPaymentMethodDetailsCardPresentReadMethod `json:"read_method"`
+	// A collection of fields required to be displayed on receipts. Only required for EMV transactions.
+	Receipt *PaymentMethodCardGeneratedFromPaymentMethodDetailsCardPresentReceipt `json:"receipt"`
+}
+
+// Transaction-specific details of the payment method used in the payment.
+type PaymentMethodCardGeneratedFromPaymentMethodDetails struct {
+	CardPresent *PaymentMethodCardGeneratedFromPaymentMethodDetailsCardPresent `json:"card_present"`
+	// The type of payment method transaction-specific details from the transaction that generated this `card` payment method. Always `card_present`.
+	Type string `json:"type"`
+}
+
+// Details of the original PaymentMethod that created this object.
+type PaymentMethodCardGeneratedFrom struct {
+	// The charge that created this object.
+	Charge string `json:"charge"`
+	// Transaction-specific details of the payment method used in the payment.
+	PaymentMethodDetails *PaymentMethodCardGeneratedFromPaymentMethodDetails `json:"payment_method_details"`
+	// The ID of the SetupAttempt that generated this PaymentMethod, if any.
+	SetupAttempt *SetupAttempt `json:"setup_attempt"`
+}
+
 // Contains information about card networks that can be used to process the payment.
 type PaymentMethodCardNetworks struct {
 	// All available networks for the card.
@@ -742,6 +882,8 @@ type PaymentMethodCard struct {
 	Fingerprint string `json:"fingerprint"`
 	// Card funding type. Can be `credit`, `debit`, `prepaid`, or `unknown`.
 	Funding CardFunding `json:"funding"`
+	// Details of the original PaymentMethod that created this object.
+	GeneratedFrom *PaymentMethodCardGeneratedFrom `json:"generated_from"`
 	// The last four digits of the card.
 	Last4 string `json:"last4"`
 	// Contains information about card networks that can be used to process the payment.
@@ -794,6 +936,8 @@ type PaymentMethodCardPresent struct {
 	Last4 string `json:"last4"`
 	// Contains information about card networks that can be used to process the payment.
 	Networks *PaymentMethodCardPresentNetworks `json:"networks"`
+	// EMV tag 5F2D. Preferred languages specified by the integrated circuit chip.
+	PreferredLocales []string `json:"preferred_locales"`
 	// How card details were read in this transaction.
 	ReadMethod PaymentMethodCardPresentReadMethod `json:"read_method"`
 }
@@ -881,9 +1025,11 @@ type PaymentMethodLink struct {
 	// Account owner's email address.
 	Email string `json:"email"`
 	// [Deprecated] This is a legacy parameter that no longer has any function.
+	// Deprecated:
 	PersistentToken string `json:"persistent_token"`
 }
 type PaymentMethodMobilepay struct{}
+type PaymentMethodMultibanco struct{}
 type PaymentMethodOXXO struct{}
 type PaymentMethodP24 struct {
 	// The customer's bank, if provided.
@@ -933,6 +1079,7 @@ type PaymentMethodSofort struct {
 	Country string `json:"country"`
 }
 type PaymentMethodSwish struct{}
+type PaymentMethodTWINT struct{}
 
 // Contains information about US bank account networks that can be used.
 type PaymentMethodUSBankAccountNetworks struct {
@@ -986,16 +1133,18 @@ type PaymentMethod struct {
 	Affirm           *PaymentMethodAffirm           `json:"affirm"`
 	AfterpayClearpay *PaymentMethodAfterpayClearpay `json:"afterpay_clearpay"`
 	Alipay           *PaymentMethodAlipay           `json:"alipay"`
-	AmazonPay        *PaymentMethodAmazonPay        `json:"amazon_pay"`
-	AUBECSDebit      *PaymentMethodAUBECSDebit      `json:"au_becs_debit"`
-	BACSDebit        *PaymentMethodBACSDebit        `json:"bacs_debit"`
-	Bancontact       *PaymentMethodBancontact       `json:"bancontact"`
-	BillingDetails   *PaymentMethodBillingDetails   `json:"billing_details"`
-	BLIK             *PaymentMethodBLIK             `json:"blik"`
-	Boleto           *PaymentMethodBoleto           `json:"boleto"`
-	Card             *PaymentMethodCard             `json:"card"`
-	CardPresent      *PaymentMethodCardPresent      `json:"card_present"`
-	CashApp          *PaymentMethodCashApp          `json:"cashapp"`
+	// This field indicates whether this payment method can be shown again to its customer in a checkout flow. Stripe products such as Checkout and Elements use this field to determine whether a payment method can be shown as a saved payment method in a checkout flow. The field defaults to “unspecified”.
+	AllowRedisplay PaymentMethodAllowRedisplay  `json:"allow_redisplay"`
+	AmazonPay      *PaymentMethodAmazonPay      `json:"amazon_pay"`
+	AUBECSDebit    *PaymentMethodAUBECSDebit    `json:"au_becs_debit"`
+	BACSDebit      *PaymentMethodBACSDebit      `json:"bacs_debit"`
+	Bancontact     *PaymentMethodBancontact     `json:"bancontact"`
+	BillingDetails *PaymentMethodBillingDetails `json:"billing_details"`
+	BLIK           *PaymentMethodBLIK           `json:"blik"`
+	Boleto         *PaymentMethodBoleto         `json:"boleto"`
+	Card           *PaymentMethodCard           `json:"card"`
+	CardPresent    *PaymentMethodCardPresent    `json:"card_present"`
+	CashApp        *PaymentMethodCashApp        `json:"cashapp"`
 	// Time at which the object was created. Measured in seconds since the Unix epoch.
 	Created int64 `json:"created"`
 	// The ID of the Customer to which this PaymentMethod is saved. This will not be set when the PaymentMethod has not been saved to a Customer.
@@ -1015,8 +1164,9 @@ type PaymentMethod struct {
 	// Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
 	Livemode bool `json:"livemode"`
 	// Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
-	Metadata  map[string]string       `json:"metadata"`
-	Mobilepay *PaymentMethodMobilepay `json:"mobilepay"`
+	Metadata   map[string]string        `json:"metadata"`
+	Mobilepay  *PaymentMethodMobilepay  `json:"mobilepay"`
+	Multibanco *PaymentMethodMultibanco `json:"multibanco"`
 	// String representing the object's type. Objects of the same type share the same value.
 	Object    string                  `json:"object"`
 	OXXO      *PaymentMethodOXXO      `json:"oxxo"`
@@ -1031,6 +1181,7 @@ type PaymentMethod struct {
 	SEPADebit    *PaymentMethodSEPADebit    `json:"sepa_debit"`
 	Sofort       *PaymentMethodSofort       `json:"sofort"`
 	Swish        *PaymentMethodSwish        `json:"swish"`
+	TWINT        *PaymentMethodTWINT        `json:"twint"`
 	// The type of the PaymentMethod. An additional hash is included on the PaymentMethod with a name matching this value. It contains additional information specific to the PaymentMethod type.
 	Type          PaymentMethodType           `json:"type"`
 	USBankAccount *PaymentMethodUSBankAccount `json:"us_bank_account"`

@@ -3,7 +3,7 @@ package discord
 import (
 	"time"
 
-	"github.com/disgoorg/json"
+	"github.com/disgoorg/json/v2"
 	"github.com/disgoorg/snowflake/v2"
 )
 
@@ -64,6 +64,10 @@ func (i PingInteraction) CreatedAt() time.Time {
 	return i.id.Time()
 }
 
+func (PingInteraction) PartialGuild() *InteractionGuild {
+	return nil
+}
+
 func (PingInteraction) GuildID() *snowflake.ID {
 	return nil
 }
@@ -98,6 +102,18 @@ func (PingInteraction) AppPermissions() *Permissions {
 
 func (PingInteraction) Entitlements() []Entitlement {
 	return nil
+}
+
+func (PingInteraction) AuthorizingIntegrationOwners() map[ApplicationIntegrationType]snowflake.ID {
+	return nil
+}
+
+func (PingInteraction) Context() InteractionContextType {
+	return 0
+}
+
+func (PingInteraction) AttachmentSizeLimit() int {
+	return 0
 }
 
 func (PingInteraction) interaction() {}

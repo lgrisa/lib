@@ -3,6 +3,11 @@ package discord
 // InteractionResponseType indicates the type of slash command response, whether it's responding immediately or deferring to edit your response later
 type InteractionResponseType int
 
+// InteractionResponseTypeAcknowledge is stricly internal and will never be sent to discord.
+//
+// It is used to indicate that the HTTP response should be 202 Accepted
+const InteractionResponseTypeAcknowledge InteractionResponseType = -1
+
 // Constants for the InteractionResponseType(s)
 const (
 	InteractionResponseTypePong InteractionResponseType = iota + 1
@@ -14,7 +19,9 @@ const (
 	InteractionResponseTypeUpdateMessage
 	InteractionResponseTypeAutocompleteResult
 	InteractionResponseTypeModal
-	InteractionResponseTypePremiumRequired
+	_
+	_
+	InteractionResponseTypeLaunchActivity
 )
 
 // InteractionResponse is how you answer interactions. If an answer is not sent within 3 seconds of receiving it, the interaction is failed, and you will be unable to respond to it.
@@ -46,6 +53,8 @@ type AutocompleteResult struct {
 func (AutocompleteResult) interactionCallbackData() {}
 
 type AutocompleteChoice interface {
+	ChoiceName() string
+
 	autoCompleteChoice()
 }
 
@@ -53,6 +62,10 @@ type AutocompleteChoiceString struct {
 	Name              string            `json:"name"`
 	NameLocalizations map[Locale]string `json:"name_localizations,omitempty"`
 	Value             string            `json:"value"`
+}
+
+func (c AutocompleteChoiceString) ChoiceName() string {
+	return c.Name
 }
 
 func (AutocompleteChoiceString) autoCompleteChoice() {}
@@ -63,12 +76,20 @@ type AutocompleteChoiceInt struct {
 	Value             int               `json:"value"`
 }
 
+func (c AutocompleteChoiceInt) ChoiceName() string {
+	return c.Name
+}
+
 func (AutocompleteChoiceInt) autoCompleteChoice() {}
 
 type AutocompleteChoiceFloat struct {
 	Name              string            `json:"name"`
 	NameLocalizations map[Locale]string `json:"name_localizations,omitempty"`
 	Value             float64           `json:"value"`
+}
+
+func (c AutocompleteChoiceFloat) ChoiceName() string {
+	return c.Name
 }
 
 func (AutocompleteChoiceFloat) autoCompleteChoice() {}
